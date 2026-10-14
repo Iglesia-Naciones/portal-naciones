@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Portal Naciones</title>
 
-  <!-- Favicon para navegadores de escritorio (Carga directa) -->
-  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H">
-  <link rel="shortcut icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H">
-  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H">
+  <!-- Favicon para navegadores de escritorio (usa el icono cuadrado local) -->
+  <link rel="icon" type="image/png" href="./icon.png">
+  <link rel="shortcut icon" type="image/png" href="./icon.png">
+  <link rel="apple-touch-icon" href="./icon.png">
 
-  <!-- Configuración de PWA para instalación móvil -->
+  <!-- Configuración PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#005b92">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -44,7 +44,6 @@
 
     .contenedor { max-width: 440px; margin: 0 auto; padding: 16px 12px 32px; }
     
-    /* Botón de Instalación PWA en la pantalla */
     .banner-instalar-app {
       background: #ffffff;
       border: 2px solid #005b92;
@@ -57,20 +56,8 @@
       gap: 12px;
       box-shadow: 0 4px 12px rgba(0,91,146,0.08);
     }
-    .texto-instalar-app {
-      font-size: 13px;
-      font-weight: 700;
-      color: #005b92;
-    }
-    .btn-instalar-accion {
-      background: #005b92;
-      color: #ffffff;
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 12.5px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
+    .texto-instalar-app { font-size: 13px; font-weight: 700; color: #005b92; }
+    .btn-instalar-accion { background: #005b92; color: #ffffff; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; font-weight: 800; white-space: nowrap; }
 
     .tarjeta {
       background: #ffffff;
@@ -78,6 +65,23 @@
       padding: 24px;
       margin-bottom: 16px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+
+    /* Tarjeta de Aviso con Imagen */
+    .tarjeta-aviso-imagen {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+    .img-aviso-promocional {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      object-fit: cover;
     }
 
     .marca { color: #71808e; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
@@ -206,7 +210,6 @@
 
 <main class="contenedor">
 
-  <!-- BANNER DE INSTALACIÓN PERSONALIZADO -->
   <div id="bannerInstalacion" class="banner-instalar-app">
     <span class="texto-instalar-app">¿Quieres instalar la app en tu teléfono?</span>
     <button id="btnInstalarApp" class="btn-instalar-accion" type="button">Instalar App</button>
@@ -240,6 +243,11 @@
           <img id="qrImagen" class="qr-imagen" src="" alt="Código QR personal">
           <div id="qrNumero" class="qr-numero"></div>
         </div>
+      </section>
+
+      <!-- AVISO EN IMAGEN DINÁMICO -->
+      <section id="tarjetaAvisoImagen" class="tarjeta-aviso-imagen oculto">
+        <img id="imgAvisoPromocional" class="img-aviso-promocional" src="" alt="Aviso">
       </section>
 
       <section class="tarjeta-programas-selector">
@@ -345,7 +353,6 @@
     navigator.serviceWorker.register('./sw.js');
   }
 
-  // URL DE TU WEB APP EN GOOGLE APPS SCRIPT
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
 
   const URL_BANNER_HOMBRIA = 'https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow';
@@ -556,6 +563,17 @@
     document.getElementById('qrImagen').src =
       'https://quickchart.io/qr?text=' + encodeURIComponent(registroSesion) + '&size=220&margin=1';
     document.getElementById('qrNumero').textContent = registroSesion;
+
+    const tarjetaAvisoImg = document.getElementById('tarjetaAvisoImagen');
+    const imgAviso = document.getElementById('imgAvisoPromocional');
+
+    if (resultado.avisoImagen && resultado.avisoImagen.urlImagen) {
+      imgAviso.src = resultado.avisoImagen.urlImagen;
+      imgAviso.alt = resultado.avisoImagen.titulo || 'Aviso';
+      tarjetaAvisoImg.classList.remove('oculto');
+    } else {
+      tarjetaAvisoImg.classList.add('oculto');
+    }
 
     dibujarLista('fundamentos', nombresFundamentos, resultado.fundamentos);
     dibujarLista('hombria', nombresHombria, resultado.hombria);
