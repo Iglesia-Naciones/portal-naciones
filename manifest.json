@@ -1,6 +1,6 @@
 {
   "name": "Portal Naciones",
-  "short_name": "Naciones",
+  "short_name": "Portal Naciones",
   "description": "Portal de seguimiento de asistencias y avances - Iglesia Naciones",
   "start_url": "./index.html",
   "display": "standalone",
