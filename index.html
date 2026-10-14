@@ -275,8 +275,6 @@
 
 <script>
   if ('serviceWorker' in navigator) {
-    nav<script>
-  if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js');
   }
 
@@ -325,6 +323,9 @@
   let nacimientoSesion = '';
   let programaActual = '';
 
+  // Memoria en caché local para carga instantánea
+  const cacheAsistencias = {};
+
   inputNacimiento.addEventListener('input', function(e) {
     let v = e.target.value.replace(/\D/g, '');
     if (v.length > 8) v = v.substring(0, 8);
@@ -354,10 +355,7 @@
 
   function seleccionarPrograma(programa) {
     programaActual = normalizarProgramaCliente(programa);
-    
-    // Cambiamos el HASH de la URL para crear una entrada en el historial de navegación móvil
     window.location.hash = 'programa';
-
     mostrarVistaPrograma();
   }
 
@@ -395,7 +393,6 @@
     window.scrollTo(0, 0);
   }
 
-  // Escucha los cambios en la URL (Botón Atrás físico o virtual del teléfono)
   window.addEventListener('hashchange', function() {
     if (window.location.hash !== '#programa') {
       volverACuentaInterno();
@@ -462,11 +459,14 @@
         document.getElementById('acceso').classList.add('oculto');
         document.getElementById('panel').classList.remove('oculto');
         
-        // Limpiamos hash por si acaso
         if (window.location.hash) {
           history.replaceState("", document.title, window.location.pathname + window.location.search);
         }
         volverACuentaInterno();
+
+        // Precargar asistencias silenciosamente en segundo plano
+        precargarProgramaSegundoPlano('HOMBRIA');
+        precargarProgramaSegundoPlano('FUNDAMENTOS');
       })
       .catch(function(error) {
         if (idConsulta !== consultaActual) return;
@@ -475,6 +475,17 @@
         console.error(error);
       });
   });
+
+  function precargarProgramaSegundoPlano(prog) {
+    if (cacheAsistencias[prog]) return;
+    const url = `${WEB_APP_URL}?action=consultarAsistencias&registro=${encodeURIComponent(registroSesion)}&nacimiento=${encodeURIComponent(nacimientoSesion)}&programa=${encodeURIComponent(prog)}`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        cacheAsistencias[prog] = Array.isArray(data) ? data : [];
+      })
+      .catch(err => console.log('Error al precargar', err));
+  }
 
   function dibujarLista(id, nombres, valores) {
     const contenedor = document.getElementById(id);
@@ -507,6 +518,11 @@
       return;
     }
 
+    if (cacheAsistencias[programaActual]) {
+      renderizarAsistencias(cacheAsistencias[programaActual]);
+      return;
+    }
+
     lista.replaceChildren();
     const cargando = document.createElement('p');
     cargando.className = 'subtitulo';
@@ -519,73 +535,8 @@
       .then(res => res.json())
       .then(function(registros) {
         const datos = Array.isArray(registros) ? registros : [];
-        const conteo = { PRESENTE: 0, FALTA: 0, RETARDO: 0 };
-
-        datos.forEach(function(item) {
-          const estado = String(item.estado || '').trim().toUpperCase();
-          if (Object.prototype.hasOwnProperty.call(conteo, estado)) conteo[estado]++;
-        });
-
-        const totalAsistencias = conteo.PRESENTE + conteo.RETARDO;
-        const totalEsperado = 10;
-        document.getElementById('textoConteoProgreso').textContent =
-          totalAsistencias + ' de ' + totalEsperado + ' asistencias completadas';
-
-        let nivelActual = programaActual === 'HOMBRIA' ? 'Nivel 1: Hombría al Máximo' : 'Bloque 1: Sanidad y Libertad';
-        if (datos.length > 0 && (datos[0].nivelCurso || datos[0].curso)) {
-          nivelActual = datos[0].nivelCurso || datos[0].curso;
-        }
-        document.getElementById('tituloResumenNivel').textContent = nivelActual;
-
-        const porcentaje = Math.min(Math.round((totalAsistencias / totalEsperado) * 100), 100);
-        document.getElementById('barraProgresoFill').style.width = porcentaje + '%';
-
-        lista.replaceChildren();
-
-        if (datos.length === 0) {
-          const sinDatos = document.createElement('p');
-          sinDatos.className = 'subtitulo';
-          sinDatos.textContent = 'Todavía no hay asistencias registradas para este programa.';
-          lista.appendChild(sinDatos);
-          return;
-        }
-
-        datos.sort((a, b) => fechaOrdenable(b.fecha).localeCompare(fechaOrdenable(a.fecha)));
-
-        datos.forEach(function(item) {
-          const fila = document.createElement('div');
-          fila.className = 'fila';
-
-          const detalle = document.createElement('div');
-          detalle.className = 'detalle';
-
-          const titulo = document.createElement('strong');
-          titulo.textContent = [item.nivelCurso || item.curso || item.programa || 'Sesión']
-            .filter(Boolean).join(' · ');
-
-          const info = document.createElement('div');
-          info.className = 'subtitulo';
-          info.textContent = [
-            item.fecha || '',
-            item.sesion ? 'Sesión ' + item.sesion : '',
-            item.campus || ''
-          ].filter(Boolean).join(' · ');
-
-          detalle.append(titulo, info);
-
-          const valor = String(item.estado || '').trim().toUpperCase();
-          const estado = document.createElement('span');
-          estado.className = 'estado';
-          if (valor === 'PRESENTE') estado.classList.add('aprobado');
-          else if (valor === 'FALTA') estado.classList.add('falta');
-          else if (valor === 'RETARDO') estado.classList.add('retardo');
-          else estado.classList.add('pendiente');
-          
-          estado.textContent = valor || 'SIN ESTADO';
-
-          fila.append(detalle, estado);
-          lista.appendChild(fila);
-        });
+        cacheAsistencias[programaActual] = datos;
+        renderizarAsistencias(datos);
       })
       .catch(function(error) {
         lista.replaceChildren();
@@ -595,6 +546,77 @@
         lista.appendChild(errElem);
         console.error(error);
       });
+  }
+
+  function renderizarAsistencias(datos) {
+    const lista = document.getElementById('listaAsistencias');
+    const conteo = { PRESENTE: 0, FALTA: 0, RETARDO: 0 };
+
+    datos.forEach(function(item) {
+      const estado = String(item.estado || '').trim().toUpperCase();
+      if (Object.prototype.hasOwnProperty.call(conteo, estado)) conteo[estado]++;
+    });
+
+    const totalAsistencias = conteo.PRESENTE + conteo.RETARDO;
+    const totalEsperado = 10;
+    document.getElementById('textoConteoProgreso').textContent =
+      totalAsistencias + ' de ' + totalEsperado + ' asistencias completadas';
+
+    let nivelActual = programaActual === 'HOMBRIA' ? 'Nivel 1: Hombría al Máximo' : 'Bloque 1: Sanidad y Libertad';
+    if (datos.length > 0 && (datos[0].nivelCurso || datos[0].curso)) {
+      nivelActual = datos[0].nivelCurso || datos[0].curso;
+    }
+    document.getElementById('tituloResumenNivel').textContent = nivelActual;
+
+    const porcentaje = Math.min(Math.round((totalAsistencias / totalEsperado) * 100), 100);
+    document.getElementById('barraProgresoFill').style.width = porcentaje + '%';
+
+    lista.replaceChildren();
+
+    if (datos.length === 0) {
+      const sinDatos = document.createElement('p');
+      sinDatos.className = 'subtitulo';
+      sinDatos.textContent = 'Todavía no hay asistencias registradas para este programa.';
+      lista.appendChild(sinDatos);
+      return;
+    }
+
+    datos.sort((a, b) => fechaOrdenable(b.fecha).localeCompare(fechaOrdenable(a.fecha)));
+
+    datos.forEach(function(item) {
+      const fila = document.createElement('div');
+      fila.className = 'fila';
+
+      const detalle = document.createElement('div');
+      detalle.className = 'detalle';
+
+      const titulo = document.createElement('strong');
+      titulo.textContent = [item.nivelCurso || item.curso || item.programa || 'Sesión']
+        .filter(Boolean).join(' · ');
+
+      const info = document.createElement('div');
+      info.className = 'subtitulo';
+      info.textContent = [
+        item.fecha || '',
+        item.sesion ? 'Sesión ' + item.sesion : '',
+        item.campus || ''
+      ].filter(Boolean).join(' · ');
+
+      detalle.append(titulo, info);
+
+      const valor = String(item.estado || '').trim().toUpperCase();
+      const estado = document.createElement('span');
+      estado.className = 'estado';
+      if (valor === 'PRESENTE') estado.classList.add('aprobado');
+      else if (valor === 'FALTA') estado.classList.add('falta');
+      else if (valor === 'RETARDO') estado.classList.add('retardo');
+      else estado.classList.add('pendiente');
+      
+      estado.textContent = valor || 'SIN ESTADO';
+
+      fila.append(detalle, estado);
+      lista.appendChild(fila);
+    });
   }
 
   function fechaOrdenable(fecha) {
@@ -608,6 +630,9 @@
     registroSesion = '';
     nacimientoSesion = '';
     programaActual = '';
+
+    delete cacheAsistencias['HOMBRIA'];
+    delete cacheAsistencias['FUNDAMENTOS'];
 
     document.getElementById('panel').classList.add('oculto');
     document.getElementById('acceso').classList.remove('oculto');
