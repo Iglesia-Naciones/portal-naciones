@@ -8,7 +8,7 @@
 
   <!-- Configuración de PWA para instalación móvil -->
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H">
+  <link rel="apple-touch-icon" href="./icon.png">
   <meta name="theme-color" content="#005b92">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -39,6 +39,35 @@
     .img-logo-naciones { max-height: 36px; width: auto; object-fit: contain; display: block; }
 
     .contenedor { max-width: 440px; margin: 0 auto; padding: 16px 12px 32px; }
+    
+    /* Botón de Instalación PWA en la pantalla */
+    .banner-instalar-app {
+      background: #ffffff;
+      border: 2px solid #005b92;
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0,91,146,0.08);
+    }
+    .texto-instalar-app {
+      font-size: 13px;
+      font-weight: 700;
+      color: #005b92;
+    }
+    .btn-instalar-accion {
+      background: #005b92;
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 12.5px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
     .tarjeta {
       background: #ffffff;
       border-radius: 18px;
@@ -173,6 +202,12 @@
 
 <main class="contenedor">
 
+  <!-- BANNER DE INSTALACIÓN PERSONALIZADO -->
+  <div id="bannerInstalacion" class="banner-instalar-app oculto">
+    <span class="texto-instalar-app">¿Quieres instalar la app en tu teléfono?</span>
+    <button id="btnInstalarApp" class="btn-instalar-accion" type="button">Instalar App</button>
+  </div>
+
   <section class="tarjeta" id="acceso">
     <div class="marca">Iglesia Naciones</div>
     <h1>Portal de seguimiento</h1>
@@ -274,6 +309,31 @@
 </main>
 
 <script>
+  let eventoInstalacionPrompt = null;
+  const bannerInstalacion = document.getElementById('bannerInstalacion');
+  const btnInstalarApp = document.getElementById('btnInstalarApp');
+
+  // Captura la disponibilidad de instalación en Android / Chrome
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    eventoInstalacionPrompt = e;
+    if (bannerInstalacion) {
+      bannerInstalacion.classList.remove('oculto');
+    }
+  });
+
+  if (btnInstalarApp) {
+    btnInstalarApp.addEventListener('click', async () => {
+      if (!eventoInstalacionPrompt) return;
+      eventoInstalacionPrompt.prompt();
+      const { outcome } = await eventoInstalacionPrompt.userChoice;
+      if (outcome === 'accepted') {
+        bannerInstalacion.classList.add('oculto');
+      }
+      eventoInstalacionPrompt = null;
+    });
+  }
+
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js');
   }
@@ -323,10 +383,8 @@
   let nacimientoSesion = '';
   let programaActual = '';
 
-  // Memoria local de asistencias pre-cargadas al ingresar
   let cacheAsistencias = {};
 
-  // Formato fluido de fecha DD/MM/AAAA para celulares
   inputNacimiento.addEventListener('input', function(e) {
     let valor = e.target.value.replace(/\D/g, '');
     if (valor.length > 8) valor = valor.substring(0, 8);
@@ -389,7 +447,6 @@
 
     window.scrollTo(0, 0);
 
-    // Carga de datos instantánea desde la memoria
     cargarAsistencias();
   }
 
@@ -448,7 +505,6 @@
         registroSesion = String(resultado.registro || registro).trim();
         nacimientoSesion = nacimiento;
 
-        // Guardamos las asistencias entregadas en la consulta inicial
         cacheAsistencias = resultado.asistencias || {};
 
         document.getElementById('nombre').textContent =
