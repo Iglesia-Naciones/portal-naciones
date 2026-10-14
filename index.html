@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portal NACIONES</title>
+
+  <!-- Configuración de PWA para instalación móvil -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H">
+  <meta name="theme-color" content="#005b92">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #dce2e6;
+      color: #18232d;
+      min-height: 100vh;
+    }
+
+    .header-naciones {
+      background-color: #005b92;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo-box { display: flex; align-items: center; justify-content: center; }
+    .img-logo-naciones { max-height: 36px; width: auto; object-fit: contain; display: block; }
+
+    .contenedor { max-width: 440px; margin: 0 auto; padding: 16px 12px 32px; }
+    .tarjeta {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+
+    .marca { color: #71808e; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+    h1 { margin: 0 0 8px; font-size: 22px; font-weight: 800; color: #0d171e; }
+    .subtitulo { color: #71808e; font-size: 13px; line-height: 1.5; }
+    label { display: block; font-weight: 700; margin: 16px 0 8px; font-size: 13.5px; }
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd3d9;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+    }
+    input:focus { outline: 2px solid #005b92; border-color: #005b92; }
+    button { cursor: pointer; border: 0; font-family: inherit; }
+    button:disabled { opacity: .6; cursor: wait; }
+    
+    .boton-principal {
+      width: 100%;
+      margin-top: 20px;
+      background: #005b92;
+      color: white;
+      padding: 13px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .nombre-usuario { font-size: 21px; font-weight: 800; color: #0d171e; margin: 4px 0 2px; line-height: 1.2; }
+    .qr-contenedor { text-align: center; padding: 16px 0 8px; }
+    .qr-imagen { width: 180px; height: 180px; display: block; margin: 0 auto; }
+    .qr-numero { font-family: Georgia, serif; font-style: italic; font-size: 17px; color: #2b363f; margin-top: 8px; }
+
+    .tarjeta-programas-selector {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+    .btn-banner {
+      width: 100%;
+      border-radius: 12px;
+      padding: 0;
+      overflow: hidden;
+      background: transparent;
+      border: 0;
+      transition: transform 0.15s ease;
+      display: block;
+    }
+    .btn-banner:active { transform: scale(0.98); }
+    .img-banner-programa { width: 100%; height: auto; display: block; border-radius: 12px; object-fit: cover; }
+
+    .banner-programa-header { border-radius: 14px; margin-bottom: 16px; overflow: hidden; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .img-banner-header { width: 100%; height: auto; display: block; border-radius: 14px; object-fit: cover; }
+
+    .navegacion-pestanas { display: flex; gap: 10px; margin-bottom: 16px; }
+    .boton-pestana {
+      flex: 1;
+      background: #636f7a;
+      color: #ffffff;
+      padding: 12px 10px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      transition: background-color 0.2s;
+    }
+    .boton-pestana.activa { background: #005b92; color: #ffffff; }
+
+    .boton-volver { background: transparent; color: #005b92; font-size: 13px; font-weight: 700; padding: 0 0 12px 4px; display: inline-flex; align-items: center; gap: 4px; }
+
+    .titulo-nivel-resumen { font-size: 16.5px; font-weight: 800; color: #0d171e; margin: 0 0 6px; }
+    .subtitulo-conteo { font-size: 14px; color: #52606d; margin: 0 0 14px; }
+    .barra-progreso-track { width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+    .barra-progreso-fill { height: 100%; background: #8a2a2a; border-radius: 3px; width: 0%; transition: width 0.4s ease; }
+
+    .caption-lista { font-size: 12px; color: #808c96; margin-bottom: 12px; display: block; }
+    .subtitulo-seccion-adicional {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #18232d;
+      margin: 20px 0 10px;
+      padding-top: 16px;
+      border-top: 1px dashed #e2e8f0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f0f3f5; }
+    .fila:last-child { border-bottom: 0; }
+    .detalle { min-width: 0; overflow-wrap: anywhere; }
+    .detalle strong { display: block; font-size: 13.5px; color: #18232d; font-weight: 700; }
+    .detalle .subtitulo { font-size: 12px; color: #71808e; margin-top: 3px; }
+
+    .estado { display: inline-block; flex-shrink: 0; font-size: 10.5px; font-weight: 800; padding: 5px 12px; border-radius: 12px; letter-spacing: 0.2px; text-transform: uppercase; }
+    .aprobado, .contador-presente { color: #176b3a; background: #d8f3e1; }
+    .falta, .contador-falta { color: #a52828; background: #fde2e2; }
+    .retardo, .contador-retardo { color: #895b00; background: #fef0cd; }
+    .pendiente { color: #6a7075; background: #edf0f2; }
+
+    .tarjeta-aviso { background: #ffffff; padding: 18px 22px; border-radius: 18px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); text-align: center; }
+    .tarjeta-aviso p { margin: 0; font-size: 12.5px; color: #808c96; line-height: 1.5; }
+    .contenedor-salir { text-align: center; margin-top: 14px; }
+    .boton-salir { background: #6c7782; color: white; width: 100%; max-width: 260px; padding: 12px 0; border-radius: 10px; font-size: 14px; font-weight: 700; }
+
+    .oculto { display: none !important; }
+    #mensaje { margin-top: 14px; line-height: 1.5; color: #a52828; font-size: 14px; }
+
+    @media (max-width: 480px) {
+      .contenedor { padding: 12px 10px 24px; }
+      .tarjeta { padding: 20px; }
+      .fila { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header-naciones">
+  <div class="logo-box">
+    <img src="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H" alt="Naciones" class="img-logo-naciones">
+  </div>
+</header>
+
+<main class="contenedor">
+
+  <section class="tarjeta" id="acceso">
+    <div class="marca">Iglesia Naciones</div>
+    <h1>Portal de seguimiento</h1>
+    <p class="subtitulo">Consulta tu avance en Hombría al Máximo y Fundamentos, así como tus asistencias registradas.</p>
+    <form id="formulario">
+      <label for="registro">Número de registro</label>
+      <input id="registro" name="registro" type="text" autocomplete="off" required placeholder="Escribe tu número de registro">
+      
+      <label for="nacimiento">Fecha de nacimiento</label>
+      <input id="nacimiento" name="nacimiento" type="text" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off" required>
+      
+      <button class="boton-principal" id="boton" type="submit">Consultar mi avance</button>
+    </form>
+    <div id="mensaje" role="status" aria-live="polite"></div>
+  </section>
+
+  <section id="panel" class="oculto">
+
+    <div id="vistaCuenta">
+      <section class="tarjeta">
+        <div class="marca">Mi Cuenta</div>
+        <div class="nombre-usuario" id="nombre"></div>
+        <p class="subtitulo" id="campus" style="margin: 0 0 8px;"></p>
+
+        <div class="qr-contenedor">
+          <img id="qrImagen" class="qr-imagen" src="" alt="Código QR personal">
+          <div id="qrNumero" class="qr-numero"></div>
+        </div>
+      </section>
+
+      <section class="tarjeta-programas-selector">
+        <button class="btn-banner" id="btnHombria" type="button">
+          <img src="https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow" alt="Hombría al Máximo" class="img-banner-programa">
+        </button>
+
+        <button class="btn-banner" id="btnFundamentos" type="button">
+          <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" alt="Fundamentos" class="img-banner-programa">
+        </button>
+      </section>
+
+      <div class="tarjeta-aviso">
+        <p>Si consideras que algún avance o registro de asistencia es incorrecto, comunícate con el equipo de administración de tu campus</p>
+      </div>
+
+      <div class="contenedor-salir">
+        <button id="salir" class="boton-salir" type="button">Cerrar sesión</button>
+      </div>
+    </div>
+
+    <div id="vistaPrograma" class="oculto">
+      <button class="boton-volver" id="btnVolverCuenta" type="button">
+        &#8592; Volver a Mi Cuenta
+      </button>
+
+      <div id="bannerProgramaActivo" class="banner-programa-header">
+        <img id="imgBannerHeader" src="" alt="Programa Activo" class="img-banner-header">
+      </div>
+
+      <nav class="navegacion-pestanas">
+        <button id="navAsistencias" class="boton-pestana activa" type="button">Mis Asistencias</button>
+        <button id="navProgreso" class="boton-pestana" type="button">Mi Progreso</button>
+      </nav>
+
+      <section id="seccionAsistencias">
+        <div class="tarjeta" id="cardResumenProgreso">
+          <div class="titulo-nivel-resumen" id="tituloResumenNivel">Nivel 1: Hombría al Máximo</div>
+          <div class="subtitulo-conteo" id="textoConteoProgreso">0 de 10 asistencias completadas</div>
+          <div class="barra-progreso-track">
+            <div class="barra-progreso-fill" id="barraProgresoFill"></div>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <span class="caption-lista" id="captionListaAsistencias">Asistencias de Hombría al Máximo</span>
+          <div id="resumenAsistencias" class="oculto"></div>
+          <div id="listaAsistencias"></div>
+        </div>
+      </section>
+
+      <section id="seccionProgreso" class="oculto">
+        <div class="tarjeta">
+          <span class="caption-lista" id="captionListaProgreso">Consulta tus niveles aprobados</span>
+          
+          <div id="seccionProgresoHombria">
+            <div id="hombria"></div>
+          </div>
+
+          <div id="seccionProgresoFundamentos" class="oculto">
+            <div id="fundamentos"></div>
+          </div>
+
+          <div class="subtitulo-seccion-adicional">Requisitos adicionales</div>
+          <div id="requisitos"></div>
+        </div>
+      </section>
+    </div>
+
+  </section>
+</main>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js');
+  }
+
+  // REEMPLAZA CON LA URL DE TU WEB APP EN GOOGLE APPS SCRIPT
+  const WEB_APP_URL = 'https://script.google.com/macros/s/TU_SCRIPT_ID_AQUI/exec';
+
+  const URL_BANNER_HOMBRIA = 'https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow';
+  const URL_BANNER_FUNDAMENTOS = 'https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr';
+
+  const nombresFundamentos = [
+    'Bloque 1: Sanidad y Libertad',
+    'Bloque 1: Cimientos',
+    'Bloque 1: Hábitos de un Discípulo',
+    'Bloque 2: La Gran Comisión',
+    'Bloque 2: El Carácter del Obrero',
+    'Bloque 2: Liderazgo'
+  ];
+
+  const nombresHombria = [
+    'Nivel 1: Hombría al Máximo',
+    'Nivel 2: Valor',
+    'Nivel 3: Integridad Sexual',
+    'Nivel 4: El Principio del Potencial',
+    'Nivel 5: Nunca Te Rindas',
+    'Nivel 6: Comunicación, Sexo y Dinero',
+    'Nivel 7: Un Hombre de Verdad I',
+    'Nivel 8: Un Hombre de Verdad II',
+    'Nivel 9: Hombres Fuertes',
+    'Nivel 10: Mujer Única'
+  ];
+
+  const nombresRequisitos = [
+    'Encuentro Con La Cruz',
+    'Voluntariado',
+    'Voluntario en Grupos Pequeños',
+    'Viaje Misionero'
+  ];
+
+  const formulario = document.getElementById('formulario');
+  const boton = document.getElementById('boton');
+  const mensaje = document.getElementById('mensaje');
+  const inputNacimiento = document.getElementById('nacimiento');
+
+  let consultaActual = 0;
+  let registroSesion = '';
+  let nacimientoSesion = '';
+  let programaActual = '';
+
+  inputNacimiento.addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length > 8) v = v.substring(0, 8);
+
+    if (v.length >= 5) {
+      e.target.value = v.substring(0, 2) + '/' + v.substring(2, 4) + '/' + v.substring(4);
+    } else if (v.length >= 3) {
+      e.target.value = v.substring(0, 2) + '/' + v.substring(2);
+    } else {
+      e.target.value = v;
+    }
+  });
+
+  document.getElementById('navAsistencias').addEventListener('click', () => cambiarPestana('asistencias'));
+  document.getElementById('navProgreso').addEventListener('click', () => cambiarPestana('progreso'));
+  document.getElementById('btnHombria').addEventListener('click', () => seleccionarPrograma('HOMBRIA'));
+  document.getElementById('btnFundamentos').addEventListener('click', () => seleccionarPrograma('FUNDAMENTOS'));
+  document.getElementById('btnVolverCuenta').addEventListener('click', volverACuenta);
+
+  function cambiarPestana(pestana) {
+    const asistenciasActivas = pestana === 'asistencias';
+    document.getElementById('navAsistencias').classList.toggle('activa', asistenciasActivas);
+    document.getElementById('navProgreso').classList.toggle('activa', !asistenciasActivas);
+    document.getElementById('seccionAsistencias').classList.toggle('oculto', !asistenciasActivas);
+    document.getElementById('seccionProgreso').classList.toggle('oculto', asistenciasActivas);
+  }
+
+  function seleccionarPrograma(programa) {
+    programaActual = normalizarProgramaCliente(programa);
+    const esHombria = programaActual === 'HOMBRIA';
+    const imgHeader = document.getElementById('imgBannerHeader');
+
+    if (esHombria) {
+      imgHeader.src = URL_BANNER_HOMBRIA;
+      document.getElementById('captionListaAsistencias').textContent = 'Asistencias de Hombría al Máximo';
+      document.getElementById('captionListaProgreso').textContent = 'Consulta tus niveles aprobados';
+      document.getElementById('barraProgresoFill').style.background = '#8a2a2a';
+    } else {
+      imgHeader.src = URL_BANNER_FUNDAMENTOS;
+      document.getElementById('captionListaAsistencias').textContent = 'Asistencias de Fundamentos';
+      document.getElementById('captionListaProgreso').textContent = 'Consulta tus cursos aprobados';
+      document.getElementById('barraProgresoFill').style.background = '#125278';
+    }
+
+    document.getElementById('seccionProgresoHombria').classList.toggle('oculto', !esHombria);
+    document.getElementById('seccionProgresoFundamentos').classList.toggle('oculto', esHombria);
+
+    document.getElementById('vistaCuenta').classList.add('oculto');
+    document.getElementById('vistaPrograma').classList.remove('oculto');
+    cambiarPestana('asistencias');
+
+    if (registroSesion && nacimientoSesion) cargarAsistencias();
+  }
+
+  function volverACuenta() {
+    document.getElementById('vistaPrograma').classList.add('oculto');
+    document.getElementById('vistaCuenta').classList.remove('oculto');
+  }
+
+  function normalizarProgramaCliente(valor) {
+    return String(valor || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toUpperCase();
+  }
+
+  formulario.addEventListener('submit', function(evento) {
+    evento.preventDefault();
+    const registro = document.getElementById('registro').value.trim();
+    const nacimientoTexto = inputNacimiento.value.trim();
+
+    if (!registro || !nacimientoTexto) {
+      mensaje.textContent = 'Escribe tu número de registro y fecha de nacimiento.';
+      return;
+    }
+
+    const partes = nacimientoTexto.split('/');
+    if (partes.length !== 3 || partes[0].length !== 2 || partes[1].length !== 2 || partes[2].length !== 4) {
+      mensaje.textContent = 'Escribe una fecha válida con formato DD/MM/AAAA.';
+      return;
+    }
+
+    const nacimiento = partes[2] + '-' + partes[1] + '-' + partes[0];
+
+    const idConsulta = ++consultaActual;
+    boton.disabled = true;
+    mensaje.textContent = 'Verificando tus datos...';
+
+    const url = `${WEB_APP_URL}?action=buscarParticipante&registro=${encodeURIComponent(registro)}&nacimiento=${encodeURIComponent(nacimiento)}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(function(resultado) {
+        if (idConsulta !== consultaActual) return;
+        boton.disabled = false;
+
+        if (!resultado || !resultado.encontrado) {
+          mensaje.textContent = 'No pudimos verificar esos datos. Revisa la información.';
+          return;
+        }
+
+        mensaje.textContent = '';
+        registroSesion = String(resultado.registro || registro).trim();
+        nacimientoSesion = nacimiento;
+
+        document.getElementById('nombre').textContent =
+          [resultado.nombre || '', resultado.apellidos || ''].filter(Boolean).join(' ');
+        
+        const textoCampus = resultado.campus ? 'Campus: ' + resultado.campus : '';
+        document.getElementById('campus').textContent = textoCampus;
+
+        document.getElementById('qrImagen').src =
+          'https://quickchart.io/qr?text=' + encodeURIComponent(registroSesion) + '&size=220&margin=1';
+        document.getElementById('qrNumero').textContent = registroSesion;
+
+        dibujarLista('fundamentos', nombresFundamentos, resultado.fundamentos);
+        dibujarLista('hombria', nombresHombria, resultado.hombria);
+        dibujarLista('requisitos', nombresRequisitos, resultado.requisitos);
+
+        document.getElementById('acceso').classList.add('oculto');
+        document.getElementById('panel').classList.remove('oculto');
+        volverACuenta();
+      })
+      .catch(function(error) {
+        if (idConsulta !== consultaActual) return;
+        boton.disabled = false;
+        mensaje.textContent = 'No fue posible realizar la consulta. Intenta más tarde.';
+        console.error(error);
+      });
+  });
+
+  function dibujarLista(id, nombres, valores) {
+    const contenedor = document.getElementById(id);
+    if (!contenedor) return;
+    contenedor.replaceChildren();
+
+    nombres.forEach(function(nombre, indice) {
+      const fila = document.createElement('div');
+      fila.className = 'fila';
+
+      const texto = document.createElement('span');
+      texto.className = 'detalle';
+      texto.textContent = nombre;
+
+      const aprobado = Array.isArray(valores) && valores[indice] === true;
+      const estado = document.createElement('span');
+      estado.className = 'estado ' + (aprobado ? 'aprobado' : 'pendiente');
+      estado.textContent = aprobado ? 'APROBADO' : 'PENDIENTE';
+
+      fila.append(texto, estado);
+      contenedor.appendChild(fila);
+    });
+  }
+
+  function cargarAsistencias() {
+    const lista = document.getElementById('listaAsistencias');
+
+    if (!programaActual) {
+      lista.replaceChildren();
+      return;
+    }
+
+    lista.replaceChildren();
+    const cargando = document.createElement('p');
+    cargando.className = 'subtitulo';
+    cargando.textContent = 'Consultando asistencias...';
+    lista.appendChild(cargando);
+
+    const url = `${WEB_APP_URL}?action=consultarAsistencias&registro=${encodeURIComponent(registroSesion)}&nacimiento=${encodeURIComponent(nacimientoSesion)}&programa=${encodeURIComponent(programaActual)}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(function(registros) {
+        const datos = Array.isArray(registros) ? registros : [];
+        const conteo = { PRESENTE: 0, FALTA: 0, RETARDO: 0 };
+
+        datos.forEach(function(item) {
+          const estado = String(item.estado || '').trim().toUpperCase();
+          if (Object.prototype.hasOwnProperty.call(conteo, estado)) conteo[estado]++;
+        });
+
+        const totalAsistencias = conteo.PRESENTE + conteo.RETARDO;
+        const totalEsperado = 10;
+        document.getElementById('textoConteoProgreso').textContent =
+          totalAsistencias + ' de ' + totalEsperado + ' asistencias completadas';
+
+        let nivelActual = programaActual === 'HOMBRIA' ? 'Nivel 1: Hombría al Máximo' : 'Bloque 1: Sanidad y Libertad';
+        if (datos.length > 0 && (datos[0].nivelCurso || datos[0].curso)) {
+          nivelActual = datos[0].nivelCurso || datos[0].curso;
+        }
+        document.getElementById('tituloResumenNivel').textContent = nivelActual;
+
+        const porcentaje = Math.min(Math.round((totalAsistencias / totalEsperado) * 100), 100);
+        document.getElementById('barraProgresoFill').style.width = porcentaje + '%';
+
+        lista.replaceChildren();
+
+        if (datos.length === 0) {
+          const sinDatos = document.createElement('p');
+          sinDatos.className = 'subtitulo';
+          sinDatos.textContent = 'Todavía no hay asistencias registradas para este programa.';
+          lista.appendChild(sinDatos);
+          return;
+        }
+
+        datos.sort((a, b) => fechaOrdenable(b.fecha).localeCompare(fechaOrdenable(a.fecha)));
+
+        datos.forEach(function(item) {
+          const fila = document.createElement('div');
+          fila.className = 'fila';
+
+          const detalle = document.createElement('div');
+          detalle.className = 'detalle';
+
+          const titulo = document.createElement('strong');
+          titulo.textContent = [item.nivelCurso || item.curso || item.programa || 'Sesión']
+            .filter(Boolean).join(' · ');
+
+          const info = document.createElement('div');
+          info.className = 'subtitulo';
+          info.textContent = [
+            item.fecha || '',
+            item.sesion ? 'Sesión ' + item.sesion : '',
+            item.campus || ''
+          ].filter(Boolean).join(' · ');
+
+          detalle.append(titulo, info);
+
+          const valor = String(item.estado || '').trim().toUpperCase();
+          const estado = document.createElement('span');
+          estado.className = 'estado';
+          if (valor === 'PRESENTE') estado.classList.add('aprobado');
+          else if (valor === 'FALTA') estado.classList.add('falta');
+          else if (valor === 'RETARDO') estado.classList.add('retardo');
+          else estado.classList.add('pendiente');
+          
+          estado.textContent = valor || 'SIN ESTADO';
+
+          fila.append(detalle, estado);
+          lista.appendChild(fila);
+        });
+      })
+      .catch(function(error) {
+        lista.replaceChildren();
+        const errElem = document.createElement('p');
+        errElem.className = 'subtitulo';
+        errElem.textContent = 'No se pudieron consultar las asistencias. Intenta más tarde.';
+        lista.appendChild(errElem);
+        console.error(error);
+      });
+  }
+
+  function fechaOrdenable(fecha) {
+    const texto = String(fecha || '');
+    const partes = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    return partes ? partes[3] + '-' + partes[2] + '-' + partes[1] : texto;
+  }
+
+  document.getElementById('salir').addEventListener('click', function() {
+    consultaActual++;
+    registroSesion = '';
+    nacimientoSesion = '';
+    programaActual = '';
+
+    document.getElementById('panel').classList.add('oculto');
+    document.getElementById('acceso').classList.remove('oculto');
+    formulario.reset();
+    boton.disabled = false;
+    mensaje.textContent = '';
+
+    document.getElementById('nombre').textContent = '';
+    document.getElementById('campus').textContent = '';
+    document.getElementById('qrImagen').removeAttribute('src');
+    document.getElementById('qrNumero').textContent = '';
+    document.getElementById('fundamentos').replaceChildren();
+    document.getElementById('hombria').replaceChildren();
+    document.getElementById('requisitos').replaceChildren();
+    document.getElementById('listaAsistencias').replaceChildren();
+    volverACuenta();
+  });
+</script>
+</body>
+</html>
