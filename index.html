@@ -323,20 +323,25 @@
   let nacimientoSesion = '';
   let programaActual = '';
 
-  // Memoria en caché local para carga instantánea
-  const cacheAsistencias = {};
+  // Memoria local de asistencias pre-cargadas al ingresar
+  let cacheAsistencias = {};
 
+  // Formato fluido de fecha DD/MM/AAAA para celulares
   inputNacimiento.addEventListener('input', function(e) {
-    let v = e.target.value.replace(/\D/g, '');
-    if (v.length > 8) v = v.substring(0, 8);
+    let valor = e.target.value.replace(/\D/g, '');
+    if (valor.length > 8) valor = valor.substring(0, 8);
 
-    if (v.length >= 5) {
-      e.target.value = v.substring(0, 2) + '/' + v.substring(2, 4) + '/' + v.substring(4);
-    } else if (v.length >= 3) {
-      e.target.value = v.substring(0, 2) + '/' + v.substring(2);
-    } else {
-      e.target.value = v;
+    let formateado = '';
+    if (valor.length > 0) {
+      formateado += valor.substring(0, 2);
+      if (valor.length >= 3) {
+        formateado += '/' + valor.substring(2, 4);
+      }
+      if (valor.length >= 5) {
+        formateado += '/' + valor.substring(4, 8);
+      }
     }
+    e.target.value = formateado;
   });
 
   document.getElementById('navAsistencias').addEventListener('click', () => cambiarPestana('asistencias'));
@@ -384,7 +389,8 @@
 
     window.scrollTo(0, 0);
 
-    if (registroSesion && nacimientoSesion) cargarAsistencias();
+    // Carga de datos instantánea desde la memoria
+    cargarAsistencias();
   }
 
   function volverACuentaInterno() {
@@ -442,6 +448,9 @@
         registroSesion = String(resultado.registro || registro).trim();
         nacimientoSesion = nacimiento;
 
+        // Guardamos las asistencias entregadas en la consulta inicial
+        cacheAsistencias = resultado.asistencias || {};
+
         document.getElementById('nombre').textContent =
           [resultado.nombre || '', resultado.apellidos || ''].filter(Boolean).join(' ');
         
@@ -463,10 +472,6 @@
           history.replaceState("", document.title, window.location.pathname + window.location.search);
         }
         volverACuentaInterno();
-
-        // Precargar asistencias silenciosamente en segundo plano
-        precargarProgramaSegundoPlano('HOMBRIA');
-        precargarProgramaSegundoPlano('FUNDAMENTOS');
       })
       .catch(function(error) {
         if (idConsulta !== consultaActual) return;
@@ -475,17 +480,6 @@
         console.error(error);
       });
   });
-
-  function precargarProgramaSegundoPlano(prog) {
-    if (cacheAsistencias[prog]) return;
-    const url = `${WEB_APP_URL}?action=consultarAsistencias&registro=${encodeURIComponent(registroSesion)}&nacimiento=${encodeURIComponent(nacimientoSesion)}&programa=${encodeURIComponent(prog)}`;
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        cacheAsistencias[prog] = Array.isArray(data) ? data : [];
-      })
-      .catch(err => console.log('Error al precargar', err));
-  }
 
   function dibujarLista(id, nombres, valores) {
     const contenedor = document.getElementById(id);
@@ -518,34 +512,8 @@
       return;
     }
 
-    if (cacheAsistencias[programaActual]) {
-      renderizarAsistencias(cacheAsistencias[programaActual]);
-      return;
-    }
-
-    lista.replaceChildren();
-    const cargando = document.createElement('p');
-    cargando.className = 'subtitulo';
-    cargando.textContent = 'Consultando asistencias...';
-    lista.appendChild(cargando);
-
-    const url = `${WEB_APP_URL}?action=consultarAsistencias&registro=${encodeURIComponent(registroSesion)}&nacimiento=${encodeURIComponent(nacimientoSesion)}&programa=${encodeURIComponent(programaActual)}`;
-
-    fetch(url)
-      .then(res => res.json())
-      .then(function(registros) {
-        const datos = Array.isArray(registros) ? registros : [];
-        cacheAsistencias[programaActual] = datos;
-        renderizarAsistencias(datos);
-      })
-      .catch(function(error) {
-        lista.replaceChildren();
-        const errElem = document.createElement('p');
-        errElem.className = 'subtitulo';
-        errElem.textContent = 'No se pudieron consultar las asistencias. Intenta más tarde.';
-        lista.appendChild(errElem);
-        console.error(error);
-      });
+    const datos = cacheAsistencias[programaActual] || [];
+    renderizarAsistencias(datos);
   }
 
   function renderizarAsistencias(datos) {
@@ -631,8 +599,7 @@
     nacimientoSesion = '';
     programaActual = '';
 
-    delete cacheAsistencias['HOMBRIA'];
-    delete cacheAsistencias['FUNDAMENTOS'];
+    cacheAsistencias = {};
 
     document.getElementById('panel').classList.add('oculto');
     document.getElementById('acceso').classList.remove('oculto');
