@@ -278,7 +278,7 @@
     navigator.serviceWorker.register('./sw.js');
   }
 
-  // URL DE TU WEB APP EN GOOGLE APPS SCRIPT INTEGRADA
+  // URL DE TU WEB APP EN GOOGLE APPS SCRIPT
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
 
   const URL_BANNER_HOMBRIA = 'https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow';
@@ -340,7 +340,7 @@
   document.getElementById('navProgreso').addEventListener('click', () => cambiarPestana('progreso'));
   document.getElementById('btnHombria').addEventListener('click', () => seleccionarPrograma('HOMBRIA'));
   document.getElementById('btnFundamentos').addEventListener('click', () => seleccionarPrograma('FUNDAMENTOS'));
-  document.getElementById('btnVolverCuenta').addEventListener('click', volverACuenta);
+  document.getElementById('btnVolverCuenta').addEventListener('click', () => volverACuenta(true));
 
   function cambiarPestana(pestana) {
     const asistenciasActivas = pestana === 'asistencias';
@@ -350,7 +350,7 @@
     document.getElementById('seccionProgreso').classList.toggle('oculto', asistenciasActivas);
   }
 
-  function seleccionarPrograma(programa) {
+  function seleccionarPrograma(programa, pushState = true) {
     programaActual = normalizarProgramaCliente(programa);
     const esHombria = programaActual === 'HOMBRIA';
     const imgHeader = document.getElementById('imgBannerHeader');
@@ -374,13 +374,33 @@
     document.getElementById('vistaPrograma').classList.remove('oculto');
     cambiarPestana('asistencias');
 
+    window.scrollTo(0, 0);
+
+    if (pushState) {
+      history.pushState({ vista: 'programa', programa: programaActual }, '');
+    }
+
     if (registroSesion && nacimientoSesion) cargarAsistencias();
   }
 
-  function volverACuenta() {
+  function volverACuenta(esBotonManual = false) {
     document.getElementById('vistaPrograma').classList.add('oculto');
     document.getElementById('vistaCuenta').classList.remove('oculto');
+    
+    window.scrollTo(0, 0);
+
+    if (esBotonManual && history.state && history.state.vista === 'programa') {
+      history.back();
+    }
   }
+
+  // Intercepta el botón "Atrás" de teléfonos móviles
+  window.addEventListener('popstate', function(event) {
+    const vistaPrograma = document.getElementById('vistaPrograma');
+    if (vistaPrograma && !vistaPrograma.classList.contains('oculto')) {
+      volverACuenta(false);
+    }
+  });
 
   function normalizarProgramaCliente(valor) {
     return String(valor || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toUpperCase();
@@ -441,7 +461,7 @@
 
         document.getElementById('acceso').classList.add('oculto');
         document.getElementById('panel').classList.remove('oculto');
-        volverACuenta();
+        volverACuenta(false);
       })
       .catch(function(error) {
         if (idConsulta !== consultaActual) return;
@@ -598,7 +618,7 @@
     document.getElementById('hombria').replaceChildren();
     document.getElementById('requisitos').replaceChildren();
     document.getElementById('listaAsistencias').replaceChildren();
-    volverACuenta();
+    volverACuenta(false);
   });
 </script>
 </body>
