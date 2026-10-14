@@ -44,7 +44,7 @@
 
     .contenedor { max-width: 440px; margin: 0 auto; padding: 16px 12px 32px; }
     
-    /* Botón de Instalación PWA: Oculto en Escritorio */
+    /* Botón de Instalación PWA: Oculto en Escritorio por defecto */
     .banner-instalar-app {
       display: none;
       background: #ffffff;
@@ -333,8 +333,11 @@
   const bannerInstalacion = document.getElementById('bannerInstalacion');
   const btnInstalarApp = document.getElementById('btnInstalarApp');
 
-  // Detecta si es dispositivo móvil para gestionar visibilidad del banner
-  const esDispositivoMovil = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  // Detecta si es un dispositivo iOS (iPhone / iPad) o un móvil genérico
+  const esIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const esDispositivoMovil = esIOS || /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  // Oculta el banner en computadoras de escritorio
   if (!esDispositivoMovil && bannerInstalacion) {
     bannerInstalacion.classList.add('oculto');
   }
@@ -348,6 +351,18 @@
 
   if (btnInstalarApp) {
     btnInstalarApp.addEventListener('click', async () => {
+      // 1. Manejo específico para iPhone/iPad (iOS)
+      if (esIOS) {
+        const esSafari = /Safari/i.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS/i.test(navigator.userAgent);
+        if (esSafari) {
+          alert('Para instalar en iPhone/iPad:\n\n1. Toca el botón "Compartir" (el cuadrado con la flecha hacia arriba ⎋) en la barra inferior de Safari.\n2. Desplázate hacia abajo y elige "Agregar al inicio" (+).');
+        } else {
+          alert('En iPhone es necesario usar Safari para instalar la app:\n\n1. Copia el enlace de esta página.\n2. Ábrelo en el navegador Safari.\n3. Toca Compartir (⎋) y elige "Agregar al inicio".');
+        }
+        return;
+      }
+
+      // 2. Manejo para Android si Chrome capturó el evento nativo
       if (eventoInstalacionPrompt) {
         eventoInstalacionPrompt.prompt();
         const { outcome } = await eventoInstalacionPrompt.userChoice;
@@ -356,11 +371,13 @@
         }
         eventoInstalacionPrompt = null;
       } else {
-        alert('Para instalar la app:\n1. Toca los tres puntos (⋮) arriba a la derecha de Chrome.\n2. Selecciona "Agregar a la pantalla principal" o "Instalar aplicación".');
+        // 3. Android genérico
+        alert('Para instalar la app:\n\n1. Toca los tres puntos (⋮) arriba a la derecha de Chrome.\n2. Selecciona "Agregar a la pantalla principal" o "Instalar aplicación".');
       }
     });
   }
 
+  // Ocultar si la app ya se está ejecutando instalada (Standalone)
   if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
     if (bannerInstalacion) bannerInstalacion.classList.add('oculto');
   }
