@@ -6,9 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Portal Naciones</title>
 
+  <!-- Favicon para navegadores de escritorio (Carga directa) -->
+  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H">
+  <link rel="shortcut icon" type="image/png" href="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H">
+  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H">
+
   <!-- Configuración de PWA para instalación móvil -->
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="./icon.png">
   <meta name="theme-color" content="#005b92">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -313,7 +317,6 @@
   const bannerInstalacion = document.getElementById('bannerInstalacion');
   const btnInstalarApp = document.getElementById('btnInstalarApp');
 
-  // Captura el evento nativo de instalación si Chrome lo dispara
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     eventoInstalacionPrompt = e;
@@ -334,7 +337,6 @@
     });
   }
 
-  // Oculta el banner automáticamente si la app ya se está ejecutando instalada
   if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
     if (bannerInstalacion) bannerInstalacion.classList.add('oculto');
   }
@@ -412,6 +414,22 @@
   document.getElementById('btnHombria').addEventListener('click', () => seleccionarPrograma('HOMBRIA'));
   document.getElementById('btnFundamentos').addEventListener('click', () => seleccionarPrograma('FUNDAMENTOS'));
   document.getElementById('btnVolverCuenta').addEventListener('click', () => history.back());
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const sesionGuardada = localStorage.getItem('naciones_sesion');
+    if (sesionGuardada) {
+      try {
+        const datosSesion = JSON.parse(sesionGuardada);
+        if (datosSesion && datosSesion.registro && datosSesion.resultado) {
+          registroSesion = datosSesion.registro;
+          nacimientoSesion = datosSesion.nacimiento;
+          mostrarPanelUsuario(datosSesion.resultado);
+        }
+      } catch (e) {
+        localStorage.removeItem('naciones_sesion');
+      }
+    }
+  });
 
   function cambiarPestana(pestana) {
     const asistenciasActivas = pestana === 'asistencias';
@@ -510,29 +528,13 @@
         registroSesion = String(resultado.registro || registro).trim();
         nacimientoSesion = nacimiento;
 
-        cacheAsistencias = resultado.asistencias || {};
+        localStorage.setItem('naciones_sesion', JSON.stringify({
+          registro: registroSesion,
+          nacimiento: nacimientoSesion,
+          resultado: resultado
+        }));
 
-        document.getElementById('nombre').textContent =
-          [resultado.nombre || '', resultado.apellidos || ''].filter(Boolean).join(' ');
-        
-        const textoCampus = resultado.campus ? 'Campus: ' + resultado.campus : '';
-        document.getElementById('campus').textContent = textoCampus;
-
-        document.getElementById('qrImagen').src =
-          'https://quickchart.io/qr?text=' + encodeURIComponent(registroSesion) + '&size=220&margin=1';
-        document.getElementById('qrNumero').textContent = registroSesion;
-
-        dibujarLista('fundamentos', nombresFundamentos, resultado.fundamentos);
-        dibujarLista('hombria', nombresHombria, resultado.hombria);
-        dibujarLista('requisitos', nombresRequisitos, resultado.requisitos);
-
-        document.getElementById('acceso').classList.add('oculto');
-        document.getElementById('panel').classList.remove('oculto');
-        
-        if (window.location.hash) {
-          history.replaceState("", document.title, window.location.pathname + window.location.search);
-        }
-        volverACuentaInterno();
+        mostrarPanelUsuario(resultado);
       })
       .catch(function(error) {
         if (idConsulta !== consultaActual) return;
@@ -541,6 +543,32 @@
         console.error(error);
       });
   });
+
+  function mostrarPanelUsuario(resultado) {
+    cacheAsistencias = resultado.asistencias || {};
+
+    document.getElementById('nombre').textContent =
+      [resultado.nombre || '', resultado.apellidos || ''].filter(Boolean).join(' ');
+    
+    const textoCampus = resultado.campus ? 'Campus: ' + resultado.campus : '';
+    document.getElementById('campus').textContent = textoCampus;
+
+    document.getElementById('qrImagen').src =
+      'https://quickchart.io/qr?text=' + encodeURIComponent(registroSesion) + '&size=220&margin=1';
+    document.getElementById('qrNumero').textContent = registroSesion;
+
+    dibujarLista('fundamentos', nombresFundamentos, resultado.fundamentos);
+    dibujarLista('hombria', nombresHombria, resultado.hombria);
+    dibujarLista('requisitos', nombresRequisitos, resultado.requisitos);
+
+    document.getElementById('acceso').classList.add('oculto');
+    document.getElementById('panel').classList.remove('oculto');
+    
+    if (window.location.hash) {
+      history.replaceState("", document.title, window.location.pathname + window.location.search);
+    }
+    volverACuentaInterno();
+  }
 
   function dibujarLista(id, nombres, valores) {
     const contenedor = document.getElementById(id);
@@ -661,6 +689,7 @@
     programaActual = '';
 
     cacheAsistencias = {};
+    localStorage.removeItem('naciones_sesion');
 
     document.getElementById('panel').classList.add('oculto');
     document.getElementById('acceso').classList.remove('oculto');
