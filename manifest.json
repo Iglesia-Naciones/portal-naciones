@@ -1,0 +1,22 @@
+{
+  "name": "Portal Iglesia Naciones",
+  "short_name": "Naciones",
+  "description": "Consulta de avances y asistencias para Hombría al Máximo y Fundamentos",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#dce2e6",
+  "theme_color": "#005b92",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
