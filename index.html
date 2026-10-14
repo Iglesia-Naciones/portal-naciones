@@ -308,30 +308,36 @@
   </section>
 </main>
 
-<script>
-  let eventoInstalacionPrompt = null;
+let eventoInstalacionPrompt = null;
   const bannerInstalacion = document.getElementById('bannerInstalacion');
   const btnInstalarApp = document.getElementById('btnInstalarApp');
 
-  // Captura la disponibilidad de instalación en Android / Chrome
+  // Captura el evento nativo de instalación si Chrome lo dispara
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     eventoInstalacionPrompt = e;
-    if (bannerInstalacion) {
-      bannerInstalacion.classList.remove('oculto');
-    }
   });
 
   if (btnInstalarApp) {
     btnInstalarApp.addEventListener('click', async () => {
-      if (!eventoInstalacionPrompt) return;
-      eventoInstalacionPrompt.prompt();
-      const { outcome } = await eventoInstalacionPrompt.userChoice;
-      if (outcome === 'accepted') {
-        bannerInstalacion.classList.add('oculto');
+      // Si el navegador capturó el evento nativo, dispara la ventana oficial
+      if (eventoInstalacionPrompt) {
+        eventoInstalacionPrompt.prompt();
+        const { outcome } = await eventoInstalacionPrompt.userChoice;
+        if (outcome === 'accepted') {
+          bannerInstalacion.classList.add('oculto');
+        }
+        eventoInstalacionPrompt = null;
+      } else {
+        // Si el navegador no disparó el evento (o ya está habilitado en el menú), indica los tres puntos
+        alert('Para instalar la app:\n1. Toca los tres puntos (⋮) arriba a la derecha de Chrome.\n2. Selecciona "Agregar a la pantalla principal" o "Instalar aplicación".');
       }
-      eventoInstalacionPrompt = null;
     });
+  }
+
+  // Oculta el banner automáticamente si la app ya está corriendo instalada (standalone)
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+    if (bannerInstalacion) bannerInstalacion.classList.add('oculto');
   }
 
   if ('serviceWorker' in navigator) {
