@@ -198,14 +198,32 @@
     .contenedor-salir { text-align: center; margin-top: 14px; }
     .boton-salir { background: #6c7782; color: white; width: 100%; max-width: 260px; padding: 12px 0; border-radius: 10px; font-size: 14px; font-weight: 700; }
 
-    /* MÓDULO ESCÁNER */
+    /* MÓDULO ESCÁNER DE CÁMARA DIRECTA */
     .tarjeta-escaner { background: #ffffff; border-radius: 18px; padding: 20px; margin-bottom: 16px; }
     .titulo-seccion-escaner { font-size: 16px; font-weight: 800; color: #005b92; margin: 0 0 12px; text-align: center; }
     .grid-campus { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
     .btn-campus-card {
       background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; text-align: center; letter-spacing: 0.5px;
     }
-    #reader { width: 100%; border-radius: 12px; overflow: hidden; background: #000; margin-top: 12px; }
+    
+    #reader {
+      width: 100%;
+      min-height: 280px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #0d171e;
+      margin-top: 12px;
+      border: 0 !important;
+      position: relative;
+    }
+    #reader video {
+      width: 100% !important;
+      height: auto !important;
+      border-radius: 16px;
+      object-fit: cover;
+      display: block;
+    }
+
     #resultadoEscaneo { margin-top: 12px; padding: 12px; border-radius: 10px; text-align: center; font-weight: bold; display: none; }
     .res-exito { background: #d8f3e1; color: #176b3a; }
     .res-retardo { background: #fef0cd; color: #895b00; }
@@ -433,10 +451,10 @@
   let cacheAsistencias = {};
   let permisosVoluntarioGlobal = { esVoluntario: false, programas: [] };
 
-  // Variables para flujo de escáner
+  // Instancia directa de Html5Qrcode (sin menús nativos feos)
+  let html5QrCodeDirecto = null;
   let esc_programaSeleccionado = '';
   let esc_campusSeleccionado = '';
-  let html5QrcodeScannerObj = null;
   let permitoEscanearProximo = true;
 
   // Menú Lateral
@@ -455,7 +473,6 @@
     drawerMenu.classList.toggle('activo', abrir);
   }
 
-  // AUTOFORMATEADOR FLEXIBLE DE FECHA DE NACIMIENTO
   function autoFormatearFecha(e) {
     let valor = e.target.value.replace(/\D/g, '');
     if (valor.length > 8) valor = valor.substring(0, 8);
@@ -478,7 +495,6 @@
   document.getElementById('btnFundamentos').addEventListener('click', () => seleccionarPrograma('FUNDAMENTOS'));
   document.getElementById('btnVolverCuenta').addEventListener('click', () => mostrarVista('cuenta'));
 
-  // Eventos de selección en escáner de voluntario
   document.getElementById('btnEscProgHombria').addEventListener('click', () => seleccionarProgEscaner('HOMBRIA'));
   document.getElementById('btnEscProgFundamentos').addEventListener('click', () => seleccionarProgEscaner('FUNDAMENTOS'));
   document.getElementById('btnVolverEscanerProg').addEventListener('click', () => {
@@ -499,7 +515,6 @@
         if (datosSesion && datosSesion.registro && datosSesion.nacimiento) {
           registroSesion = datosSesion.registro;
           nacimientoSesion = datosSesion.nacimiento;
-          
           refrescarDatosUsuario(registroSesion, nacimientoSesion);
         }
       } catch (e) {
@@ -583,7 +598,6 @@
     evento.preventDefault();
     const registro = document.getElementById('registro').value.trim();
     
-    // Auto-formatear antes de validar para admitir secuencias puras de dígitos
     autoFormatearFecha({ target: inputNacimiento });
     const nacimientoTexto = inputNacimiento.value.trim();
 
@@ -763,7 +777,7 @@
     });
   }
 
-  // LÓGICA DEL ESCÁNER DE VOLUNTARIO
+  // LÓGICA DE ESCÁNER DE CÁMARA DIRECTA (SIN MENÚS FEOS)
   function seleccionarProgEscaner(prog) {
     esc_programaSeleccionado = prog;
     const gridCampus = document.getElementById('gridCampusOpciones');
@@ -784,17 +798,29 @@
     document.getElementById('escanerPasoCampus').classList.remove('oculto');
   }
 
-  function iniciarCamaraEscaneo(campus) {
+  async function iniciarCamaraEscaneo(campus) {
     esc_campusSeleccionado = campus;
     document.getElementById('labelEscanerCampusActivo').textContent = esc_programaSeleccionado + ' · ' + esc_campusSeleccionado;
 
     document.getElementById('escanerPasoCampus').classList.add('oculto');
     document.getElementById('escanerPasoCamara').classList.remove('oculto');
 
-    detenerCamara();
+    await detenerCamara();
 
-    html5QrcodeScannerObj = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 220 });
-    html5QrcodeScannerObj.render(onQRDetectado);
+    // Inicializa la cámara directamente en la lente trasera
+    html5QrCodeDirecto = new Html5Qrcode("reader");
+    const config = { fps: 10, qrbox: { width: 220, height: 220 } };
+
+    html5QrCodeDirecto.start(
+      { facingMode: "environment" },
+      config,
+      onQRDetectado
+    ).catch(err => {
+      console.warn("Error al encender cámara trasera, intentando cámara por defecto:", err);
+      html5QrCodeDirecto.start({ facingMode: "user" }, config, onQRDetectado).catch(e => {
+        alert("No se pudo acceder a la cámara. Asegúrate de otorgar permisos en tu navegador.");
+      });
+    });
   }
 
   function onQRDetectado(decodedText) {
@@ -839,10 +865,14 @@
       });
   }
 
-  function detenerCamara() {
-    if (html5QrcodeScannerObj) {
-      try { html5QrcodeScannerObj.clear(); } catch(e) {}
-      html5QrcodeScannerObj = null;
+  async function detenerCamara() {
+    if (html5QrCodeDirecto) {
+      try {
+        if (html5QrCodeDirecto.isScanning) {
+          await html5QrCodeDirecto.stop();
+        }
+      } catch(e) {}
+      html5QrCodeDirecto = null;
     }
     const divRes = document.getElementById('resultadoEscaneo');
     if (divRes) divRes.style.display = 'none';
