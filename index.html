@@ -29,21 +29,35 @@
       min-height: 100vh;
     }
 
+    /* HEADER CON LOGO PERFECTAMENTE CENTRADO */
     .header-naciones {
       background-color: #005b92;
-      padding: 14px 16px;
-      display: flex;
+      padding: 10px 16px;
+      display: grid;
+      grid-template-columns: 40px 1fr 40px;
       align-items: center;
-      justify-content: space-between;
       box-shadow: 0 2px 8px rgba(0,0,0,0.12);
       position: sticky;
       top: 0;
       z-index: 100;
     }
-    .logo-box { display: flex; align-items: center; gap: 12px; }
-    .img-logo-naciones { max-height: 32px; width: auto; object-fit: contain; display: block; }
+    
+    .logo-center-box {
+      grid-column: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .img-logo-naciones {
+      max-height: 32px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
 
     .btn-menu-hamburguesa {
+      grid-column: 1;
       background: transparent;
       border: 0;
       color: white;
@@ -52,8 +66,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 6px 10px;
+      padding: 4px;
       border-radius: 6px;
+      width: 40px;
+      height: 40px;
     }
     .btn-menu-hamburguesa:active { background: rgba(255,255,255,0.2); }
 
@@ -198,7 +214,7 @@
     .contenedor-salir { text-align: center; margin-top: 14px; }
     .boton-salir { background: #6c7782; color: white; width: 100%; max-width: 260px; padding: 12px 0; border-radius: 10px; font-size: 14px; font-weight: 700; }
 
-    /* MÓDULO ESCÁNER DE CÁMARA DIRECTA */
+    /* MÓDULO ESCÁNER */
     .tarjeta-escaner { background: #ffffff; border-radius: 18px; padding: 20px; margin-bottom: 16px; }
     .titulo-seccion-escaner { font-size: 16px; font-weight: 800; color: #005b92; margin: 0 0 12px; text-align: center; }
     .grid-campus { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
@@ -246,8 +262,8 @@
 </aside>
 
 <header class="header-naciones">
-  <div class="logo-box">
-    <button id="btnHamburguesa" class="btn-menu-hamburguesa oculto" type="button" aria-label="Menú">☰</button>
+  <button id="btnHamburguesa" class="btn-menu-hamburguesa oculto" type="button" aria-label="Menú">☰</button>
+  <div class="logo-center-box">
     <img src="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H" alt="Naciones" class="img-logo-naciones">
   </div>
 </header>
@@ -380,7 +396,7 @@
           <button class="boton-volver" id="btnVolverEscanerCampus" type="button">&#8592; Cambiar campus</button>
 
           <div style="text-align: center; margin-bottom: 10px;">
-            <strong id="labelEscanerCampusActivo" style="color: #005b92; font-size: 16px; text-transform: uppercase;">HUEJO</strong>
+            <strong id="labelEscanerCampusActivo" style="color: #005b92; font-size: 16px; text-transform: uppercase;">PUEBLA</strong>
           </div>
 
           <div id="reader"></div>
@@ -451,7 +467,6 @@
   let cacheAsistencias = {};
   let permisosVoluntarioGlobal = { esVoluntario: false, programas: [] };
 
-  // Instancia directa de Html5Qrcode (sin menús nativos feos)
   let html5QrCodeDirecto = null;
   let esc_programaSeleccionado = '';
   let esc_campusSeleccionado = '';
@@ -777,13 +792,14 @@
     });
   }
 
-  // LÓGICA DE ESCÁNER DE CÁMARA DIRECTA (SIN MENÚS FEOS)
+  // LÓGICA DE ESCÁNER (CONFIGURACIÓN DE OPCIONES DE CAMPUS DE HOMBRÍA)
   function seleccionarProgEscaner(prog) {
     esc_programaSeleccionado = prog;
     const gridCampus = document.getElementById('gridCampusOpciones');
     gridCampus.replaceChildren();
 
-    const listaCampus = prog === 'HOMBRIA' ? ['11 SUR', 'HUEJO'] : ['11 SUR', 'NACIONAL', 'HUEJO'];
+    // Hombría: PUEBLA, HUEJO. Fundamentos: 11 SUR, NACIONAL, HUEJO.
+    const listaCampus = prog === 'HOMBRIA' ? ['PUEBLA', 'HUEJO'] : ['11 SUR', 'NACIONAL', 'HUEJO'];
 
     listaCampus.forEach(c => {
       const btn = document.createElement('button');
@@ -807,7 +823,6 @@
 
     await detenerCamara();
 
-    // Inicializa la cámara directamente en la lente trasera
     html5QrCodeDirecto = new Html5Qrcode("reader");
     const config = { fps: 10, qrbox: { width: 220, height: 220 } };
 
@@ -816,7 +831,6 @@
       config,
       onQRDetectado
     ).catch(err => {
-      console.warn("Error al encender cámara trasera, intentando cámara por defecto:", err);
       html5QrCodeDirecto.start({ facingMode: "user" }, config, onQRDetectado).catch(e => {
         alert("No se pudo acceder a la cámara. Asegúrate de otorgar permisos en tu navegador.");
       });
