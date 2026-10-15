@@ -211,8 +211,6 @@
 
     .tarjeta-aviso { background: #ffffff; padding: 18px 22px; border-radius: 18px; margin-bottom: 16px; text-align: center; }
     .tarjeta-aviso p { margin: 0; font-size: 12.5px; color: #808c96; line-height: 1.5; }
-    .contenedor-salir { text-align: center; margin-top: 14px; }
-    .boton-salir { background: #6c7782; color: white; width: 100%; max-width: 260px; padding: 12px 0; border-radius: 10px; font-size: 14px; font-weight: 700; }
 
     /* MÓDULO ESCÁNER DE CÁMARA DIRECTA */
     .tarjeta-escaner { background: #ffffff; border-radius: 18px; padding: 20px; margin-bottom: 16px; }
@@ -322,10 +320,6 @@
 
       <div class="tarjeta-aviso">
         <p>Si consideras que algún avance o registro de asistencia es incorrecto, comunícate con el equipo de administración de tu campus</p>
-      </div>
-
-      <div class="contenedor-salir">
-        <button id="salir" class="boton-salir" type="button">Cerrar sesión</button>
       </div>
     </div>
 
@@ -481,7 +475,12 @@
   drawerOverlay.addEventListener('click', () => abrirMenu(false));
   document.getElementById('itemMiCuenta').addEventListener('click', () => { abrirMenu(false); mostrarVista('cuenta'); });
   document.getElementById('itemRegistro').addEventListener('click', () => { abrirMenu(false); mostrarVista('escaner'); });
-  document.getElementById('itemCerrarSesion').addEventListener('click', () => { abrirMenu(false); cerrarSesion(); });
+  document.getElementById('itemCerrarSesion').addEventListener('click', () => {
+    abrirMenu(false);
+    if (confirm('¿Estás seguro que deseas salir?')) {
+      cerrarSesion();
+    }
+  });
 
   function abrirMenu(abrir) {
     drawerOverlay.classList.toggle('activo', abrir);
@@ -792,7 +791,6 @@
     });
   }
 
-  // LÓGICA DE ESCÁNER (CONFIGURACIÓN DE CAMPUS DE HOMBRÍA: PUEBLA Y HUEJO)
   function seleccionarProgEscaner(prog) {
     esc_programaSeleccionado = prog;
     const gridCampus = document.getElementById('gridCampusOpciones');
@@ -908,8 +906,6 @@
     boton.disabled = false;
     mensaje.textContent = '';
   }
-
-  document.getElementById('salir').addEventListener('click', cerrarSesion);
 </script>
 </body>
 </html>
