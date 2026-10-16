@@ -15,86 +15,277 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+  <!-- Librería del Escáner QR -->
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
   <style>
     * { box-sizing: border-box; }
     body {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #dce2e6; color: #18232d; min-height: 100vh;
+      background: #dce2e6;
+      color: #18232d;
+      min-height: 100vh;
     }
 
+    /* HEADER CON LOGO CENTRADO PERFECTAMENTE */
     .header-naciones {
-      background-color: #005b92; padding: 10px 16px;
-      display: grid; grid-template-columns: 40px 1fr 40px; align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.12); position: sticky; top: 0; z-index: 100;
+      background-color: #005b92;
+      padding: 10px 16px;
+      display: grid;
+      grid-template-columns: 40px 1fr 40px;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .logo-center-box { grid-column: 2; display: flex; justify-content: center; align-items: center; }
-    .img-logo-naciones { max-height: 32px; width: auto; object-fit: contain; display: block; }
+    
+    .logo-center-box {
+      grid-column: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .img-logo-naciones {
+      max-height: 32px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
 
     .btn-menu-hamburguesa {
-      grid-column: 1; background: transparent; border: 0; color: white; font-size: 24px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px; border-radius: 6px; width: 40px; height: 40px;
+      grid-column: 1;
+      background: transparent;
+      border: 0;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 6px;
+      width: 40px;
+      height: 40px;
     }
     .btn-menu-hamburguesa:active { background: rgba(255,255,255,0.2); }
 
-    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 200; display: none; }
+    /* Menú Lateral Desplegable */
+    .drawer-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      display: none;
+    }
     .drawer-overlay.activo { display: block; }
 
     .drawer-menu {
-      position: fixed; top: 0; left: -270px; width: 270px; height: 100vh;
-      background: #ffffff; z-index: 201; transition: left 0.3s ease;
-      display: flex; flex-direction: column; box-shadow: 4px 0 16px rgba(0,0,0,0.15); overflow-y: auto;
+      position: fixed;
+      top: 0; left: -270px; width: 270px; height: 100vh;
+      background: #ffffff;
+      z-index: 201;
+      transition: left 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 0 16px rgba(0,0,0,0.15);
+      overflow-y: auto;
     }
     .drawer-menu.activo { left: 0; }
 
-    .drawer-header { background: #005b92; color: white; padding: 24px 16px; display: flex; align-items: center; gap: 12px; }
+    .drawer-header {
+      background: #005b92;
+      color: white;
+      padding: 24px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
     .drawer-item {
-      padding: 16px 20px; font-size: 13.5px; font-weight: 700; color: #2b363f;
-      border-bottom: 1px solid #f0f3f5; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 16px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #2b363f;
+      border-bottom: 1px solid #f0f3f5;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .drawer-item:active { background: #eef3f6; }
-    .drawer-item.cerrar-sesion { color: #a52828; margin-top: auto; border-top: 1px solid #e2e8f0; }
+    
+    /* FIX 1: BOTÓN CERRAR SESIÓN MÁS ARRIBA */
+    .drawer-item.cerrar-sesion { 
+      color: #a52828; 
+      margin-top: 12px; 
+      border-top: 1px solid #e2e8f0; 
+    }
 
     .contenedor { max-width: 440px; margin: 0 auto; padding: 16px 12px 32px; }
+    
+    .banner-instalar-app {
+      display: none;
+      background: #ffffff;
+      border: 2px solid #005b92;
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .texto-instalar-app { font-size: 13px; font-weight: 700; color: #005b92; }
+    .btn-instalar-accion { background: #005b92; color: #ffffff; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; font-weight: 800; }
 
-    .tarjeta { background: #ffffff; border-radius: 18px; padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+    @media (max-width: 768px) {
+      .banner-instalar-app:not(.oculto) { display: flex; }
+    }
+
+    .tarjeta {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+
+    /* TARJETA PRÓXIMA LECCIÓN */
+    .tarjeta-proxima-leccion {
+      background: linear-gradient(135deg, #005b92 0%, #124063 100%);
+      color: #ffffff;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    .badge-proxima {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .titulo-proxima-semana { font-size: 17px; font-weight: 800; margin: 0 0 4px; }
+    .subtitulo-proxima-tema { font-size: 14px; font-weight: 500; line-height: 1.4; opacity: 0.95; }
+
+    .tarjeta-aviso-imagen {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      overflow: hidden;
+    }
+    .img-aviso-promocional { width: 100%; height: auto; display: block; border-radius: 12px; object-fit: cover; }
+
     .marca { color: #71808e; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
     h1 { margin: 0 0 8px; font-size: 22px; font-weight: 800; color: #0d171e; }
     .subtitulo { color: #71808e; font-size: 13px; line-height: 1.5; }
     label { display: block; font-weight: 700; margin: 16px 0 8px; font-size: 13.5px; }
-    input, select { width: 100%; padding: 13px; border: 1px solid #cbd3d9; border-radius: 10px; font-size: 15px; background: #fff; }
+    input { width: 100%; padding: 13px; border: 1px solid #cbd3d9; border-radius: 10px; font-size: 15px; background: #fff; }
+    input:focus { outline: 2px solid #005b92; border-color: #005b92; }
     button { cursor: pointer; border: 0; font-family: inherit; }
+    
     .boton-principal { width: 100%; margin-top: 20px; background: #005b92; color: white; padding: 13px; border-radius: 10px; font-size: 15px; font-weight: 700; }
 
-    .nombre-usuario { font-size: 21px; font-weight: 800; color: #0d171e; margin: 4px 0 2px; }
+    .nombre-usuario { font-size: 21px; font-weight: 800; color: #0d171e; margin: 4px 0 2px; line-height: 1.2; }
     .qr-contenedor { text-align: center; padding: 16px 0 8px; }
     .qr-imagen { width: 180px; height: 180px; display: block; margin: 0 auto; }
-    .qr-numero { font-family: "Montserrat", Arial, sans-serif; font-style: italic; font-weight: 600; font-size: 16px; color: #2b363f; margin-top: 10px; }
-
-    /* ESTILOS DE CURSOS Y PROGRESO */
-    .progreso-grid { display: flex; gap: 6px; margin: 12px 0; }
-    .progreso-bloque { flex: 1; height: 10px; background: #e2e8f0; border-radius: 4px; }
-    .progreso-bloque.completado { background: #005b92; }
-
-    .badge-estado {
-      display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase;
+    
+    /* FIX 2: TIPOGRAFÍA MODERNA SANS-SERIF / ITALIC PARA EL NÚMERO DE REGISTRO */
+    .qr-numero { 
+      font-family: "Montserrat", Arial, sans-serif; 
+      font-style: italic; 
+      font-weight: 600; 
+      font-size: 16px; 
+      color: #2b363f; 
+      margin-top: 10px; 
+      letter-spacing: 0.5px; 
     }
-    .badge-presente { background: #e6f4ea; color: #137333; }
-    .badge-retardo { background: #fef7e0; color: #b06000; }
-    .badge-falta { background: #fce8e6; color: #c5221f; }
 
-    .item-asistencia {
-      padding: 12px 0; border-bottom: 1px solid #f0f3f5; display: flex; justify-content: space-between; align-items: center;
+    .tarjeta-programas-selector {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
-    .asistencia-info { font-size: 13px; }
-    .asistencia-fecha { color: #71808e; font-size: 11px; }
+    .btn-banner { width: 100%; border-radius: 12px; padding: 0; background: transparent; border: 0; display: block; }
+    .btn-banner:active { transform: scale(0.98); }
+    .img-banner-programa { width: 100%; height: auto; display: block; border-radius: 12px; object-fit: cover; }
 
-    .aviso-img { width: 100%; border-radius: 12px; display: block; margin-top: 8px; }
+    .banner-programa-header { border-radius: 14px; margin-bottom: 16px; overflow: hidden; width: 100%; }
+    .img-banner-header { width: 100%; height: auto; display: block; border-radius: 14px; object-fit: cover; }
+
+    .navegacion-pestanas { display: flex; gap: 10px; margin-bottom: 16px; }
+    .boton-pestana { flex: 1; background: #636f7a; color: #ffffff; padding: 12px 10px; border-radius: 10px; font-size: 13.5px; font-weight: 700; }
+    .boton-pestana.activa { background: #005b92; color: #ffffff; }
+
+    .boton-volver { background: transparent; color: #005b92; font-size: 13px; font-weight: 700; padding: 0 0 12px 4px; display: inline-flex; align-items: center; gap: 4px; }
+
+    .titulo-nivel-resumen { font-size: 16.5px; font-weight: 800; color: #0d171e; margin: 0 0 6px; }
+    .subtitulo-conteo { font-size: 14px; color: #52606d; margin: 0 0 14px; }
+    .barra-progreso-track { width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+    .barra-progreso-fill { height: 100%; background: #8a2a2a; border-radius: 3px; width: 0%; transition: width 0.4s ease; }
+
+    .caption-lista { font-size: 12px; color: #808c96; margin-bottom: 12px; display: block; }
+    .fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f0f3f5; }
+    .fila:last-child { border-bottom: 0; }
+    .detalle { min-width: 0; overflow-wrap: anywhere; }
+    .detalle strong { display: block; font-size: 13.5px; color: #18232d; font-weight: 700; }
+    .detalle .subtitulo { font-size: 12px; color: #71808e; margin-top: 3px; }
+
+    .estado { display: inline-block; flex-shrink: 0; font-size: 10.5px; font-weight: 800; padding: 5px 12px; border-radius: 12px; text-transform: uppercase; }
+    .aprobado { color: #176b3a; background: #d8f3e1; }
+    .falta { color: #a52828; background: #fde2e2; }
+    .retardo { color: #895b00; background: #fef0cd; }
+    .pendiente { color: #6a7075; background: #edf0f2; }
+
+    .tarjeta-aviso { background: #ffffff; padding: 18px 22px; border-radius: 18px; margin-bottom: 16px; text-align: center; }
+    .tarjeta-aviso p { margin: 0; font-size: 12.5px; color: #808c96; line-height: 1.5; }
+
+    /* MÓDULO ESCÁNER DE CÁMARA DIRECTA */
+    .tarjeta-escaner { background: #ffffff; border-radius: 18px; padding: 20px; margin-bottom: 16px; }
+    .titulo-seccion-escaner { font-size: 16px; font-weight: 800; color: #005b92; margin: 0 0 12px; text-align: center; }
+    .grid-campus { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+    .btn-campus-card {
+      background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; text-align: center; letter-spacing: 0.5px;
+    }
+    
+    #reader {
+      width: 100%;
+      min-height: 280px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #0d171e;
+      margin-top: 12px;
+      border: 0 !important;
+      position: relative;
+    }
+    #reader video {
+      width: 100% !important;
+      height: auto !important;
+      border-radius: 16px;
+      object-fit: cover;
+      display: block;
+    }
+
+    #resultadoEscaneo { margin-top: 12px; padding: 12px; border-radius: 10px; text-align: center; font-weight: bold; display: none; }
+    .res-exito { background: #d8f3e1; color: #176b3a; }
+    .res-retardo { background: #fef0cd; color: #895b00; }
+    .res-error { background: #fde2e2; color: #a52828; }
 
     .oculto { display: none !important; }
-    #mensaje { margin-top: 14px; color: #a52828; font-size: 14px; font-weight: bold; }
+    #mensaje { margin-top: 14px; line-height: 1.5; color: #a52828; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -105,7 +296,7 @@
     <strong id="drawerNombreUser">NACIONES</strong>
   </div>
   <div id="itemMiCuenta" class="drawer-item">MI CUENTA</div>
-  <div id="itemRegistro" class="drawer-item oculto">REGISTRO (ESCANEAR QR)</div>
+  <div id="itemRegistro" class="drawer-item oculto">REGISTRO</div>
   <div id="itemCerrarSesion" class="drawer-item cerrar-sesion">CERRAR SESIÓN</div>
 </aside>
 
@@ -118,99 +309,216 @@
 
 <main class="contenedor">
 
-  <!-- ACCESO PRINCIPAL -->
+  <div id="bannerInstalacion" class="banner-instalar-app">
+    <span class="texto-instalar-app">¿Quieres instalar la app en tu teléfono?</span>
+    <button id="btnInstalarApp" class="btn-instalar-accion" type="button">Instalar App</button>
+  </div>
+
   <section class="tarjeta" id="acceso">
     <div class="marca">Iglesia Naciones</div>
     <h1>Portal de seguimiento</h1>
+    <p class="subtitulo">Consulta tu avance en Hombría al Máximo y Fundamentos, así como tus asistencias registradas.</p>
     <form id="formulario">
       <label for="registro">Número de registro</label>
-      <input id="registro" name="registro" type="text" autocomplete="off" required placeholder="Tu número de registro">
+      <input id="registro" name="registro" type="text" autocomplete="off" required placeholder="Escribe tu número de registro">
       
       <label for="nacimiento">Fecha de nacimiento</label>
       <input id="nacimiento" name="nacimiento" type="text" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off" required>
       
       <button class="boton-principal" id="boton" type="submit">Consultar mi avance</button>
     </form>
-    <div id="mensaje"></div>
+    <div id="mensaje" role="status" aria-live="polite"></div>
   </section>
 
-  <!-- PANEL PRINCIPAL DE USUARIO -->
   <section id="panel" class="oculto">
 
-    <!-- MI CUENTA Y CURSOS (INTERFAZ DE SIEMPRE) -->
+    <!-- VISTA 1: MI CUENTA -->
     <div id="vistaCuenta">
-      
-      <!-- TARJETA PERFIL Y QR -->
       <section class="tarjeta">
-        <div class="marca" id="badgeRol">MI CUENTA</div>
+        <div class="marca">Mi Cuenta</div>
         <div class="nombre-usuario" id="nombre"></div>
-        <p class="subtitulo" id="campus"></p>
+        <p class="subtitulo" id="campus" style="margin: 0 0 8px;"></p>
 
         <div class="qr-contenedor">
-          <img id="qrImagen" class="qr-imagen" src="" alt="Código QR">
+          <img id="qrImagen" class="qr-imagen" src="" alt="Código QR personal">
           <div id="qrNumero" class="qr-numero"></div>
         </div>
       </section>
 
-      <!-- AVISO IMAGEN (SI EXISTE) -->
-      <div id="seccionAviso" class="tarjeta oculto">
-        <div class="marca" id="avisoTitulo">Aviso importante</div>
-        <img id="avisoImagen" class="aviso-img" src="" alt="Aviso">
+      <section id="tarjetaAvisoImagen" class="tarjeta-aviso-imagen oculto">
+        <img id="imgAvisoPromocional" class="img-aviso-promocional" src="" alt="Aviso">
+      </section>
+
+      <section class="tarjeta-programas-selector">
+        <button class="btn-banner" id="btnHombria" type="button">
+          <img src="https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow" alt="Hombría al Máximo" class="img-banner-programa">
+        </button>
+
+        <button class="btn-banner" id="btnFundamentos" type="button">
+          <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" alt="Fundamentos" class="img-banner-programa">
+        </button>
+      </section>
+
+      <div class="tarjeta-aviso">
+        <p>Si consideras que algún avance o registro de asistencia es incorrecto, comunícate con el equipo de administración de tu campus</p>
       </div>
-
-      <!-- SECCIÓN HOMBRÍA -->
-      <section id="seccionHombria" class="tarjeta oculto">
-        <div class="marca">Programa</div>
-        <h1>HOMBRÍA</h1>
-        <div class="subtitulo" id="hombriaNivelTexto">Acreditación de Niveles</div>
-        <div class="progreso-grid" id="hombriaProgreso"></div>
-
-        <div id="hombriaProxima" style="margin-top: 16px; background: #f8fafc; padding: 12px; border-radius: 10px;">
-          <strong style="font-size: 13px; color: #005b92;">Próxima Lección:</strong>
-          <div id="hombriaProximaTema" style="font-size: 14px; font-weight: 700; margin-top: 2px;"></div>
-          <div id="hombriaProximaFecha" class="subtitulo"></div>
-        </div>
-
-        <h3 style="font-size: 14px; margin-top: 20px; margin-bottom: 8px;">Historial de Asistencias</h3>
-        <div id="hombriaAsistenciasLista"></div>
-      </section>
-
-      <!-- SECCIÓN FUNDAMENTOS -->
-      <section id="seccionFundamentos" class="tarjeta oculto">
-        <div class="marca">Programa</div>
-        <h1>FUNDAMENTOS</h1>
-        <div class="subtitulo" id="fundamentosNivelTexto">Acreditación de Bloques</div>
-        <div class="progreso-grid" id="fundamentosProgreso"></div>
-
-        <div id="fundamentosProxima" style="margin-top: 16px; background: #f8fafc; padding: 12px; border-radius: 10px;">
-          <strong style="font-size: 13px; color: #005b92;">Próxima Lección:</strong>
-          <div id="fundamentosProximaTema" style="font-size: 14px; font-weight: 700; margin-top: 2px;"></div>
-          <div id="fundamentosProximaFecha" class="subtitulo"></div>
-        </div>
-
-        <h3 style="font-size: 14px; margin-top: 20px; margin-bottom: 8px;">Historial de Asistencias</h3>
-        <div id="fundamentosAsistenciasLista"></div>
-      </section>
-
     </div>
 
-    <!-- MODULO DE REGISTRO / ESCÁNER (HERRAMIENTA ADICIONAL EN MENÚ) -->
-    <div id="vistaRegistro" class="oculto">
-      <section class="tarjeta">
-        <div class="marca">Módulo de Asistencia</div>
-        <h1>Escanear Código QR</h1>
-        <div id="reader" style="width: 100%; min-height: 250px;"></div>
-        <div id="msgEscaner" style="margin-top:12px; font-weight:bold; text-align:center;"></div>
+    <!-- VISTA 2: PROGRAMA / CURSO -->
+    <div id="vistaPrograma" class="oculto">
+      <button class="boton-volver" id="btnVolverCuenta" type="button">&#8592; Volver a Mi Cuenta</button>
+
+      <div id="bannerProgramaActivo" class="banner-programa-header">
+        <img id="imgBannerHeader" src="" alt="Programa Activo" class="img-banner-header">
+      </div>
+
+      <!-- BLOQUE DESTACADO: TU PRÓXIMA LECCIÓN -->
+      <section id="tarjetaProximaLeccion" class="tarjeta-proxima-leccion oculto">
+        <span class="badge-proxima">📌 Tu próxima lección</span>
+        <div class="titulo-proxima-semana" id="txtProximaSemana">Semana 8</div>
+        <div class="subtitulo-proxima-tema" id="txtProximaTema">Lección 10: Inclinarse, someterse o arder</div>
       </section>
+
+      <nav class="navegacion-pestanas">
+        <button id="navAsistencias" class="boton-pestana activa" type="button">Mis Asistencias</button>
+        <button id="navProgreso" class="boton-pestana" type="button">Mi Progreso</button>
+      </nav>
+
+      <section id="seccionAsistencias">
+        <div class="tarjeta" id="cardResumenProgreso">
+          <div class="titulo-nivel-resumen" id="tituloResumenNivel">Nivel 1: Hombría al Máximo</div>
+          <div class="subtitulo-conteo" id="textoConteoProgreso">0 de 10 asistencias completadas</div>
+          <div class="barra-progreso-track">
+            <div class="barra-progreso-fill" id="barraProgresoFill"></div>
+          </div>
+        </div>
+
+        <div class="tarjeta">
+          <span class="caption-lista" id="captionListaAsistencias">Asistencias</span>
+          <div id="listaAsistencias"></div>
+        </div>
+      </section>
+
+      <section id="seccionProgreso" class="oculto">
+        <div class="tarjeta">
+          <span class="caption-lista" id="captionListaProgreso">Consulta tus niveles aprobados</span>
+          <div id="seccionProgresoHombria"><div id="hombria"></div></div>
+          <div id="seccionProgresoFundamentos" class="oculto"><div id="fundamentos"></div></div>
+          <div style="font-size: 13.5px; font-weight: 800; margin: 20px 0 10px; padding-top: 16px; border-top: 1px dashed #e2e8f0; text-transform: uppercase;">Requisitos adicionales</div>
+          <div id="requisitos"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- VISTA 3: ESCÁNER DE VOLUNTARIO -->
+    <div id="vistaEscanerVoluntario" class="oculto">
+      <div class="tarjeta-escaner">
+        <div id="escanerPasoPrograma">
+          <div class="titulo-seccion-escaner">Selecciona qué asistencia deseas registrar</div>
+          <div class="tarjeta-programas-selector">
+            <button class="btn-banner" id="btnEscProgHombria" type="button">
+              <img src="https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow" alt="Hombría" class="img-banner-programa">
+            </button>
+            <button class="btn-banner" id="btnEscProgFundamentos" type="button">
+              <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" alt="Fundamentos" class="img-banner-programa">
+            </button>
+          </div>
+        </div>
+
+        <div id="escanerPasoCampus" class="oculto">
+          <button class="boton-volver" id="btnVolverEscanerProg" type="button">&#8592; Cambiar programa</button>
+          <div class="titulo-seccion-escaner">Selecciona en qué campus deseas registrar asistencias</div>
+          <div id="gridCampusOpciones" class="grid-campus"></div>
+        </div>
+
+        <div id="escanerPasoCamara" class="oculto">
+          <button class="boton-volver" id="btnVolverEscanerCampus" type="button">&#8592; Cambiar campus</button>
+
+          <div style="text-align: center; margin-bottom: 10px;">
+            <strong id="labelEscanerCampusActivo" style="color: #005b92; font-size: 16px; text-transform: uppercase;">PUEBLA</strong>
+          </div>
+
+          <div id="reader"></div>
+          <div id="resultadoEscaneo"></div>
+        </div>
+      </div>
     </div>
 
   </section>
 </main>
 
 <script>
-  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
+  let eventoInstalacionPrompt = null;
+  const bannerInstalacion = document.getElementById('bannerInstalacion');
+  const btnInstalarApp = document.getElementById('btnInstalarApp');
 
-  let usuarioSesion = null;
+  // FIX 3: DETECTAR SI LA APP YA ESTÁ INSTALADA / MODO STANDALONE
+  const esPWAInstalada = window.matchMedia('(display-mode: standalone)').matches || 
+                         window.navigator.standalone === true || 
+                         document.referrer.includes('android-app://');
+
+  const esIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const esDispositivoMovil = esIOS || /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+  // Ocultar banner si no es móvil o si YA ESTÁ INSTALADA
+  if ((!esDispositivoMovil || esPWAInstalada) && bannerInstalacion) {
+    bannerInstalacion.classList.add('oculto');
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    if (esDispositivoMovil && !esPWAInstalada) {
+      eventoInstalacionPrompt = e;
+    }
+  });
+
+  if (btnInstalarApp) {
+    btnInstalarApp.addEventListener('click', async () => {
+      if (esIOS) {
+        const esSafari = /Safari/i.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS/i.test(navigator.userAgent);
+        if (esSafari) {
+          alert('Para instalar en iPhone/iPad:\n\n1. Toca "Compartir" (⎋) en la barra inferior.\n2. Elige "Agregar al inicio" (+).');
+        } else {
+          alert('En iPhone abre este enlace en Safari para poder instalar la app.');
+        }
+        return;
+      }
+      if (eventoInstalacionPrompt) {
+        eventoInstalacionPrompt.prompt();
+        const { outcome } = await eventoInstalacionPrompt.userChoice;
+        if (outcome === 'accepted') bannerInstalacion.classList.add('oculto');
+        eventoInstalacionPrompt = null;
+      } else {
+        alert('Para instalar:\n\n1. Toca los tres puntos (⋮) en Chrome.\n2. Selecciona "Agregar a la pantalla principal".');
+      }
+    });
+  }
+
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
+  const URL_BANNER_HOMBRIA = 'https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow';
+  const URL_BANNER_FUNDAMENTOS = 'https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr';
+
+  const nombresFundamentos = ['Bloque 1: Sanidad y Libertad','Bloque 1: Cimientos','Bloque 1: Hábitos de un Discípulo','Bloque 2: La Gran Comisión','Bloque 2: El Carácter del Obrero','Bloque 2: Liderazgo'];
+  const nombresHombria = ['Nivel 1: Hombría al Máximo','Nivel 2: Valor','Nivel 3: Integridad Sexual','Nivel 4: El Principio del Potencial','Nivel 5: Nunca Te Rindas','Nivel 6: Comunicación, Sexo y Dinero','Nivel 7: Un Hombre de Verdad I','Nivel 8: Un Hombre de Verdad II','Nivel 9: Hombres Fuertes','Nivel 10: Mujer Única'];
+  const nombresRequisitos = ['Encuentro Con La Cruz','Voluntariado','Voluntario en Grupos Pequeños','Viaje Misionero'];
+
+  const formulario = document.getElementById('formulario');
+  const boton = document.getElementById('boton');
+  const mensaje = document.getElementById('mensaje');
+  const inputNacimiento = document.getElementById('nacimiento');
+
+  let consultaActual = 0;
+  let registroSesion = '';
+  let nacimientoSesion = '';
+  let programaActual = '';
+  let cacheAsistencias = {};
+  let cacheProximaLeccion = {};
+  let permisosVoluntarioGlobal = { esVoluntario: false, programas: [] };
+
+  let html5QrCodeDirecto = null;
+  let esc_programaSeleccionado = '';
+  let esc_campusSeleccionado = '';
+  let permitoEscanearProximo = true;
 
   const btnHamburguesa = document.getElementById('btnHamburguesa');
   const drawerOverlay = document.getElementById('drawerOverlay');
@@ -218,151 +526,463 @@
 
   btnHamburguesa.addEventListener('click', () => abrirMenu(true));
   drawerOverlay.addEventListener('click', () => abrirMenu(false));
-
   document.getElementById('itemMiCuenta').addEventListener('click', () => { abrirMenu(false); mostrarVista('cuenta'); });
-  document.getElementById('itemRegistro').addEventListener('click', () => { abrirMenu(false); mostrarVista('registro'); });
-  document.getElementById('itemCerrarSesion').addEventListener('click', () => { abrirMenu(false); cerrarSesion(); });
+  document.getElementById('itemRegistro').addEventListener('click', () => { abrirMenu(false); mostrarVista('escaner'); });
+  document.getElementById('itemCerrarSesion').addEventListener('click', () => {
+    abrirMenu(false);
+    if (confirm('¿Estás seguro que deseas salir?')) {
+      cerrarSesion();
+    }
+  });
 
   function abrirMenu(abrir) {
     drawerOverlay.classList.toggle('activo', abrir);
     drawerMenu.classList.toggle('activo', abrir);
   }
 
-  function mostrarVista(vista) {
-    document.getElementById('vistaCuenta').classList.add('oculto');
-    document.getElementById('vistaRegistro').classList.add('oculto');
-
-    if (vista === 'cuenta') document.getElementById('vistaCuenta').classList.remove('oculto');
-    if (vista === 'registro') document.getElementById('vistaRegistro').classList.remove('oculto');
+  function autoFormatearFecha(e) {
+    let valor = e.target.value.replace(/\D/g, '');
+    if (valor.length > 8) valor = valor.substring(0, 8);
+    let formateado = '';
+    if (valor.length > 0) {
+      formateado += valor.substring(0, 2);
+      if (valor.length >= 3) formateado += '/' + valor.substring(2, 4);
+      if (valor.length >= 5) formateado += '/' + valor.substring(4, 8);
+    }
+    e.target.value = formateado;
   }
 
-  document.getElementById('formulario').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const registro = document.getElementById('registro').value.trim();
-    const nacimiento = document.getElementById('nacimiento').value.trim();
-    document.getElementById('mensaje').textContent = 'Consultando...';
+  inputNacimiento.addEventListener('input', autoFormatearFecha);
+  inputNacimiento.addEventListener('change', autoFormatearFecha);
+  inputNacimiento.addEventListener('blur', autoFormatearFecha);
 
-    fetch(`${WEB_APP_URL}?action=buscarParticipante&registro=${encodeURIComponent(registro)}&nacimiento=${encodeURIComponent(nacimiento)}`)
+  document.getElementById('navAsistencias').addEventListener('click', () => cambiarPestana('asistencias'));
+  document.getElementById('navProgreso').addEventListener('click', () => cambiarPestana('progreso'));
+  document.getElementById('btnHombria').addEventListener('click', () => seleccionarPrograma('HOMBRIA'));
+  document.getElementById('btnFundamentos').addEventListener('click', () => seleccionarPrograma('FUNDAMENTOS'));
+  document.getElementById('btnVolverCuenta').addEventListener('click', () => mostrarVista('cuenta'));
+
+  document.getElementById('btnEscProgHombria').addEventListener('click', () => seleccionarProgEscaner('HOMBRIA'));
+  document.getElementById('btnEscProgFundamentos').addEventListener('click', () => seleccionarProgEscaner('FUNDAMENTOS'));
+  document.getElementById('btnVolverEscanerProg').addEventListener('click', () => {
+    document.getElementById('escanerPasoCampus').classList.add('oculto');
+    document.getElementById('escanerPasoPrograma').classList.remove('oculto');
+  });
+  document.getElementById('btnVolverEscanerCampus').addEventListener('click', () => {
+    detenerCamara();
+    document.getElementById('escanerPasoCamara').classList.add('oculto');
+    document.getElementById('escanerPasoCampus').classList.remove('oculto');
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const sesionGuardada = localStorage.getItem('naciones_sesion');
+    if (sesionGuardada) {
+      try {
+        const datosSesion = JSON.parse(sesionGuardada);
+        if (datosSesion && datosSesion.registro && datosSesion.nacimiento) {
+          registroSesion = datosSesion.registro;
+          nacimientoSesion = datosSesion.nacimiento;
+          refrescarDatosUsuario(registroSesion, nacimientoSesion);
+        }
+      } catch (e) {
+        localStorage.removeItem('naciones_sesion');
+      }
+    }
+  });
+
+  function refrescarDatosUsuario(registro, nacimiento) {
+    const url = `${WEB_APP_URL}?action=buscarParticipante&registro=${encodeURIComponent(registro)}&nacimiento=${encodeURIComponent(nacimiento)}`;
+    fetch(url)
       .then(res => res.json())
-      .then(res => {
-        if (res.encontrado) {
-          document.getElementById('mensaje').textContent = '';
-          usuarioSesion = res;
-          mostrarPanel(res);
+      .then(resultado => {
+        if (resultado && resultado.encontrado) {
+          localStorage.setItem('naciones_sesion', JSON.stringify({
+            registro: registro,
+            nacimiento: nacimiento,
+            resultado: resultado
+          }));
+          mostrarPanelUsuario(resultado);
         } else {
-          document.getElementById('mensaje').textContent = 'Credenciales no encontradas.';
+          cerrarSesion();
         }
       })
       .catch(() => {
-        document.getElementById('mensaje').textContent = 'Error al conectar con el servidor.';
+        const sesionGuardada = localStorage.getItem('naciones_sesion');
+        if (sesionGuardada) {
+          const datos = JSON.parse(sesionGuardada);
+          if (datos && datos.resultado) mostrarPanelUsuario(datos.resultado);
+        }
+      });
+  }
+
+  function cambiarPestana(pestana) {
+    const asistenciasActivas = pestana === 'asistencias';
+    document.getElementById('navAsistencias').classList.toggle('activa', asistenciasActivas);
+    document.getElementById('navProgreso').classList.toggle('activa', !asistenciasActivas);
+    document.getElementById('seccionAsistencias').classList.toggle('oculto', !asistenciasActivas);
+    document.getElementById('seccionProgreso').classList.toggle('oculto', asistenciasActivas);
+  }
+
+  function seleccionarPrograma(programa) {
+    programaActual = programa;
+    mostrarVista('programa');
+  }
+
+  function mostrarVista(vista) {
+    detenerCamara();
+    document.getElementById('vistaCuenta').classList.add('oculto');
+    document.getElementById('vistaPrograma').classList.add('oculto');
+    document.getElementById('vistaEscanerVoluntario').classList.add('oculto');
+
+    if (vista === 'cuenta') {
+      document.getElementById('vistaCuenta').classList.remove('oculto');
+    } else if (vista === 'programa') {
+      document.getElementById('vistaPrograma').classList.remove('oculto');
+      prepararVistaPrograma();
+    } else if (vista === 'escaner') {
+      document.getElementById('vistaEscanerVoluntario').classList.remove('oculto');
+      document.getElementById('escanerPasoCampus').classList.add('oculto');
+      document.getElementById('escanerPasoCamara').classList.add('oculto');
+      document.getElementById('escanerPasoPrograma').classList.remove('oculto');
+    }
+    window.scrollTo(0, 0);
+  }
+
+  function prepararVistaPrograma() {
+    const esHombria = programaActual === 'HOMBRIA';
+    document.getElementById('imgBannerHeader').src = esHombria ? URL_BANNER_HOMBRIA : URL_BANNER_FUNDAMENTOS;
+    document.getElementById('captionListaAsistencias').textContent = esHombria ? 'Asistencias de Hombría' : 'Asistencias de Fundamentos';
+    document.getElementById('barraProgresoFill').style.background = esHombria ? '#8a2a2a' : '#125278';
+
+    document.getElementById('seccionProgresoHombria').classList.toggle('oculto', !esHombria);
+    document.getElementById('seccionProgresoFundamentos').classList.toggle('oculto', esHombria);
+
+    const prox = cacheProximaLeccion[programaActual];
+    const tarjetaProx = document.getElementById('tarjetaProximaLeccion');
+
+    if (prox && prox.tema) {
+      document.getElementById('txtProximaSemana').textContent = (prox.semana || 'Próxima Semana') + (prox.fecha ? ' (' + prox.fecha + ')' : '');
+      document.getElementById('txtProximaTema').textContent = prox.tema;
+      tarjetaProx.classList.remove('oculto');
+    } else {
+      tarjetaProx.classList.add('oculto');
+    }
+
+    cambiarPestana('asistencias');
+    cargarAsistencias();
+  }
+
+  formulario.addEventListener('submit', function(evento) {
+    evento.preventDefault();
+    const registro = document.getElementById('registro').value.trim();
+    
+    autoFormatearFecha({ target: inputNacimiento });
+    const nacimientoTexto = inputNacimiento.value.trim();
+
+    if (!registro || !nacimientoTexto) {
+      mensaje.textContent = 'Escribe tu número de registro y fecha de nacimiento.';
+      return;
+    }
+
+    const partes = nacimientoTexto.split('/');
+    if (partes.length !== 3 || partes[2].length !== 4) {
+      mensaje.textContent = 'Escribe una fecha válida con formato DD/MM/AAAA.';
+      return;
+    }
+
+    const nacimiento = partes[2] + '-' + partes[1] + '-' + partes[0];
+    const idConsulta = ++consultaActual;
+    boton.disabled = true;
+    mensaje.textContent = 'Verificando tus datos...';
+
+    const url = `${WEB_APP_URL}?action=buscarParticipante&registro=${encodeURIComponent(registro)}&nacimiento=${encodeURIComponent(nacimiento)}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(function(resultado) {
+        if (idConsulta !== consultaActual) return;
+        boton.disabled = false;
+
+        if (!resultado || !resultado.encontrado) {
+          mensaje.textContent = 'No pudimos verificar esos datos. Revisa la información.';
+          return;
+        }
+
+        mensaje.textContent = '';
+        registroSesion = String(resultado.registro || registro).trim();
+        nacimientoSesion = nacimiento;
+
+        localStorage.setItem('naciones_sesion', JSON.stringify({
+          registro: registroSesion,
+          nacimiento: nacimientoSesion,
+          resultado: resultado
+        }));
+
+        mostrarPanelUsuario(resultado);
+      })
+      .catch(function(error) {
+        if (idConsulta !== consultaActual) return;
+        boton.disabled = false;
+        mensaje.textContent = 'No fue posible realizar la consulta. Intenta más tarde.';
       });
   });
 
-  function mostrarPanel(res) {
+  function mostrarPanelUsuario(resultado) {
+    cacheAsistencias = resultado.asistencias || {};
+    cacheProximaLeccion = resultado.proximaLeccion || {};
+    permisosVoluntarioGlobal = resultado.permisosVoluntario || { esVoluntario: false, programas: [] };
+
+    document.getElementById('nombre').textContent = [resultado.nombre || '', resultado.apellidos || ''].filter(Boolean).join(' ');
+    document.getElementById('drawerNombreUser').textContent = resultado.nombre || 'NACIONES';
+    document.getElementById('campus').textContent = resultado.campus ? 'Campus: ' + resultado.campus : '';
+
+    document.getElementById('qrImagen').src = 'https://quickchart.io/qr?text=' + encodeURIComponent(registroSesion) + '&size=220&margin=1';
+    document.getElementById('qrNumero').textContent = registroSesion;
+
+    btnHamburguesa.classList.remove('oculto');
+    
+    const itemRegistro = document.getElementById('itemRegistro');
+
+    if (permisosVoluntarioGlobal.esVoluntario) {
+      itemRegistro.classList.remove('oculto');
+      document.getElementById('btnEscProgHombria').style.display =
+        permisosVoluntarioGlobal.programas.includes('HOMBRIA') ? 'block' : 'none';
+      document.getElementById('btnEscProgFundamentos').style.display =
+        permisosVoluntarioGlobal.programas.includes('FUNDAMENTOS') ? 'block' : 'none';
+    } else {
+      itemRegistro.classList.add('oculto');
+    }
+
+    const tarjetaAvisoImg = document.getElementById('tarjetaAvisoImagen');
+    const imgAviso = document.getElementById('imgAvisoPromocional');
+
+    if (resultado.avisoImagen && resultado.avisoImagen.urlImagen) {
+      imgAviso.src = resultado.avisoImagen.urlImagen;
+      tarjetaAvisoImg.classList.remove('oculto');
+    } else {
+      tarjetaAvisoImg.classList.add('oculto');
+    }
+
+    dibujarLista('fundamentos', nombresFundamentos, resultado.fundamentos);
+    dibujarLista('hombria', nombresHombria, resultado.hombria);
+    dibujarLista('requisitos', nombresRequisitos, resultado.requisitos);
+
     document.getElementById('acceso').classList.add('oculto');
     document.getElementById('panel').classList.remove('oculto');
-    btnHamburguesa.classList.remove('oculto');
-
-    document.getElementById('nombre').textContent = res.nombre + ' ' + res.apellidos;
-    document.getElementById('campus').textContent = 'Campus: ' + res.campus;
-    document.getElementById('qrImagen').src = 'https://quickchart.io/qr?text=' + res.registro + '&size=220';
-    document.getElementById('qrNumero').textContent = res.registro;
-
-    // BADGE DE ROL
-    const rol = String(res.rol || '').toUpperCase();
-    document.getElementById('badgeRol').textContent = rol ? ('ROL: ' + rol) : 'MI CUENTA';
-
-    // AVISOS
-    if (res.avisoImagen) {
-      document.getElementById('avisoTitulo').textContent = res.avisoImagen.titulo || 'Aviso importante';
-      document.getElementById('avisoImagen').src = res.avisoImagen.urlImagen;
-      document.getElementById('seccionAviso').classList.remove('oculto');
-    } else {
-      document.getElementById('seccionAviso').classList.add('oculto');
-    }
-
-    // RENDERIZAR PROGRAMA HOMBRÍA
-    if (res.hombria) {
-      document.getElementById('seccionHombria').classList.remove('oculto');
-      renderizarProgreso('hombriaProgreso', res.hombria, 10);
-
-      if (res.proximaLeccion && res.proximaLeccion.HOMBRIA) {
-        document.getElementById('hombriaProximaTema').textContent = res.proximaLeccion.HOMBRIA.tema || '';
-        document.getElementById('hombriaProximaFecha').textContent = (res.proximaLeccion.HOMBRIA.semana || '') + ' • ' + (res.proximaLeccion.HOMBRIA.fecha || '');
-      }
-
-      if (res.asistencias && res.asistencias.HOMBRIA) {
-        renderizarAsistencias('hombriaAsistenciasLista', res.asistencias.HOMBRIA);
-      }
-    }
-
-    // RENDERIZAR PROGRAMA FUNDAMENTOS
-    if (res.fundamentos) {
-      document.getElementById('seccionFundamentos').classList.remove('oculto');
-      renderizarProgreso('fundamentosProgreso', res.fundamentos, 6);
-
-      if (res.proximaLeccion && res.proximaLeccion.FUNDAMENTOS) {
-        document.getElementById('fundamentosProximaTema').textContent = res.proximaLeccion.FUNDAMENTOS.tema || '';
-        document.getElementById('fundamentosProximaFecha').textContent = (res.proximaLeccion.FUNDAMENTOS.semana || '') + ' • ' + (res.proximaLeccion.FUNDAMENTOS.fecha || '');
-      }
-
-      if (res.asistencias && res.asistencias.FUNDAMENTOS) {
-        renderizarAsistencias('fundamentosAsistenciasLista', res.asistencias.FUNDAMENTOS);
-      }
-    }
-
-    // ACTIVACIÓN DE HERRAMIENTAS ADICIONALES EN MENÚ LATERAL
-    const esVoluntarioValido = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
-    document.getElementById('itemRegistro').classList.toggle('oculto', !esVoluntarioValido);
 
     mostrarVista('cuenta');
   }
 
-  function renderizarProgreso(contenedorId, arregloProgreso, totalBloques) {
-    const contenedor = document.getElementById(contenedorId);
-    contenedor.innerHTML = '';
-    for (let i = 0; i < totalBloques; i++) {
-      const div = document.createElement('div');
-      div.className = 'progreso-bloque' + (arregloProgreso[i] ? ' completado' : '');
-      contenedor.appendChild(div);
-    }
-  }
+  function dibujarLista(id, nombres, valores) {
+    const contenedor = document.getElementById(id);
+    if (!contenedor) return;
+    contenedor.replaceChildren();
 
-  function renderizarAsistencias(contenedorId, lista) {
-    const contenedor = document.getElementById(contenedorId);
-    contenedor.innerHTML = '';
+    nombres.forEach(function(nombre, indice) {
+      const fila = document.createElement('div');
+      fila.className = 'fila';
 
-    if (!lista || lista.length === 0) {
-      contenedor.innerHTML = '<div class="subtitulo">No hay asistencias registradas.</div>';
-      return;
-    }
+      const texto = document.createElement('span');
+      texto.className = 'detalle';
+      texto.textContent = nombre;
 
-    lista.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'item-asistencia';
+      const aprobado = Array.isArray(valores) && valores[indice] === true;
+      const estado = document.createElement('span');
+      estado.className = 'estado ' + (aprobado ? 'aprobado' : 'pendiente');
+      estado.textContent = aprobado ? 'APROBADO' : 'PENDIENTE';
 
-      const estado = String(item.estado || 'FALTA').toUpperCase();
-      let badgeClase = 'badge-falta';
-      if (estado === 'PRESENTE') badgeClase = 'badge-presente';
-      if (estado === 'RETARDO') badgeClase = 'badge-retardo';
-
-      div.innerHTML = `
-        <div>
-          <div class="asistencia-info"><strong>${item.sesion || ''}</strong> - ${item.leccion || ''}</div>
-          <div class="asistencia-fecha">${item.fecha || ''} • ${item.curso || ''}</div>
-        </div>
-        <span class="badge-estado ${badgeClase}">${estado}</span>
-      `;
-      contenedor.appendChild(div);
+      fila.append(texto, estado);
+      contenedor.appendChild(fila);
     });
   }
 
+  function cargarAsistencias() {
+    const datos = cacheAsistencias[programaActual] || [];
+    renderizarAsistencias(datos);
+  }
+
+  function renderizarAsistencias(datos) {
+    const lista = document.getElementById('listaAsistencias');
+    let totalAsistencias = 0;
+    let nivelNombreTitulo = programaActual === 'HOMBRIA' ? 'Nivel 1: Hombría al Máximo' : 'Bloque 1: Sanidad y Libertad';
+
+    datos.forEach(function(item) {
+      const val = String(item.estado || '').trim().toUpperCase();
+      if (val === 'PRESENTE' || val === 'RETARDO') totalAsistencias++;
+      if (item.curso || item.nivelCurso) {
+        nivelNombreTitulo = item.curso || item.nivelCurso;
+      }
+    });
+
+    document.getElementById('textoConteoProgreso').textContent = totalAsistencias + ' de 10 asistencias completadas';
+    document.getElementById('tituloResumenNivel').textContent = nivelNombreTitulo;
+
+    const porcentaje = Math.min(Math.round((totalAsistencias / 10) * 100), 100);
+    document.getElementById('barraProgresoFill').style.width = porcentaje + '%';
+
+    lista.replaceChildren();
+
+    if (datos.length === 0) {
+      const sinDatos = document.createElement('p');
+      sinDatos.className = 'subtitulo';
+      sinDatos.textContent = 'No hay asistencias registradas para este programa.';
+      lista.appendChild(sinDatos);
+      return;
+    }
+
+    datos.forEach(function(item) {
+      const fila = document.createElement('div');
+      fila.className = 'fila';
+
+      const detalle = document.createElement('div');
+      detalle.className = 'detalle';
+
+      const titulo = document.createElement('strong');
+      titulo.textContent = item.curso || item.nivelCurso || item.programa;
+
+      const info = document.createElement('div');
+      info.className = 'subtitulo';
+
+      let semTxt = item.sesion || 'Semana';
+      semTxt = semTxt.replace(/Sesión/gi, 'Semana');
+
+      info.textContent = [
+        item.fecha || '',
+        semTxt,
+        item.campus || ''
+      ].filter(Boolean).join(' · ');
+
+      detalle.append(titulo, info);
+
+      const valor = String(item.estado || '').trim().toUpperCase();
+      const estado = document.createElement('span');
+      estado.className = 'estado';
+      if (valor === 'PRESENTE') estado.classList.add('aprobado');
+      else if (valor === 'FALTA') estado.classList.add('falta');
+      else if (valor === 'RETARDO') estado.classList.add('retardo');
+      else estado.classList.add('pendiente');
+      estado.textContent = valor;
+
+      fila.append(detalle, estado);
+      lista.appendChild(fila);
+    });
+  }
+
+  function seleccionarProgEscaner(prog) {
+    esc_programaSeleccionado = prog;
+    const gridCampus = document.getElementById('gridCampusOpciones');
+    gridCampus.replaceChildren();
+
+    const listaCampus = prog === 'HOMBRIA' ? ['PUEBLA', 'HUEJOTZINGO'] : ['11 SUR', 'NACIONAL', 'HUEJOTZINGO'];
+
+    listaCampus.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-campus-card';
+      btn.type = 'button';
+      btn.textContent = c;
+      btn.addEventListener('click', () => iniciarCamaraEscaneo(c));
+      gridCampus.appendChild(btn);
+    });
+
+    document.getElementById('escanerPasoPrograma').classList.add('oculto');
+    document.getElementById('escanerPasoCampus').classList.remove('oculto');
+  }
+
+  async function iniciarCamaraEscaneo(campus) {
+    esc_campusSeleccionado = campus;
+    document.getElementById('labelEscanerCampusActivo').textContent = esc_programaSeleccionado + ' · ' + esc_campusSeleccionado;
+
+    document.getElementById('escanerPasoCampus').classList.add('oculto');
+    document.getElementById('escanerPasoCamara').classList.remove('oculto');
+
+    await detenerCamara();
+
+    html5QrCodeDirecto = new Html5Qrcode("reader");
+    const config = { fps: 10, qrbox: { width: 220, height: 220 } };
+
+    html5QrCodeDirecto.start(
+      { facingMode: "environment" },
+      config,
+      onQRDetectado
+    ).catch(err => {
+      html5QrCodeDirecto.start({ facingMode: "user" }, config, onQRDetectado).catch(e => {
+        alert("No se pudo acceder a la cámara. Asegúrate de otorgar permisos en tu navegador.");
+      });
+    });
+  }
+
+  function onQRDetectado(decodedText) {
+    if (!permitoEscanearProximo) return;
+    permitoEscanearProximo = false;
+
+    const divRes = document.getElementById('resultadoEscaneo');
+    divRes.style.display = 'block';
+    divRes.className = '';
+    divRes.style.background = '#e2e8f0';
+    divRes.style.color = '#18232d';
+    divRes.textContent = 'Procesando código: ' + decodedText + '...';
+
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      osc.connect(audioCtx.destination);
+      osc.frequency.value = 800;
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.15);
+    } catch(e) {}
+
+    const url = `${WEB_APP_URL}?action=registrarAsistencia&registro=${encodeURIComponent(decodedText)}&programa=${encodeURIComponent(esc_programaSeleccionado)}&campus=${encodeURIComponent(esc_campusSeleccionado)}&voluntarioRegistro=${encodeURIComponent(registroSesion)}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(res => {
+        if (res.exito) {
+          divRes.className = res.estado === 'RETARDO' ? 'res-retardo' : 'res-exito';
+          divRes.textContent = `✅ Registro ${decodedText}: ${res.mensaje}`;
+        } else {
+          divRes.className = 'res-error';
+          divRes.textContent = `⚠️ Registro ${decodedText}: ${res.mensaje}`;
+        }
+      })
+      .catch(err => {
+        divRes.className = 'res-error';
+        divRes.textContent = '❌ Error de conexión al registrar.';
+      })
+      .finally(() => {
+        setTimeout(() => { permitoEscanearProximo = true; }, 2500);
+      });
+  }
+
+  async function detenerCamara() {
+    if (html5QrCodeDirecto) {
+      try {
+        if (html5QrCodeDirecto.isScanning) {
+          await html5QrCodeDirecto.stop();
+        }
+      } catch(e) {}
+      html5QrCodeDirecto = null;
+    }
+    const divRes = document.getElementById('resultadoEscaneo');
+    if (divRes) divRes.style.display = 'none';
+  }
+
   function cerrarSesion() {
-    usuarioSesion = null;
+    detenerCamara();
+    consultaActual++;
+    registroSesion = '';
+    nacimientoSesion = '';
+    programaActual = '';
+    cacheAsistencias = {};
+    cacheProximaLeccion = {};
+    permisosVoluntarioGlobal = { esVoluntario: false, programas: [] };
+    localStorage.removeItem('naciones_sesion');
+
     document.getElementById('panel').classList.add('oculto');
     document.getElementById('acceso').classList.remove('oculto');
     btnHamburguesa.classList.add('oculto');
-    document.getElementById('formulario').reset();
+    formulario.reset();
+    boton.disabled = false;
+    mensaje.textContent = '';
   }
 </script>
 </body>
