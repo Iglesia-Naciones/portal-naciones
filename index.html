@@ -144,6 +144,30 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.04);
     }
 
+    /* TARJETA PRÓXIMA LECCIÓN */
+    .tarjeta-proxima-leccion {
+      background: linear-gradient(135deg, #005b92 0%, #124063 100%);
+      color: #ffffff;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    .badge-proxima {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .titulo-proxima-semana { font-size: 17px; font-weight: 800; margin: 0 0 4px; }
+    .subtitulo-proxima-tema { font-size: 14px; font-weight: 500; line-height: 1.4; opacity: 0.95; }
+
     .tarjeta-aviso-imagen {
       background: #ffffff;
       border-radius: 18px;
@@ -331,6 +355,13 @@
         <img id="imgBannerHeader" src="" alt="Programa Activo" class="img-banner-header">
       </div>
 
+      <!-- BLOQUE DESTACADO: TU PRÓXIMA LECCIÓN -->
+      <section id="tarjetaProximaLeccion" class="tarjeta-proxima-leccion oculto">
+        <span class="badge-proxima">📌 Tu próxima lección</span>
+        <div class="titulo-proxima-semana" id="txtProximaSemana">Semana 8</div>
+        <div class="subtitulo-proxima-tema" id="txtProximaTema">Lección 10: Inclinarse, someterse o arder</div>
+      </section>
+
       <nav class="navegacion-pestanas">
         <button id="navAsistencias" class="boton-pestana activa" type="button">Mis Asistencias</button>
         <button id="navProgreso" class="boton-pestana" type="button">Mi Progreso</button>
@@ -365,7 +396,6 @@
     <!-- VISTA 3: ESCÁNER DE VOLUNTARIO -->
     <div id="vistaEscanerVoluntario" class="oculto">
       <div class="tarjeta-escaner">
-        <!-- Paso A: Seleccionar Programa -->
         <div id="escanerPasoPrograma">
           <div class="titulo-seccion-escaner">Selecciona qué asistencia deseas registrar</div>
           <div class="tarjeta-programas-selector">
@@ -378,14 +408,12 @@
           </div>
         </div>
 
-        <!-- Paso B: Seleccionar Campus -->
         <div id="escanerPasoCampus" class="oculto">
           <button class="boton-volver" id="btnVolverEscanerProg" type="button">&#8592; Cambiar programa</button>
           <div class="titulo-seccion-escaner">Selecciona en qué campus deseas registrar asistencias</div>
           <div id="gridCampusOpciones" class="grid-campus"></div>
         </div>
 
-        <!-- Paso C: Lector de Cámara / QR -->
         <div id="escanerPasoCamara" class="oculto">
           <button class="boton-volver" id="btnVolverEscanerCampus" type="button">&#8592; Cambiar campus</button>
 
@@ -459,6 +487,7 @@
   let nacimientoSesion = '';
   let programaActual = '';
   let cacheAsistencias = {};
+  let cacheProximaLeccion = {};
   let permisosVoluntarioGlobal = { esVoluntario: false, programas: [] };
 
   let html5QrCodeDirecto = null;
@@ -466,7 +495,6 @@
   let esc_campusSeleccionado = '';
   let permitoEscanearProximo = true;
 
-  // Menú Lateral
   const btnHamburguesa = document.getElementById('btnHamburguesa');
   const drawerOverlay = document.getElementById('drawerOverlay');
   const drawerMenu = document.getElementById('drawerMenu');
@@ -604,6 +632,18 @@
     document.getElementById('seccionProgresoHombria').classList.toggle('oculto', !esHombria);
     document.getElementById('seccionProgresoFundamentos').classList.toggle('oculto', esHombria);
 
+    // Configurar Tarjeta Próxima Lección
+    const prox = cacheProximaLeccion[programaActual];
+    const tarjetaProx = document.getElementById('tarjetaProximaLeccion');
+
+    if (prox && prox.tema) {
+      document.getElementById('txtProximaSemana').textContent = (prox.semana || 'Próxima Semana') + (prox.fecha ? ' (' + prox.fecha + ')' : '');
+      document.getElementById('txtProximaTema').textContent = prox.tema;
+      tarjetaProx.classList.remove('oculto');
+    } else {
+      tarjetaProx.classList.add('oculto');
+    }
+
     cambiarPestana('asistencias');
     cargarAsistencias();
   }
@@ -665,6 +705,7 @@
 
   function mostrarPanelUsuario(resultado) {
     cacheAsistencias = resultado.asistencias || {};
+    cacheProximaLeccion = resultado.proximaLeccion || {};
     permisosVoluntarioGlobal = resultado.permisosVoluntario || { esVoluntario: false, programas: [] };
 
     document.getElementById('nombre').textContent = [resultado.nombre || '', resultado.apellidos || ''].filter(Boolean).join(' ');
@@ -739,14 +780,18 @@
   function renderizarAsistencias(datos) {
     const lista = document.getElementById('listaAsistencias');
     let totalAsistencias = 0;
+    let nivelNombreTitulo = programaActual === 'HOMBRIA' ? 'Nivel 1: Hombría al Máximo' : 'Bloque 1: Sanidad y Libertad';
 
     datos.forEach(function(item) {
       const val = String(item.estado || '').trim().toUpperCase();
       if (val === 'PRESENTE' || val === 'RETARDO') totalAsistencias++;
+      if (item.curso || item.nivelCurso) {
+        nivelNombreTitulo = item.curso || item.nivelCurso;
+      }
     });
 
     document.getElementById('textoConteoProgreso').textContent = totalAsistencias + ' de 10 asistencias completadas';
-    document.getElementById('tituloResumenNivel').textContent = programaActual === 'HOMBRIA' ? 'Nivel 1: Hombría al Máximo' : 'Bloque 1: Sanidad y Libertad';
+    document.getElementById('tituloResumenNivel').textContent = nivelNombreTitulo;
 
     const porcentaje = Math.min(Math.round((totalAsistencias / 10) * 100), 100);
     document.getElementById('barraProgresoFill').style.width = porcentaje + '%';
@@ -769,11 +814,19 @@
       detalle.className = 'detalle';
 
       const titulo = document.createElement('strong');
-      titulo.textContent = item.curso || item.programa || 'Sesión';
+      titulo.textContent = item.curso || item.nivelCurso || item.programa;
 
       const info = document.createElement('div');
       info.className = 'subtitulo';
-      info.textContent = [item.fecha || '', item.sesion || '', item.campus || ''].filter(Boolean).join(' · ');
+
+      let semTxt = item.sesion || 'Semana';
+      semTxt = semTxt.replace(/Sesión/gi, 'Semana');
+
+      info.textContent = [
+        item.fecha || '',
+        semTxt,
+        item.campus || ''
+      ].filter(Boolean).join(' · ');
 
       detalle.append(titulo, info);
 
@@ -796,7 +849,7 @@
     const gridCampus = document.getElementById('gridCampusOpciones');
     gridCampus.replaceChildren();
 
-    const listaCampus = prog === 'HOMBRIA' ? ['PUEBLA', 'HUEJO'] : ['11 SUR', 'NACIONAL', 'HUEJO'];
+    const listaCampus = prog === 'HOMBRIA' ? ['PUEBLA', 'HUEJOTZINGO'] : ['11 SUR', 'NACIONAL', 'HUEJOTZINGO'];
 
     listaCampus.forEach(c => {
       const btn = document.createElement('button');
@@ -896,6 +949,7 @@
     nacimientoSesion = '';
     programaActual = '';
     cacheAsistencias = {};
+    cacheProximaLeccion = {};
     permisosVoluntarioGlobal = { esVoluntario: false, programas: [] };
     localStorage.removeItem('naciones_sesion');
 
