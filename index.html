@@ -92,6 +92,7 @@
       display: flex;
       flex-direction: column;
       box-shadow: 4px 0 16px rgba(0,0,0,0.15);
+      overflow-y: auto;
     }
     .drawer-menu.activo { left: 0; }
 
@@ -114,7 +115,13 @@
       letter-spacing: 0.5px;
     }
     .drawer-item:active { background: #eef3f6; }
-    .drawer-item.cerrar-sesion { color: #a52828; margin-top: auto; border-top: 1px solid #e2e8f0; }
+    
+    /* FIX 1: BOTÓN CERRAR SESIÓN MÁS ARRIBA */
+    .drawer-item.cerrar-sesion { 
+      color: #a52828; 
+      margin-top: 12px; 
+      border-top: 1px solid #e2e8f0; 
+    }
 
     .contenedor { max-width: 440px; margin: 0 auto; padding: 16px 12px 32px; }
     
@@ -191,7 +198,17 @@
     .nombre-usuario { font-size: 21px; font-weight: 800; color: #0d171e; margin: 4px 0 2px; line-height: 1.2; }
     .qr-contenedor { text-align: center; padding: 16px 0 8px; }
     .qr-imagen { width: 180px; height: 180px; display: block; margin: 0 auto; }
-    .qr-numero { font-family: Georgia, serif; font-style: italic; font-size: 17px; color: #2b363f; margin-top: 8px; }
+    
+    /* FIX 2: TIPOGRAFÍA MODERNA SANS-SERIF / ITALIC PARA EL NÚMERO DE REGISTRO */
+    .qr-numero { 
+      font-family: "Montserrat", Arial, sans-serif; 
+      font-style: italic; 
+      font-weight: 600; 
+      font-size: 16px; 
+      color: #2b363f; 
+      margin-top: 10px; 
+      letter-spacing: 0.5px; 
+    }
 
     .tarjeta-programas-selector {
       background: #ffffff;
@@ -435,16 +452,24 @@
   const bannerInstalacion = document.getElementById('bannerInstalacion');
   const btnInstalarApp = document.getElementById('btnInstalarApp');
 
+  // FIX 3: DETECTAR SI LA APP YA ESTÁ INSTALADA / MODO STANDALONE
+  const esPWAInstalada = window.matchMedia('(display-mode: standalone)').matches || 
+                         window.navigator.standalone === true || 
+                         document.referrer.includes('android-app://');
+
   const esIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const esDispositivoMovil = esIOS || /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-  if (!esDispositivoMovil && bannerInstalacion) {
+  // Ocultar banner si no es móvil o si YA ESTÁ INSTALADA
+  if ((!esDispositivoMovil || esPWAInstalada) && bannerInstalacion) {
     bannerInstalacion.classList.add('oculto');
   }
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
-    if (esDispositivoMovil) eventoInstalacionPrompt = e;
+    if (esDispositivoMovil && !esPWAInstalada) {
+      eventoInstalacionPrompt = e;
+    }
   });
 
   if (btnInstalarApp) {
@@ -632,7 +657,6 @@
     document.getElementById('seccionProgresoHombria').classList.toggle('oculto', !esHombria);
     document.getElementById('seccionProgresoFundamentos').classList.toggle('oculto', esHombria);
 
-    // Configurar Tarjeta Próxima Lección
     const prox = cacheProximaLeccion[programaActual];
     const tarjetaProx = document.getElementById('tarjetaProximaLeccion');
 
