@@ -73,6 +73,26 @@
     .qr-imagen { width: 180px; height: 180px; display: block; margin: 0 auto; }
     .qr-numero { font-family: "Montserrat", Arial, sans-serif; font-style: italic; font-weight: 600; font-size: 16px; color: #2b363f; margin-top: 10px; }
 
+    /* ESTILOS DE CURSOS Y PROGRESO */
+    .progreso-grid { display: flex; gap: 6px; margin: 12px 0; }
+    .progreso-bloque { flex: 1; height: 10px; background: #e2e8f0; border-radius: 4px; }
+    .progreso-bloque.completado { background: #005b92; }
+
+    .badge-estado {
+      display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 800; text-transform: uppercase;
+    }
+    .badge-presente { background: #e6f4ea; color: #137333; }
+    .badge-retardo { background: #fef7e0; color: #b06000; }
+    .badge-falta { background: #fce8e6; color: #c5221f; }
+
+    .item-asistencia {
+      padding: 12px 0; border-bottom: 1px solid #f0f3f5; display: flex; justify-content: space-between; align-items: center;
+    }
+    .asistencia-info { font-size: 13px; }
+    .asistencia-fecha { color: #71808e; font-size: 11px; }
+
+    .aviso-img { width: 100%; border-radius: 12px; display: block; margin-top: 8px; }
+
     .oculto { display: none !important; }
     #mensaje { margin-top: 14px; color: #a52828; font-size: 14px; font-weight: bold; }
   </style>
@@ -114,13 +134,15 @@
     <div id="mensaje"></div>
   </section>
 
-  <!-- PANEL DE USUARIO -->
+  <!-- PANEL PRINCIPAL DE USUARIO -->
   <section id="panel" class="oculto">
 
-    <!-- MI CUENTA -->
+    <!-- MI CUENTA Y CURSOS (INTERFAZ DE SIEMPRE) -->
     <div id="vistaCuenta">
+      
+      <!-- TARJETA PERFIL Y QR -->
       <section class="tarjeta">
-        <div class="marca" id="badgeRol">Mi Cuenta</div>
+        <div class="marca" id="badgeRol">MI CUENTA</div>
         <div class="nombre-usuario" id="nombre"></div>
         <p class="subtitulo" id="campus"></p>
 
@@ -129,9 +151,50 @@
           <div id="qrNumero" class="qr-numero"></div>
         </div>
       </section>
+
+      <!-- AVISO IMAGEN (SI EXISTE) -->
+      <div id="seccionAviso" class="tarjeta oculto">
+        <div class="marca" id="avisoTitulo">Aviso importante</div>
+        <img id="avisoImagen" class="aviso-img" src="" alt="Aviso">
+      </div>
+
+      <!-- SECCIÓN HOMBRÍA -->
+      <section id="seccionHombria" class="tarjeta oculto">
+        <div class="marca">Programa</div>
+        <h1>HOMBRÍA</h1>
+        <div class="subtitulo" id="hombriaNivelTexto">Acreditación de Niveles</div>
+        <div class="progreso-grid" id="hombriaProgreso"></div>
+
+        <div id="hombriaProxima" style="margin-top: 16px; background: #f8fafc; padding: 12px; border-radius: 10px;">
+          <strong style="font-size: 13px; color: #005b92;">Próxima Lección:</strong>
+          <div id="hombriaProximaTema" style="font-size: 14px; font-weight: 700; margin-top: 2px;"></div>
+          <div id="hombriaProximaFecha" class="subtitulo"></div>
+        </div>
+
+        <h3 style="font-size: 14px; margin-top: 20px; margin-bottom: 8px;">Historial de Asistencias</h3>
+        <div id="hombriaAsistenciasLista"></div>
+      </section>
+
+      <!-- SECCIÓN FUNDAMENTOS -->
+      <section id="seccionFundamentos" class="tarjeta oculto">
+        <div class="marca">Programa</div>
+        <h1>FUNDAMENTOS</h1>
+        <div class="subtitulo" id="fundamentosNivelTexto">Acreditación de Bloques</div>
+        <div class="progreso-grid" id="fundamentosProgreso"></div>
+
+        <div id="fundamentosProxima" style="margin-top: 16px; background: #f8fafc; padding: 12px; border-radius: 10px;">
+          <strong style="font-size: 13px; color: #005b92;">Próxima Lección:</strong>
+          <div id="fundamentosProximaTema" style="font-size: 14px; font-weight: 700; margin-top: 2px;"></div>
+          <div id="fundamentosProximaFecha" class="subtitulo"></div>
+        </div>
+
+        <h3 style="font-size: 14px; margin-top: 20px; margin-bottom: 8px;">Historial de Asistencias</h3>
+        <div id="fundamentosAsistenciasLista"></div>
+      </section>
+
     </div>
 
-    <!-- MODULO DE REGISTRO / ESCÁNER (VOLUNTARIOS) -->
+    <!-- MODULO DE REGISTRO / ESCÁNER (HERRAMIENTA ADICIONAL EN MENÚ) -->
     <div id="vistaRegistro" class="oculto">
       <section class="tarjeta">
         <div class="marca">Módulo de Asistencia</div>
@@ -205,15 +268,93 @@
     document.getElementById('qrImagen').src = 'https://quickchart.io/qr?text=' + res.registro + '&size=220';
     document.getElementById('qrNumero').textContent = res.registro;
 
-    // EVALUACIÓN DE ROLES DESDE USUARIOS PORTAL NACIONES
+    // BADGE DE ROL
     const rol = String(res.rol || '').toUpperCase();
     document.getElementById('badgeRol').textContent = rol ? ('ROL: ' + rol) : 'MI CUENTA';
 
-    const esVoluntarioValido = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
+    // AVISOS
+    if (res.avisoImagen) {
+      document.getElementById('avisoTitulo').textContent = res.avisoImagen.titulo || 'Aviso importante';
+      document.getElementById('avisoImagen').src = res.avisoImagen.urlImagen;
+      document.getElementById('seccionAviso').classList.remove('oculto');
+    } else {
+      document.getElementById('seccionAviso').classList.add('oculto');
+    }
 
+    // RENDERIZAR PROGRAMA HOMBRÍA
+    if (res.hombria) {
+      document.getElementById('seccionHombria').classList.remove('oculto');
+      renderizarProgreso('hombriaProgreso', res.hombria, 10);
+
+      if (res.proximaLeccion && res.proximaLeccion.HOMBRIA) {
+        document.getElementById('hombriaProximaTema').textContent = res.proximaLeccion.HOMBRIA.tema || '';
+        document.getElementById('hombriaProximaFecha').textContent = (res.proximaLeccion.HOMBRIA.semana || '') + ' • ' + (res.proximaLeccion.HOMBRIA.fecha || '');
+      }
+
+      if (res.asistencias && res.asistencias.HOMBRIA) {
+        renderizarAsistencias('hombriaAsistenciasLista', res.asistencias.HOMBRIA);
+      }
+    }
+
+    // RENDERIZAR PROGRAMA FUNDAMENTOS
+    if (res.fundamentos) {
+      document.getElementById('seccionFundamentos').classList.remove('oculto');
+      renderizarProgreso('fundamentosProgreso', res.fundamentos, 6);
+
+      if (res.proximaLeccion && res.proximaLeccion.FUNDAMENTOS) {
+        document.getElementById('fundamentosProximaTema').textContent = res.proximaLeccion.FUNDAMENTOS.tema || '';
+        document.getElementById('fundamentosProximaFecha').textContent = (res.proximaLeccion.FUNDAMENTOS.semana || '') + ' • ' + (res.proximaLeccion.FUNDAMENTOS.fecha || '');
+      }
+
+      if (res.asistencias && res.asistencias.FUNDAMENTOS) {
+        renderizarAsistencias('fundamentosAsistenciasLista', res.asistencias.FUNDAMENTOS);
+      }
+    }
+
+    // ACTIVACIÓN DE HERRAMIENTAS ADICIONALES EN MENÚ LATERAL
+    const esVoluntarioValido = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
     document.getElementById('itemRegistro').classList.toggle('oculto', !esVoluntarioValido);
 
     mostrarVista('cuenta');
+  }
+
+  function renderizarProgreso(contenedorId, arregloProgreso, totalBloques) {
+    const contenedor = document.getElementById(contenedorId);
+    contenedor.innerHTML = '';
+    for (let i = 0; i < totalBloques; i++) {
+      const div = document.createElement('div');
+      div.className = 'progreso-bloque' + (arregloProgreso[i] ? ' completado' : '');
+      contenedor.appendChild(div);
+    }
+  }
+
+  function renderizarAsistencias(contenedorId, lista) {
+    const contenedor = document.getElementById(contenedorId);
+    contenedor.innerHTML = '';
+
+    if (!lista || lista.length === 0) {
+      contenedor.innerHTML = '<div class="subtitulo">No hay asistencias registradas.</div>';
+      return;
+    }
+
+    lista.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'item-asistencia';
+
+      const estado = String(item.estado || 'FALTA').toUpperCase();
+      let badgeClase = 'badge-falta';
+      if (estado === 'PRESENTE') badgeClase = 'badge-presente';
+      if (estado === 'RETARDO') badgeClase = 'badge-retardo';
+
+      div.innerHTML = `
+        <div>
+          <div class="asistencia-info"><strong>${item.sesion || ''}</strong> - ${item.leccion || ''}</div>
+          <div class="asistencia-fecha">${item.fecha || ''} • ${item.curso || ''}</div>
+        </div>
+        <span class="badge-estado ${badgeClase}">${estado}</span>
+      `;
+      contenedor.appendChild(div);
+    });
   }
 
   function cerrarSesion() {
