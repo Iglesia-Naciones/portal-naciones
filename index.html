@@ -19,15 +19,24 @@
 
   <style>
     * { box-sizing: border-box; }
+    
+    /* FONDO DE PÁGINA VARIABLE Y CONECTADO */
     body {
       margin: 0; padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #f4f6f8; color: #18232d; min-height: 100vh;
+      background-color: #f0f4f8; 
+      color: #18232d; min-height: 100vh;
+      transition: background-color 0.3s ease;
     }
 
-    /* CARRUSEL PROMOCIONAL SUPERIOR */
+    /* CARRUSEL EN PROPORCIÓN EXACTA 3840x796 */
     .hero-carousel {
-      width: 100%; height: 220px; background: #2b363f; position: relative; overflow: hidden;
+      width: 100%;
+      aspect-ratio: 3840 / 796;
+      max-height: 480px;
+      background: #18232d;
+      position: relative;
+      overflow: hidden;
     }
     .carousel-slide {
       width: 100%; height: 100%; object-fit: cover; display: none;
@@ -42,14 +51,21 @@
     }
     .dot.active { background: #ffffff; }
 
-    /* NAVBAR PRINCIPAL (RESPONSIVE) */
+    /* NAVBAR PRINCIPAL ALINEADO CON EL CONTENIDO (1080px) */
     .header-naciones {
-      background-color: #e2e8ec; padding: 0 24px;
-      display: flex; justify-content: space-between; align-items: center;
-      height: 56px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100;
+      background-color: #e2e8ec;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: background-color 0.3s ease;
     }
-    .brand-box { display: flex; align-items: center; gap: 8px; }
-    .img-logo-naciones { height: 28px; width: auto; }
+    .header-inner {
+      max-width: 1080px; margin: 0 auto; padding: 0 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      height: 56px;
+    }
+
+    .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .img-logo-naciones { height: 28px; width: auto; display: block; }
 
     .nav-desktop {
       display: flex; align-items: center; gap: 4px; height: 100%;
@@ -57,10 +73,14 @@
     .nav-btn {
       padding: 8px 18px; border: 0; background: transparent; font-size: 13.5px; font-weight: 700;
       color: #2b363f; cursor: pointer; border-radius: 18px 18px 0 0; height: 42px; margin-top: 14px;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
+
+    /* PESTAÑA ACTIVA SE CONECTA DIRECTAMENTE AL FONDO GENERAL DE LA VISTA */
     .nav-btn.active {
-      background: #ffffff; color: #0d171e; box-shadow: 0 -2px 6px rgba(0,0,0,0.04);
+      background-color: var(--color-fondo-vista, #f0f4f8);
+      color: #0d171e;
+      box-shadow: 0 -3px 8px rgba(0,0,0,0.04);
     }
 
     .btn-menu-hamburguesa {
@@ -86,7 +106,7 @@
     /* CONTENEDOR PRINCIPAL ESCRITORIO */
     .contenedor { max-width: 1080px; margin: 32px auto; padding: 0 20px; }
 
-    /* TARJETA INICIO PANORÁMICA DE PERFIL (MOCKUP 1) */
+    /* TARJETA INICIO PANORÁMICA DE PERFIL */
     .profile-card-desktop {
       background: #ffffff; border-radius: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);
       overflow: hidden; display: flex; flex-direction: column; position: relative; margin-bottom: 32px;
@@ -111,9 +131,8 @@
     .qr-card-float img { width: 180px; height: 180px; display: block; margin: 0 auto; }
     .qr-card-float .qr-num { font-size: 14px; font-style: italic; font-weight: 600; margin-top: 8px; }
 
-    /* TARJETAS DE VISTAS DE CURSOS (MOCKUPS 2 Y 3) */
+    /* TARJETAS Y VISTAS DE CURSOS */
     .course-header-title { text-align: center; margin-bottom: 24px; }
-    .course-header-title img { max-height: 48px; }
 
     .card-rounded-gray {
       background: #e5e9ec; border-radius: 24px; padding: 20px 28px; margin-bottom: 20px;
@@ -126,10 +145,10 @@
     .pill-tab {
       flex: 1; padding: 14px; border-radius: 30px; border: 0; font-size: 14px; font-weight: 800;
       color: #ffffff; background: #5a646e; cursor: pointer; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: background 0.2s ease;
     }
     .pill-tab.active { background: #8a2a2a; }
 
-    .progress-bar-container { margin-top: 12px; }
     .progress-bar-track { width: 100%; height: 8px; background: #ffffff; border-radius: 4px; overflow: hidden; margin-top: 8px; }
     .progress-bar-fill { height: 100%; background: #8a2a2a; border-radius: 4px; }
 
@@ -144,7 +163,7 @@
     .badge-presente { background: #d8f3e1; color: #176b3a; }
     .badge-retardo { background: #fef0cd; color: #895b00; }
 
-    /* ESTILOS DE ACCESO / LOGIN */
+    /* ESTILOS DE LOGIN */
     .login-card {
       max-width: 420px; margin: 40px auto; background: #ffffff; border-radius: 24px; padding: 32px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08);
@@ -155,18 +174,16 @@
 
     .oculto { display: none !important; }
 
-    /* RESPONSIVE PARA MÓVILES */
     @media (max-width: 767px) {
       .nav-desktop { display: none; }
       .btn-menu-hamburguesa { display: block; }
       .profile-card-body { grid-template-columns: 1fr; }
-      .hero-carousel { height: 150px; }
     }
   </style>
 </head>
 <body>
 
-<!-- HERO CAROUSEL -->
+<!-- HERO CAROUSEL 3840x796 PROPORCIONAL -->
 <div class="hero-carousel" id="heroCarousel">
   <img src="https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow" class="carousel-slide active" alt="Anuncio 1">
   <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" class="carousel-slide" alt="Anuncio 2">
@@ -176,21 +193,22 @@
   </div>
 </div>
 
-<!-- NAVBAR SUPERIOR -->
+<!-- NAVBAR ALINEADO CON CONTENIDO (1080px) -->
 <header class="header-naciones">
-  <button id="btnHamburguesa" class="btn-menu-hamburguesa" type="button">☰</button>
-  
-  <div class="brand-box">
-    <img src="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H" alt="Naciones" class="img-logo-naciones">
-  </div>
+  <div class="header-inner">
+    <div class="brand-box" onclick="navegarA('inicio')">
+      <button id="btnHamburguesa" class="btn-menu-hamburguesa" type="button">☰</button>
+      <img src="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H" alt="Naciones" class="img-logo-naciones">
+    </div>
 
-  <nav class="nav-desktop">
-    <button class="nav-btn active" id="navBtnInicio" onclick="navegarA('inicio')">Inicio</button>
-    <button class="nav-btn" id="navBtnHombria" onclick="navegarA('hombria')">Hombría al Máximo</button>
-    <button class="nav-btn" id="navBtnFundamentos" onclick="navegarA('fundamentos')">Fundamentos</button>
-    <button class="nav-btn" id="navBtnRecursos" onclick="navegarA('recursos')">Recursos</button>
-    <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
-  </nav>
+    <nav class="nav-desktop">
+      <button class="nav-btn active" id="navBtnInicio" onclick="navegarA('inicio')">Inicio</button>
+      <button class="nav-btn" id="navBtnHombria" onclick="navegarA('hombria')">Hombría al Máximo</button>
+      <button class="nav-btn" id="navBtnFundamentos" onclick="navegarA('fundamentos')">Fundamentos</button>
+      <button class="nav-btn" id="navBtnRecursos" onclick="navegarA('recursos')">Recursos</button>
+      <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
+    </nav>
+  </div>
 </header>
 
 <!-- DRAWER MÓVIL -->
@@ -223,7 +241,7 @@
   <!-- PANEL DE CONTENIDO EN SESIÓN -->
   <div id="panelPrincipal" class="oculto">
 
-    <!-- VISTA INICIO (MOCKUP 1: TARJETA DE PERFIL + QR FLOTANTE) -->
+    <!-- VISTA INICIO -->
     <section id="vistaInicio">
       <div class="profile-card-desktop">
         <div class="profile-card-header" id="userNombreHeader">Esteban Bautista Moreno</div>
@@ -257,25 +275,22 @@
       </div>
     </section>
 
-    <!-- VISTA HOMBRÍA (MOCKUPS 2 Y 3) -->
+    <!-- VISTA HOMBRÍA -->
     <section id="vistaHombria" class="oculto">
       <div class="course-header-title">
         <h1 style="font-size: 28px; margin: 0;">Hombría al Máximo</h1>
       </div>
 
-      <!-- PRÓXIMA LECCIÓN -->
       <div class="card-rounded-gray" id="boxProxHombria">
         <div class="next-lesson-title">Tu próxima lección:</div>
         <div class="next-lesson-sub" id="txtProxHombria">Lección 9: ¿Cómo pasar del fracaso al éxito?</div>
       </div>
 
-      <!-- PESTAÑAS PILI -->
       <div class="pill-tabs-nav">
         <button class="pill-tab active" id="tabHombriaAsis" onclick="toggleSubPestana('hombria', 'asis')">Mis asistencias</button>
         <button class="pill-tab" id="tabHombriaProg" onclick="toggleSubPestana('hombria', 'prog')">Mi progreso</button>
       </div>
 
-      <!-- ASISTENCIAS HOMBRÍA -->
       <div id="secHombriaAsis">
         <div class="card-rounded-gray">
           <div style="font-weight: 800; font-size: 16px;" id="lblHombriaNivelAct">Nivel 5: Nunca Te Rindas</div>
@@ -291,7 +306,6 @@
         </div>
       </div>
 
-      <!-- PROGRESO HOMBRÍA -->
       <div id="secHombriaProg" class="oculto">
         <div class="card-rounded-gray">
           <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #52606d;">Consulta tus niveles aprobados</div>
@@ -339,7 +353,7 @@
       </div>
     </section>
 
-    <!-- VISTA ESCÁNER QR (VOLUNTARIOS) -->
+    <!-- VISTA ESCÁNER QR -->
     <section id="vistaEscaner" class="oculto">
       <div class="card-rounded-gray" style="background: #ffffff; text-align: center;">
         <h2 style="margin-top: 0; color: #005b92;">Escáner de Asistencia QR</h2>
@@ -355,7 +369,6 @@
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
   let usuarioSesion = null;
 
-  // AUTO FORMATEO FECHA
   document.getElementById('inputNacimiento').addEventListener('input', (e) => {
     let v = e.target.value.replace(/\D/g, '');
     if (v.length > 8) v = v.substring(0, 8);
@@ -366,7 +379,6 @@
     e.target.value = f;
   });
 
-  // LOGIN
   document.getElementById('formLogin').addEventListener('submit', (e) => {
     e.preventDefault();
     const reg = document.getElementById('inputRegistro').value.trim();
@@ -397,16 +409,13 @@
     document.getElementById('userNombreHeader').textContent = nombreFull;
     document.getElementById('drawerNombreUser').textContent = res.nombre || 'NACIONES';
 
-    // QR
     document.getElementById('qrImgMain').src = 'https://quickchart.io/qr?text=' + encodeURIComponent(res.registro) + '&size=220&margin=1';
     document.getElementById('qrNumMain').textContent = res.registro;
 
-    // ROL Y PERMISOS
     const rol = String(res.rol || '').toUpperCase();
     const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
     document.getElementById('itemRegistro').classList.toggle('oculto', !esVoluntario);
 
-    // HOMBRÍA
     if (res.proximaLeccion && res.proximaLeccion.HOMBRIA) {
       document.getElementById('txtProxHombria').textContent = res.proximaLeccion.HOMBRIA.tema || '';
       document.getElementById('sumHombriaTexto').innerHTML = 'Próxima sesión: ' + (res.proximaLeccion.HOMBRIA.tema || '');
@@ -416,7 +425,6 @@
       renderizarListaAsistencias('listHombriaAsistencias', res.asistencias.HOMBRIA);
     }
 
-    // FUNDAMENTOS
     if (res.proximaLeccion && res.proximaLeccion.FUNDAMENTOS) {
       document.getElementById('txtProxFundamentos').textContent = res.proximaLeccion.FUNDAMENTOS.tema || '';
       document.getElementById('sumFundamentosTexto').innerHTML = 'Próxima sesión: ' + (res.proximaLeccion.FUNDAMENTOS.tema || '');
@@ -453,7 +461,7 @@
     });
   }
 
-  // NAVEGACIÓN ENTRE VISTAS
+  // CAMBIO DINÁMICO DE VISTAS Y DE COLOR DE FONDO
   function navegarA(vista) {
     document.getElementById('vistaInicio').classList.add('oculto');
     document.getElementById('vistaHombria').classList.add('oculto');
@@ -462,18 +470,28 @@
 
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
+    let colorFondoVista = '#f0f4f8';
+
     if (vista === 'inicio' || vista === 'cuenta') {
       document.getElementById('vistaInicio').classList.remove('oculto');
       document.getElementById('navBtnInicio').classList.add('active');
+      colorFondoVista = '#f0f4f8';
     } else if (vista === 'hombria') {
       document.getElementById('vistaHombria').classList.remove('oculto');
       document.getElementById('navBtnHombria').classList.add('active');
+      colorFondoVista = '#e5e9ec';
     } else if (vista === 'fundamentos') {
       document.getElementById('vistaFundamentos').classList.remove('oculto');
       document.getElementById('navBtnFundamentos').classList.add('active');
+      colorFondoVista = '#e1e7ec';
     } else if (vista === 'escaner') {
       document.getElementById('vistaEscaner').classList.remove('oculto');
+      colorFondoVista = '#ffffff';
     }
+
+    // CONECTAR EL FONDO CON LA PESTAÑA SELECCIONADA
+    document.documentElement.style.setProperty('--color-fondo-vista', colorFondoVista);
+    document.body.style.backgroundColor = colorFondoVista;
   }
 
   function toggleSubPestana(prog, pest) {
