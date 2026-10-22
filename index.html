@@ -15,974 +15,511 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- Librería del Escáner QR -->
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
   <style>
     * { box-sizing: border-box; }
     body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #dce2e6;
-      color: #18232d;
-      min-height: 100vh;
+      background: #f4f6f8; color: #18232d; min-height: 100vh;
     }
 
-    /* HEADER CON LOGO CENTRADO PERFECTAMENTE */
+    /* CARRUSEL PROMOCIONAL SUPERIOR */
+    .hero-carousel {
+      width: 100%; height: 220px; background: #2b363f; position: relative; overflow: hidden;
+    }
+    .carousel-slide {
+      width: 100%; height: 100%; object-fit: cover; display: none;
+    }
+    .carousel-slide.active { display: block; }
+    .carousel-indicators {
+      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 8px; z-index: 10;
+    }
+    .dot {
+      width: 32px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; cursor: pointer;
+    }
+    .dot.active { background: #ffffff; }
+
+    /* NAVBAR PRINCIPAL (RESPONSIVE) */
     .header-naciones {
-      background-color: #005b92;
-      padding: 10px 16px;
-      display: grid;
-      grid-template-columns: 40px 1fr 40px;
-      align-items: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      background-color: #e2e8ec; padding: 0 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      height: 56px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 100;
     }
-    
-    .logo-center-box {
-      grid-column: 2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .brand-box { display: flex; align-items: center; gap: 8px; }
+    .img-logo-naciones { height: 28px; width: auto; }
+
+    .nav-desktop {
+      display: flex; align-items: center; gap: 4px; height: 100%;
     }
-    
-    .img-logo-naciones {
-      max-height: 32px;
-      width: auto;
-      object-fit: contain;
-      display: block;
+    .nav-btn {
+      padding: 8px 18px; border: 0; background: transparent; font-size: 13.5px; font-weight: 700;
+      color: #2b363f; cursor: pointer; border-radius: 18px 18px 0 0; height: 42px; margin-top: 14px;
+      transition: all 0.2s ease;
+    }
+    .nav-btn.active {
+      background: #ffffff; color: #0d171e; box-shadow: 0 -2px 6px rgba(0,0,0,0.04);
     }
 
     .btn-menu-hamburguesa {
-      grid-column: 1;
-      background: transparent;
-      border: 0;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-      border-radius: 6px;
-      width: 40px;
-      height: 40px;
+      background: transparent; border: 0; color: #005b92; font-size: 24px; cursor: pointer; display: none;
     }
-    .btn-menu-hamburguesa:active { background: rgba(255,255,255,0.2); }
 
-    /* Menú Lateral Desplegable */
+    /* MENÚ LATERAL MÓVIL */
     .drawer-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.5);
-      z-index: 200;
-      display: none;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.5); z-index: 200; display: none;
     }
     .drawer-overlay.activo { display: block; }
 
     .drawer-menu {
-      position: fixed;
-      top: 0; left: -270px; width: 270px; height: 100vh;
-      background: #ffffff;
-      z-index: 201;
-      transition: left 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 4px 0 16px rgba(0,0,0,0.15);
-      overflow-y: auto;
+      position: fixed; top: 0; left: -270px; width: 270px; height: 100vh;
+      background: #ffffff; z-index: 201; transition: left 0.3s ease;
+      display: flex; flex-direction: column; box-shadow: 4px 0 16px rgba(0,0,0,0.15);
     }
     .drawer-menu.activo { left: 0; }
+    .drawer-header { background: #005b92; color: white; padding: 24px 16px; font-weight: bold; }
+    .drawer-item { padding: 16px 20px; font-size: 13.5px; font-weight: 700; color: #2b363f; border-bottom: 1px solid #f0f3f5; cursor: pointer; }
 
-    .drawer-header {
-      background: #005b92;
-      color: white;
-      padding: 24px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    /* CONTENEDOR PRINCIPAL ESCRITORIO */
+    .contenedor { max-width: 1080px; margin: 32px auto; padding: 0 20px; }
+
+    /* TARJETA INICIO PANORÁMICA DE PERFIL (MOCKUP 1) */
+    .profile-card-desktop {
+      background: #ffffff; border-radius: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      overflow: hidden; display: flex; flex-direction: column; position: relative; margin-bottom: 32px;
     }
-    .drawer-item {
-      padding: 16px 20px;
-      font-size: 14px;
-      font-weight: 700;
-      color: #2b363f;
-      border-bottom: 1px solid #f0f3f5;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .profile-card-header {
+      background: #005b92; color: #ffffff; padding: 20px 32px; font-size: 24px; font-weight: 800;
     }
-    .drawer-item:active { background: #eef3f6; }
-    
-    /* FIX 1: BOTÓN CERRAR SESIÓN MÁS ARRIBA */
-    .drawer-item.cerrar-sesion { 
-      color: #a52828; 
-      margin-top: 12px; 
-      border-top: 1px solid #e2e8f0; 
+    .profile-card-body {
+      display: grid; grid-template-columns: 1fr 300px; padding: 28px 32px; gap: 24px; align-items: center;
     }
 
-    .contenedor { max-width: 440px; margin: 0 auto; padding: 16px 12px 32px; }
-    
-    .banner-instalar-app {
-      display: none;
-      background: #ffffff;
-      border: 2px solid #005b92;
-      border-radius: 14px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .texto-instalar-app { font-size: 13px; font-weight: 700; color: #005b92; }
-    .btn-instalar-accion { background: #005b92; color: #ffffff; border-radius: 8px; padding: 8px 14px; font-size: 12.5px; font-weight: 800; }
+    .program-summary-item { margin-bottom: 20px; }
+    .program-summary-title { font-size: 15px; font-weight: 800; color: #18232d; margin-bottom: 6px; }
+    .program-progress-track { width: 100%; height: 10px; background: #e8ecef; border-radius: 5px; overflow: hidden; margin-bottom: 6px; }
+    .program-progress-fill { height: 100%; background: #a17852; border-radius: 5px; width: 70%; }
+    .program-summary-sub { font-size: 12.5px; color: #71808e; }
 
-    @media (max-width: 768px) {
-      .banner-instalar-app:not(.oculto) { display: flex; }
+    .qr-card-float {
+      background: #ffffff; border-radius: 20px; padding: 16px; text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12); border: 1px solid #eef2f5;
     }
+    .qr-card-float img { width: 180px; height: 180px; display: block; margin: 0 auto; }
+    .qr-card-float .qr-num { font-size: 14px; font-style: italic; font-weight: 600; margin-top: 8px; }
 
-    .tarjeta {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 24px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-    }
+    /* TARJETAS DE VISTAS DE CURSOS (MOCKUPS 2 Y 3) */
+    .course-header-title { text-align: center; margin-bottom: 24px; }
+    .course-header-title img { max-height: 48px; }
 
-    /* TARJETA PRÓXIMA LECCIÓN */
-    .tarjeta-proxima-leccion {
-      background: linear-gradient(135deg, #005b92 0%, #124063 100%);
-      color: #ffffff;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    .card-rounded-gray {
+      background: #e5e9ec; border-radius: 24px; padding: 20px 28px; margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
-    .badge-proxima {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 10px;
-    }
-    .titulo-proxima-semana { font-size: 17px; font-weight: 800; margin: 0 0 4px; }
-    .subtitulo-proxima-tema { font-size: 14px; font-weight: 500; line-height: 1.4; opacity: 0.95; }
+    .next-lesson-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+    .next-lesson-sub { font-size: 14px; color: #33414d; }
 
-    .tarjeta-aviso-imagen {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 12px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-      overflow: hidden;
+    .pill-tabs-nav { display: flex; gap: 12px; margin-bottom: 24px; }
+    .pill-tab {
+      flex: 1; padding: 14px; border-radius: 30px; border: 0; font-size: 14px; font-weight: 800;
+      color: #ffffff; background: #5a646e; cursor: pointer; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-    .img-aviso-promocional { width: 100%; height: auto; display: block; border-radius: 12px; object-fit: cover; }
+    .pill-tab.active { background: #8a2a2a; }
 
-    .marca { color: #71808e; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
-    h1 { margin: 0 0 8px; font-size: 22px; font-weight: 800; color: #0d171e; }
-    .subtitulo { color: #71808e; font-size: 13px; line-height: 1.5; }
+    .progress-bar-container { margin-top: 12px; }
+    .progress-bar-track { width: 100%; height: 8px; background: #ffffff; border-radius: 4px; overflow: hidden; margin-top: 8px; }
+    .progress-bar-fill { height: 100%; background: #8a2a2a; border-radius: 4px; }
+
+    .attendance-row {
+      display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #d8dfe4;
+    }
+    .attendance-row:last-child { border-bottom: 0; }
+    .badge-status {
+      padding: 6px 16px; border-radius: 16px; font-size: 11px; font-weight: 800; text-transform: uppercase;
+    }
+    .badge-falta { background: #fce4e4; color: #a52828; }
+    .badge-presente { background: #d8f3e1; color: #176b3a; }
+    .badge-retardo { background: #fef0cd; color: #895b00; }
+
+    /* ESTILOS DE ACCESO / LOGIN */
+    .login-card {
+      max-width: 420px; margin: 40px auto; background: #ffffff; border-radius: 24px; padding: 32px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
     label { display: block; font-weight: 700; margin: 16px 0 8px; font-size: 13.5px; }
-    input { width: 100%; padding: 13px; border: 1px solid #cbd3d9; border-radius: 10px; font-size: 15px; background: #fff; }
-    input:focus { outline: 2px solid #005b92; border-color: #005b92; }
-    button { cursor: pointer; border: 0; font-family: inherit; }
-    
-    .boton-principal { width: 100%; margin-top: 20px; background: #005b92; color: white; padding: 13px; border-radius: 10px; font-size: 15px; font-weight: 700; }
-
-    .nombre-usuario { font-size: 21px; font-weight: 800; color: #0d171e; margin: 4px 0 2px; line-height: 1.2; }
-    .qr-contenedor { text-align: center; padding: 16px 0 8px; }
-    .qr-imagen { width: 180px; height: 180px; display: block; margin: 0 auto; }
-    
-    /* FIX 2: TIPOGRAFÍA MODERNA SANS-SERIF / ITALIC PARA EL NÚMERO DE REGISTRO */
-    .qr-numero { 
-      font-family: "Montserrat", Arial, sans-serif; 
-      font-style: italic; 
-      font-weight: 600; 
-      font-size: 16px; 
-      color: #2b363f; 
-      margin-top: 10px; 
-      letter-spacing: 0.5px; 
-    }
-
-    .tarjeta-programas-selector {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .btn-banner { width: 100%; border-radius: 12px; padding: 0; background: transparent; border: 0; display: block; }
-    .btn-banner:active { transform: scale(0.98); }
-    .img-banner-programa { width: 100%; height: auto; display: block; border-radius: 12px; object-fit: cover; }
-
-    .banner-programa-header { border-radius: 14px; margin-bottom: 16px; overflow: hidden; width: 100%; }
-    .img-banner-header { width: 100%; height: auto; display: block; border-radius: 14px; object-fit: cover; }
-
-    .navegacion-pestanas { display: flex; gap: 10px; margin-bottom: 16px; }
-    .boton-pestana { flex: 1; background: #636f7a; color: #ffffff; padding: 12px 10px; border-radius: 10px; font-size: 13.5px; font-weight: 700; }
-    .boton-pestana.activa { background: #005b92; color: #ffffff; }
-
-    .boton-volver { background: transparent; color: #005b92; font-size: 13px; font-weight: 700; padding: 0 0 12px 4px; display: inline-flex; align-items: center; gap: 4px; }
-
-    .titulo-nivel-resumen { font-size: 16.5px; font-weight: 800; color: #0d171e; margin: 0 0 6px; }
-    .subtitulo-conteo { font-size: 14px; color: #52606d; margin: 0 0 14px; }
-    .barra-progreso-track { width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
-    .barra-progreso-fill { height: 100%; background: #8a2a2a; border-radius: 3px; width: 0%; transition: width 0.4s ease; }
-
-    .caption-lista { font-size: 12px; color: #808c96; margin-bottom: 12px; display: block; }
-    .fila { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f0f3f5; }
-    .fila:last-child { border-bottom: 0; }
-    .detalle { min-width: 0; overflow-wrap: anywhere; }
-    .detalle strong { display: block; font-size: 13.5px; color: #18232d; font-weight: 700; }
-    .detalle .subtitulo { font-size: 12px; color: #71808e; margin-top: 3px; }
-
-    .estado { display: inline-block; flex-shrink: 0; font-size: 10.5px; font-weight: 800; padding: 5px 12px; border-radius: 12px; text-transform: uppercase; }
-    .aprobado { color: #176b3a; background: #d8f3e1; }
-    .falta { color: #a52828; background: #fde2e2; }
-    .retardo { color: #895b00; background: #fef0cd; }
-    .pendiente { color: #6a7075; background: #edf0f2; }
-
-    .tarjeta-aviso { background: #ffffff; padding: 18px 22px; border-radius: 18px; margin-bottom: 16px; text-align: center; }
-    .tarjeta-aviso p { margin: 0; font-size: 12.5px; color: #808c96; line-height: 1.5; }
-
-    /* MÓDULO ESCÁNER DE CÁMARA DIRECTA */
-    .tarjeta-escaner { background: #ffffff; border-radius: 18px; padding: 20px; margin-bottom: 16px; }
-    .titulo-seccion-escaner { font-size: 16px; font-weight: 800; color: #005b92; margin: 0 0 12px; text-align: center; }
-    .grid-campus { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
-    .btn-campus-card {
-      background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; text-align: center; letter-spacing: 0.5px;
-    }
-    
-    #reader {
-      width: 100%;
-      min-height: 280px;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #0d171e;
-      margin-top: 12px;
-      border: 0 !important;
-      position: relative;
-    }
-    #reader video {
-      width: 100% !important;
-      height: auto !important;
-      border-radius: 16px;
-      object-fit: cover;
-      display: block;
-    }
-
-    #resultadoEscaneo { margin-top: 12px; padding: 12px; border-radius: 10px; text-align: center; font-weight: bold; display: none; }
-    .res-exito { background: #d8f3e1; color: #176b3a; }
-    .res-retardo { background: #fef0cd; color: #895b00; }
-    .res-error { background: #fde2e2; color: #a52828; }
+    input { width: 100%; padding: 13px; border: 1px solid #cbd3d9; border-radius: 10px; font-size: 15px; }
+    .btn-submit { width: 100%; margin-top: 24px; background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
 
     .oculto { display: none !important; }
-    #mensaje { margin-top: 14px; line-height: 1.5; color: #a52828; font-size: 14px; }
+
+    /* RESPONSIVE PARA MÓVILES */
+    @media (max-width: 767px) {
+      .nav-desktop { display: none; }
+      .btn-menu-hamburguesa { display: block; }
+      .profile-card-body { grid-template-columns: 1fr; }
+      .hero-carousel { height: 150px; }
+    }
   </style>
 </head>
 <body>
 
-<div id="drawerOverlay" class="drawer-overlay"></div>
-<aside id="drawerMenu" class="drawer-menu">
-  <div class="drawer-header">
-    <strong id="drawerNombreUser">NACIONES</strong>
+<!-- HERO CAROUSEL -->
+<div class="hero-carousel" id="heroCarousel">
+  <img src="https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow" class="carousel-slide active" alt="Anuncio 1">
+  <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" class="carousel-slide" alt="Anuncio 2">
+  <div class="carousel-indicators">
+    <div class="dot active" onclick="setSlide(0)"></div>
+    <div class="dot" onclick="setSlide(1)"></div>
   </div>
-  <div id="itemMiCuenta" class="drawer-item">MI CUENTA</div>
-  <div id="itemRegistro" class="drawer-item oculto">REGISTRO</div>
-  <div id="itemCerrarSesion" class="drawer-item cerrar-sesion">CERRAR SESIÓN</div>
-</aside>
+</div>
 
+<!-- NAVBAR SUPERIOR -->
 <header class="header-naciones">
-  <button id="btnHamburguesa" class="btn-menu-hamburguesa oculto" type="button" aria-label="Menú">☰</button>
-  <div class="logo-center-box">
+  <button id="btnHamburguesa" class="btn-menu-hamburguesa" type="button">☰</button>
+  
+  <div class="brand-box">
     <img src="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H" alt="Naciones" class="img-logo-naciones">
   </div>
+
+  <nav class="nav-desktop">
+    <button class="nav-btn active" id="navBtnInicio" onclick="navegarA('inicio')">Inicio</button>
+    <button class="nav-btn" id="navBtnHombria" onclick="navegarA('hombria')">Hombría al Máximo</button>
+    <button class="nav-btn" id="navBtnFundamentos" onclick="navegarA('fundamentos')">Fundamentos</button>
+    <button class="nav-btn" id="navBtnRecursos" onclick="navegarA('recursos')">Recursos</button>
+    <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
+  </nav>
 </header>
+
+<!-- DRAWER MÓVIL -->
+<div id="drawerOverlay" class="drawer-overlay"></div>
+<aside id="drawerMenu" class="drawer-menu">
+  <div class="drawer-header" id="drawerNombreUser">NACIONES</div>
+  <div class="drawer-item" onclick="navegarA('inicio'); cerrarDrawer();">INICIO</div>
+  <div class="drawer-item" onclick="navegarA('hombria'); cerrarDrawer();">HOMBRÍA AL MÁXIMO</div>
+  <div class="drawer-item" onclick="navegarA('fundamentos'); cerrarDrawer();">FUNDAMENTOS</div>
+  <div class="drawer-item oculto" id="itemRegistro" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO (ESCANEAR QR)</div>
+  <div class="drawer-item" onclick="cerrarSesion(); cerrarDrawer();" style="color: #a52828; margin-top: auto;">CERRAR SESIÓN</div>
+</aside>
 
 <main class="contenedor">
 
-  <div id="bannerInstalacion" class="banner-instalar-app">
-    <span class="texto-instalar-app">¿Quieres instalar la app en tu teléfono?</span>
-    <button id="btnInstalarApp" class="btn-instalar-accion" type="button">Instalar App</button>
-  </div>
-
-  <section class="tarjeta" id="acceso">
-    <div class="marca">Iglesia Naciones</div>
-    <h1>Portal de seguimiento</h1>
-    <p class="subtitulo">Consulta tu avance en Hombría al Máximo y Fundamentos, así como tus asistencias registradas.</p>
-    <form id="formulario">
-      <label for="registro">Número de registro</label>
-      <input id="registro" name="registro" type="text" autocomplete="off" required placeholder="Escribe tu número de registro">
-      
-      <label for="nacimiento">Fecha de nacimiento</label>
-      <input id="nacimiento" name="nacimiento" type="text" inputmode="numeric" placeholder="DD/MM/AAAA" maxlength="10" autocomplete="off" required>
-      
-      <button class="boton-principal" id="boton" type="submit">Consultar mi avance</button>
+  <!-- ACCESO / LOGIN -->
+  <section class="login-card" id="seccionLogin">
+    <div style="color: #71808e; font-size: 11px; font-weight: 700; text-transform: uppercase;">Iglesia Naciones</div>
+    <h1 style="margin: 4px 0 16px; font-size: 22px;">Portal de seguimiento</h1>
+    <form id="formLogin">
+      <label>Número de registro</label>
+      <input id="inputRegistro" type="text" placeholder="Tu número de registro" required autocomplete="off">
+      <label>Fecha de nacimiento</label>
+      <input id="inputNacimiento" type="text" placeholder="DD/MM/AAAA" maxlength="10" required autocomplete="off">
+      <button class="btn-submit" type="submit">Ingresar al Portal</button>
     </form>
-    <div id="mensaje" role="status" aria-live="polite"></div>
+    <div id="msgLogin" style="margin-top: 12px; color: #a52828; font-weight: bold;"></div>
   </section>
 
-  <section id="panel" class="oculto">
+  <!-- PANEL DE CONTENIDO EN SESIÓN -->
+  <div id="panelPrincipal" class="oculto">
 
-    <!-- VISTA 1: MI CUENTA -->
-    <div id="vistaCuenta">
-      <section class="tarjeta">
-        <div class="marca">Mi Cuenta</div>
-        <div class="nombre-usuario" id="nombre"></div>
-        <p class="subtitulo" id="campus" style="margin: 0 0 8px;"></p>
+    <!-- VISTA INICIO (MOCKUP 1: TARJETA DE PERFIL + QR FLOTANTE) -->
+    <section id="vistaInicio">
+      <div class="profile-card-desktop">
+        <div class="profile-card-header" id="userNombreHeader">Esteban Bautista Moreno</div>
+        <div class="profile-card-body">
+          <div>
+            <!-- HOMBRÍA -->
+            <div class="program-summary-item" id="sumHombriaBox">
+              <div class="program-summary-title" id="sumHombriaNivel">Hombría al Máximo - Nivel 1</div>
+              <div class="program-progress-track">
+                <div class="program-progress-fill" id="sumHombriaFill" style="width: 70%;"></div>
+              </div>
+              <div class="program-summary-sub" id="sumHombriaTexto">Asistencia 70%<br>Próxima sesión: Sentencia Máxima / Dejados fuera de Canaán</div>
+            </div>
 
-        <div class="qr-contenedor">
-          <img id="qrImagen" class="qr-imagen" src="" alt="Código QR personal">
-          <div id="qrNumero" class="qr-numero"></div>
+            <!-- FUNDAMENTOS -->
+            <div class="program-summary-item" id="sumFundamentosBox">
+              <div class="program-summary-title" id="sumFundamentosNivel">Fundamentos - Sanidad y Libertad</div>
+              <div class="program-progress-track">
+                <div class="program-progress-fill" id="sumFundamentosFill" style="width: 70%;"></div>
+              </div>
+              <div class="program-summary-sub" id="sumFundamentosTexto">Asistencia 70%<br>Próxima sesión: Sanidad Financiera</div>
+            </div>
+          </div>
+
+          <!-- TARJETA QR FLOTANTE -->
+          <div class="qr-card-float">
+            <img id="qrImgMain" src="" alt="Código QR">
+            <div class="qr-num" id="qrNumMain">10061</div>
+          </div>
         </div>
-      </section>
-
-      <section id="tarjetaAvisoImagen" class="tarjeta-aviso-imagen oculto">
-        <img id="imgAvisoPromocional" class="img-aviso-promocional" src="" alt="Aviso">
-      </section>
-
-      <section class="tarjeta-programas-selector">
-        <button class="btn-banner" id="btnHombria" type="button">
-          <img src="https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow" alt="Hombría al Máximo" class="img-banner-programa">
-        </button>
-
-        <button class="btn-banner" id="btnFundamentos" type="button">
-          <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" alt="Fundamentos" class="img-banner-programa">
-        </button>
-      </section>
-
-      <div class="tarjeta-aviso">
-        <p>Si consideras que algún avance o registro de asistencia es incorrecto, comunícate con el equipo de administración de tu campus</p>
       </div>
-    </div>
+    </section>
 
-    <!-- VISTA 2: PROGRAMA / CURSO -->
-    <div id="vistaPrograma" class="oculto">
-      <button class="boton-volver" id="btnVolverCuenta" type="button">&#8592; Volver a Mi Cuenta</button>
-
-      <div id="bannerProgramaActivo" class="banner-programa-header">
-        <img id="imgBannerHeader" src="" alt="Programa Activo" class="img-banner-header">
+    <!-- VISTA HOMBRÍA (MOCKUPS 2 Y 3) -->
+    <section id="vistaHombria" class="oculto">
+      <div class="course-header-title">
+        <h1 style="font-size: 28px; margin: 0;">Hombría al Máximo</h1>
       </div>
 
-      <!-- BLOQUE DESTACADO: TU PRÓXIMA LECCIÓN -->
-      <section id="tarjetaProximaLeccion" class="tarjeta-proxima-leccion oculto">
-        <span class="badge-proxima">📌 Tu próxima lección</span>
-        <div class="titulo-proxima-semana" id="txtProximaSemana">Semana 8</div>
-        <div class="subtitulo-proxima-tema" id="txtProximaTema">Lección 10: Inclinarse, someterse o arder</div>
-      </section>
+      <!-- PRÓXIMA LECCIÓN -->
+      <div class="card-rounded-gray" id="boxProxHombria">
+        <div class="next-lesson-title">Tu próxima lección:</div>
+        <div class="next-lesson-sub" id="txtProxHombria">Lección 9: ¿Cómo pasar del fracaso al éxito?</div>
+      </div>
 
-      <nav class="navegacion-pestanas">
-        <button id="navAsistencias" class="boton-pestana activa" type="button">Mis Asistencias</button>
-        <button id="navProgreso" class="boton-pestana" type="button">Mi Progreso</button>
-      </nav>
+      <!-- PESTAÑAS PILI -->
+      <div class="pill-tabs-nav">
+        <button class="pill-tab active" id="tabHombriaAsis" onclick="toggleSubPestana('hombria', 'asis')">Mis asistencias</button>
+        <button class="pill-tab" id="tabHombriaProg" onclick="toggleSubPestana('hombria', 'prog')">Mi progreso</button>
+      </div>
 
-      <section id="seccionAsistencias">
-        <div class="tarjeta" id="cardResumenProgreso">
-          <div class="titulo-nivel-resumen" id="tituloResumenNivel">Nivel 1: Hombría al Máximo</div>
-          <div class="subtitulo-conteo" id="textoConteoProgreso">0 de 10 asistencias completadas</div>
-          <div class="barra-progreso-track">
-            <div class="barra-progreso-fill" id="barraProgresoFill"></div>
+      <!-- ASISTENCIAS HOMBRÍA -->
+      <div id="secHombriaAsis">
+        <div class="card-rounded-gray">
+          <div style="font-weight: 800; font-size: 16px;" id="lblHombriaNivelAct">Nivel 5: Nunca Te Rindas</div>
+          <div style="font-size: 13px; color: #52606d;" id="lblHombriaConteo">6 de 10 asistencias completadas</div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="fillHombriaProgBar" style="width: 60%;"></div>
           </div>
         </div>
 
-        <div class="tarjeta">
-          <span class="caption-lista" id="captionListaAsistencias">Asistencias</span>
-          <div id="listaAsistencias"></div>
-        </div>
-      </section>
-
-      <section id="seccionProgreso" class="oculto">
-        <div class="tarjeta">
-          <span class="caption-lista" id="captionListaProgreso">Consulta tus niveles aprobados</span>
-          <div id="seccionProgresoHombria"><div id="hombria"></div></div>
-          <div id="seccionProgresoFundamentos" class="oculto"><div id="fundamentos"></div></div>
-          <div style="font-size: 13.5px; font-weight: 800; margin: 20px 0 10px; padding-top: 16px; border-top: 1px dashed #e2e8f0; text-transform: uppercase;">Requisitos adicionales</div>
-          <div id="requisitos"></div>
-        </div>
-      </section>
-    </div>
-
-    <!-- VISTA 3: ESCÁNER DE VOLUNTARIO -->
-    <div id="vistaEscanerVoluntario" class="oculto">
-      <div class="tarjeta-escaner">
-        <div id="escanerPasoPrograma">
-          <div class="titulo-seccion-escaner">Selecciona qué asistencia deseas registrar</div>
-          <div class="tarjeta-programas-selector">
-            <button class="btn-banner" id="btnEscProgHombria" type="button">
-              <img src="https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow" alt="Hombría" class="img-banner-programa">
-            </button>
-            <button class="btn-banner" id="btnEscProgFundamentos" type="button">
-              <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" alt="Fundamentos" class="img-banner-programa">
-            </button>
-          </div>
-        </div>
-
-        <div id="escanerPasoCampus" class="oculto">
-          <button class="boton-volver" id="btnVolverEscanerProg" type="button">&#8592; Cambiar programa</button>
-          <div class="titulo-seccion-escaner">Selecciona en qué campus deseas registrar asistencias</div>
-          <div id="gridCampusOpciones" class="grid-campus"></div>
-        </div>
-
-        <div id="escanerPasoCamara" class="oculto">
-          <button class="boton-volver" id="btnVolverEscanerCampus" type="button">&#8592; Cambiar campus</button>
-
-          <div style="text-align: center; margin-bottom: 10px;">
-            <strong id="labelEscanerCampusActivo" style="color: #005b92; font-size: 16px; text-transform: uppercase;">PUEBLA</strong>
-          </div>
-
-          <div id="reader"></div>
-          <div id="resultadoEscaneo"></div>
+        <div class="card-rounded-gray">
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #52606d;">Asistencias de Hombría</div>
+          <div id="listHombriaAsistencias"></div>
         </div>
       </div>
-    </div>
 
-  </section>
+      <!-- PROGRESO HOMBRÍA -->
+      <div id="secHombriaProg" class="oculto">
+        <div class="card-rounded-gray">
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #52606d;">Consulta tus niveles aprobados</div>
+          <div id="listHombriaProgreso"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA FUNDAMENTOS -->
+    <section id="vistaFundamentos" class="oculto">
+      <div class="course-header-title">
+        <h1 style="font-size: 28px; margin: 0;">Fundamentos</h1>
+      </div>
+
+      <div class="card-rounded-gray" id="boxProxFundamentos">
+        <div class="next-lesson-title">Tu próxima lección:</div>
+        <div class="next-lesson-sub" id="txtProxFundamentos">Lección de Fundamentos</div>
+      </div>
+
+      <div class="pill-tabs-nav">
+        <button class="pill-tab active" id="tabFundAsis" onclick="toggleSubPestana('fundamentos', 'asis')">Mis asistencias</button>
+        <button class="pill-tab" id="tabFundProg" onclick="toggleSubPestana('fundamentos', 'prog')">Mi progreso</button>
+      </div>
+
+      <div id="secFundAsis">
+        <div class="card-rounded-gray">
+          <div style="font-weight: 800; font-size: 16px;" id="lblFundNivelAct">Bloque 1: Sanidad y Libertad</div>
+          <div style="font-size: 13px; color: #52606d;" id="lblFundConteo">0 de 6 asistencias completadas</div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="fillFundProgBar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="card-rounded-gray">
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #52606d;">Asistencias de Fundamentos</div>
+          <div id="listFundAsistencias"></div>
+        </div>
+      </div>
+
+      <div id="secFundProg" class="oculto">
+        <div class="card-rounded-gray">
+          <div style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #52606d;">Consulta tus bloques aprobados</div>
+          <div id="listFundProgreso"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA ESCÁNER QR (VOLUNTARIOS) -->
+    <section id="vistaEscaner" class="oculto">
+      <div class="card-rounded-gray" style="background: #ffffff; text-align: center;">
+        <h2 style="margin-top: 0; color: #005b92;">Escáner de Asistencia QR</h2>
+        <div id="reader" style="width: 100%; min-height: 280px; background: #000; border-radius: 16px;"></div>
+        <div id="resEscaneoMsg" style="margin-top: 12px; font-weight: bold;"></div>
+      </div>
+    </section>
+
+  </div>
 </main>
 
 <script>
-  let eventoInstalacionPrompt = null;
-  const bannerInstalacion = document.getElementById('bannerInstalacion');
-  const btnInstalarApp = document.getElementById('btnInstalarApp');
-
-  // FIX 3: DETECTAR SI LA APP YA ESTÁ INSTALADA / MODO STANDALONE
-  const esPWAInstalada = window.matchMedia('(display-mode: standalone)').matches || 
-                         window.navigator.standalone === true || 
-                         document.referrer.includes('android-app://');
-
-  const esIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const esDispositivoMovil = esIOS || /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-  // Ocultar banner si no es móvil o si YA ESTÁ INSTALADA
-  if ((!esDispositivoMovil || esPWAInstalada) && bannerInstalacion) {
-    bannerInstalacion.classList.add('oculto');
-  }
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    if (esDispositivoMovil && !esPWAInstalada) {
-      eventoInstalacionPrompt = e;
-    }
-  });
-
-  if (btnInstalarApp) {
-    btnInstalarApp.addEventListener('click', async () => {
-      if (esIOS) {
-        const esSafari = /Safari/i.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS/i.test(navigator.userAgent);
-        if (esSafari) {
-          alert('Para instalar en iPhone/iPad:\n\n1. Toca "Compartir" (⎋) en la barra inferior.\n2. Elige "Agregar al inicio" (+).');
-        } else {
-          alert('En iPhone abre este enlace en Safari para poder instalar la app.');
-        }
-        return;
-      }
-      if (eventoInstalacionPrompt) {
-        eventoInstalacionPrompt.prompt();
-        const { outcome } = await eventoInstalacionPrompt.userChoice;
-        if (outcome === 'accepted') bannerInstalacion.classList.add('oculto');
-        eventoInstalacionPrompt = null;
-      } else {
-        alert('Para instalar:\n\n1. Toca los tres puntos (⋮) en Chrome.\n2. Selecciona "Agregar a la pantalla principal".');
-      }
-    });
-  }
-
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
-  const URL_BANNER_HOMBRIA = 'https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow';
-  const URL_BANNER_FUNDAMENTOS = 'https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr';
+  let usuarioSesion = null;
 
-  const nombresFundamentos = ['Bloque 1: Sanidad y Libertad','Bloque 1: Cimientos','Bloque 1: Hábitos de un Discípulo','Bloque 2: La Gran Comisión','Bloque 2: El Carácter del Obrero','Bloque 2: Liderazgo'];
-  const nombresHombria = ['Nivel 1: Hombría al Máximo','Nivel 2: Valor','Nivel 3: Integridad Sexual','Nivel 4: El Principio del Potencial','Nivel 5: Nunca Te Rindas','Nivel 6: Comunicación, Sexo y Dinero','Nivel 7: Un Hombre de Verdad I','Nivel 8: Un Hombre de Verdad II','Nivel 9: Hombres Fuertes','Nivel 10: Mujer Única'];
-  const nombresRequisitos = ['Encuentro Con La Cruz','Voluntariado','Voluntario en Grupos Pequeños','Viaje Misionero'];
-
-  const formulario = document.getElementById('formulario');
-  const boton = document.getElementById('boton');
-  const mensaje = document.getElementById('mensaje');
-  const inputNacimiento = document.getElementById('nacimiento');
-
-  let consultaActual = 0;
-  let registroSesion = '';
-  let nacimientoSesion = '';
-  let programaActual = '';
-  let cacheAsistencias = {};
-  let cacheProximaLeccion = {};
-  let permisosVoluntarioGlobal = { esVoluntario: false, programas: [] };
-
-  let html5QrCodeDirecto = null;
-  let esc_programaSeleccionado = '';
-  let esc_campusSeleccionado = '';
-  let permitoEscanearProximo = true;
-
-  const btnHamburguesa = document.getElementById('btnHamburguesa');
-  const drawerOverlay = document.getElementById('drawerOverlay');
-  const drawerMenu = document.getElementById('drawerMenu');
-
-  btnHamburguesa.addEventListener('click', () => abrirMenu(true));
-  drawerOverlay.addEventListener('click', () => abrirMenu(false));
-  document.getElementById('itemMiCuenta').addEventListener('click', () => { abrirMenu(false); mostrarVista('cuenta'); });
-  document.getElementById('itemRegistro').addEventListener('click', () => { abrirMenu(false); mostrarVista('escaner'); });
-  document.getElementById('itemCerrarSesion').addEventListener('click', () => {
-    abrirMenu(false);
-    if (confirm('¿Estás seguro que deseas salir?')) {
-      cerrarSesion();
-    }
+  // AUTO FORMATEO FECHA
+  document.getElementById('inputNacimiento').addEventListener('input', (e) => {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length > 8) v = v.substring(0, 8);
+    let f = '';
+    if (v.length > 0) f += v.substring(0, 2);
+    if (v.length >= 3) f += '/' + v.substring(2, 4);
+    if (v.length >= 5) f += '/' + v.substring(4, 8);
+    e.target.value = f;
   });
 
-  function abrirMenu(abrir) {
-    drawerOverlay.classList.toggle('activo', abrir);
-    drawerMenu.classList.toggle('activo', abrir);
-  }
-
-  function autoFormatearFecha(e) {
-    let valor = e.target.value.replace(/\D/g, '');
-    if (valor.length > 8) valor = valor.substring(0, 8);
-    let formateado = '';
-    if (valor.length > 0) {
-      formateado += valor.substring(0, 2);
-      if (valor.length >= 3) formateado += '/' + valor.substring(2, 4);
-      if (valor.length >= 5) formateado += '/' + valor.substring(4, 8);
-    }
-    e.target.value = formateado;
-  }
-
-  inputNacimiento.addEventListener('input', autoFormatearFecha);
-  inputNacimiento.addEventListener('change', autoFormatearFecha);
-  inputNacimiento.addEventListener('blur', autoFormatearFecha);
-
-  document.getElementById('navAsistencias').addEventListener('click', () => cambiarPestana('asistencias'));
-  document.getElementById('navProgreso').addEventListener('click', () => cambiarPestana('progreso'));
-  document.getElementById('btnHombria').addEventListener('click', () => seleccionarPrograma('HOMBRIA'));
-  document.getElementById('btnFundamentos').addEventListener('click', () => seleccionarPrograma('FUNDAMENTOS'));
-  document.getElementById('btnVolverCuenta').addEventListener('click', () => mostrarVista('cuenta'));
-
-  document.getElementById('btnEscProgHombria').addEventListener('click', () => seleccionarProgEscaner('HOMBRIA'));
-  document.getElementById('btnEscProgFundamentos').addEventListener('click', () => seleccionarProgEscaner('FUNDAMENTOS'));
-  document.getElementById('btnVolverEscanerProg').addEventListener('click', () => {
-    document.getElementById('escanerPasoCampus').classList.add('oculto');
-    document.getElementById('escanerPasoPrograma').classList.remove('oculto');
-  });
-  document.getElementById('btnVolverEscanerCampus').addEventListener('click', () => {
-    detenerCamara();
-    document.getElementById('escanerPasoCamara').classList.add('oculto');
-    document.getElementById('escanerPasoCampus').classList.remove('oculto');
-  });
-
-  window.addEventListener('DOMContentLoaded', () => {
-    const sesionGuardada = localStorage.getItem('naciones_sesion');
-    if (sesionGuardada) {
-      try {
-        const datosSesion = JSON.parse(sesionGuardada);
-        if (datosSesion && datosSesion.registro && datosSesion.nacimiento) {
-          registroSesion = datosSesion.registro;
-          nacimientoSesion = datosSesion.nacimiento;
-          refrescarDatosUsuario(registroSesion, nacimientoSesion);
-        }
-      } catch (e) {
-        localStorage.removeItem('naciones_sesion');
-      }
-    }
-  });
-
-  function refrescarDatosUsuario(registro, nacimiento) {
-    const url = `${WEB_APP_URL}?action=buscarParticipante&registro=${encodeURIComponent(registro)}&nacimiento=${encodeURIComponent(nacimiento)}`;
-    fetch(url)
-      .then(res => res.json())
-      .then(resultado => {
-        if (resultado && resultado.encontrado) {
-          localStorage.setItem('naciones_sesion', JSON.stringify({
-            registro: registro,
-            nacimiento: nacimiento,
-            resultado: resultado
-          }));
-          mostrarPanelUsuario(resultado);
-        } else {
-          cerrarSesion();
-        }
-      })
-      .catch(() => {
-        const sesionGuardada = localStorage.getItem('naciones_sesion');
-        if (sesionGuardada) {
-          const datos = JSON.parse(sesionGuardada);
-          if (datos && datos.resultado) mostrarPanelUsuario(datos.resultado);
-        }
-      });
-  }
-
-  function cambiarPestana(pestana) {
-    const asistenciasActivas = pestana === 'asistencias';
-    document.getElementById('navAsistencias').classList.toggle('activa', asistenciasActivas);
-    document.getElementById('navProgreso').classList.toggle('activa', !asistenciasActivas);
-    document.getElementById('seccionAsistencias').classList.toggle('oculto', !asistenciasActivas);
-    document.getElementById('seccionProgreso').classList.toggle('oculto', asistenciasActivas);
-  }
-
-  function seleccionarPrograma(programa) {
-    programaActual = programa;
-    mostrarVista('programa');
-  }
-
-  function mostrarVista(vista) {
-    detenerCamara();
-    document.getElementById('vistaCuenta').classList.add('oculto');
-    document.getElementById('vistaPrograma').classList.add('oculto');
-    document.getElementById('vistaEscanerVoluntario').classList.add('oculto');
-
-    if (vista === 'cuenta') {
-      document.getElementById('vistaCuenta').classList.remove('oculto');
-    } else if (vista === 'programa') {
-      document.getElementById('vistaPrograma').classList.remove('oculto');
-      prepararVistaPrograma();
-    } else if (vista === 'escaner') {
-      document.getElementById('vistaEscanerVoluntario').classList.remove('oculto');
-      document.getElementById('escanerPasoCampus').classList.add('oculto');
-      document.getElementById('escanerPasoCamara').classList.add('oculto');
-      document.getElementById('escanerPasoPrograma').classList.remove('oculto');
-    }
-    window.scrollTo(0, 0);
-  }
-
-  function prepararVistaPrograma() {
-    const esHombria = programaActual === 'HOMBRIA';
-    document.getElementById('imgBannerHeader').src = esHombria ? URL_BANNER_HOMBRIA : URL_BANNER_FUNDAMENTOS;
-    document.getElementById('captionListaAsistencias').textContent = esHombria ? 'Asistencias de Hombría' : 'Asistencias de Fundamentos';
-    document.getElementById('barraProgresoFill').style.background = esHombria ? '#8a2a2a' : '#125278';
-
-    document.getElementById('seccionProgresoHombria').classList.toggle('oculto', !esHombria);
-    document.getElementById('seccionProgresoFundamentos').classList.toggle('oculto', esHombria);
-
-    const prox = cacheProximaLeccion[programaActual];
-    const tarjetaProx = document.getElementById('tarjetaProximaLeccion');
-
-    if (prox && prox.tema) {
-      document.getElementById('txtProximaSemana').textContent = (prox.semana || 'Próxima Semana') + (prox.fecha ? ' (' + prox.fecha + ')' : '');
-      document.getElementById('txtProximaTema').textContent = prox.tema;
-      tarjetaProx.classList.remove('oculto');
-    } else {
-      tarjetaProx.classList.add('oculto');
-    }
-
-    cambiarPestana('asistencias');
-    cargarAsistencias();
-  }
-
-  formulario.addEventListener('submit', function(evento) {
-    evento.preventDefault();
-    const registro = document.getElementById('registro').value.trim();
-    
-    autoFormatearFecha({ target: inputNacimiento });
-    const nacimientoTexto = inputNacimiento.value.trim();
-
-    if (!registro || !nacimientoTexto) {
-      mensaje.textContent = 'Escribe tu número de registro y fecha de nacimiento.';
-      return;
-    }
-
-    const partes = nacimientoTexto.split('/');
-    if (partes.length !== 3 || partes[2].length !== 4) {
-      mensaje.textContent = 'Escribe una fecha válida con formato DD/MM/AAAA.';
-      return;
-    }
-
-    const nacimiento = partes[2] + '-' + partes[1] + '-' + partes[0];
-    const idConsulta = ++consultaActual;
-    boton.disabled = true;
-    mensaje.textContent = 'Verificando tus datos...';
-
-    const url = `${WEB_APP_URL}?action=buscarParticipante&registro=${encodeURIComponent(registro)}&nacimiento=${encodeURIComponent(nacimiento)}`;
-
-    fetch(url)
-      .then(res => res.json())
-      .then(function(resultado) {
-        if (idConsulta !== consultaActual) return;
-        boton.disabled = false;
-
-        if (!resultado || !resultado.encontrado) {
-          mensaje.textContent = 'No pudimos verificar esos datos. Revisa la información.';
-          return;
-        }
-
-        mensaje.textContent = '';
-        registroSesion = String(resultado.registro || registro).trim();
-        nacimientoSesion = nacimiento;
-
-        localStorage.setItem('naciones_sesion', JSON.stringify({
-          registro: registroSesion,
-          nacimiento: nacimientoSesion,
-          resultado: resultado
-        }));
-
-        mostrarPanelUsuario(resultado);
-      })
-      .catch(function(error) {
-        if (idConsulta !== consultaActual) return;
-        boton.disabled = false;
-        mensaje.textContent = 'No fue posible realizar la consulta. Intenta más tarde.';
-      });
-  });
-
-  function mostrarPanelUsuario(resultado) {
-    cacheAsistencias = resultado.asistencias || {};
-    cacheProximaLeccion = resultado.proximaLeccion || {};
-    permisosVoluntarioGlobal = resultado.permisosVoluntario || { esVoluntario: false, programas: [] };
-
-    document.getElementById('nombre').textContent = [resultado.nombre || '', resultado.apellidos || ''].filter(Boolean).join(' ');
-    document.getElementById('drawerNombreUser').textContent = resultado.nombre || 'NACIONES';
-    document.getElementById('campus').textContent = resultado.campus ? 'Campus: ' + resultado.campus : '';
-
-    document.getElementById('qrImagen').src = 'https://quickchart.io/qr?text=' + encodeURIComponent(registroSesion) + '&size=220&margin=1';
-    document.getElementById('qrNumero').textContent = registroSesion;
-
-    btnHamburguesa.classList.remove('oculto');
-    
-    const itemRegistro = document.getElementById('itemRegistro');
-
-    if (permisosVoluntarioGlobal.esVoluntario) {
-      itemRegistro.classList.remove('oculto');
-      document.getElementById('btnEscProgHombria').style.display =
-        permisosVoluntarioGlobal.programas.includes('HOMBRIA') ? 'block' : 'none';
-      document.getElementById('btnEscProgFundamentos').style.display =
-        permisosVoluntarioGlobal.programas.includes('FUNDAMENTOS') ? 'block' : 'none';
-    } else {
-      itemRegistro.classList.add('oculto');
-    }
-
-    const tarjetaAvisoImg = document.getElementById('tarjetaAvisoImagen');
-    const imgAviso = document.getElementById('imgAvisoPromocional');
-
-    if (resultado.avisoImagen && resultado.avisoImagen.urlImagen) {
-      imgAviso.src = resultado.avisoImagen.urlImagen;
-      tarjetaAvisoImg.classList.remove('oculto');
-    } else {
-      tarjetaAvisoImg.classList.add('oculto');
-    }
-
-    dibujarLista('fundamentos', nombresFundamentos, resultado.fundamentos);
-    dibujarLista('hombria', nombresHombria, resultado.hombria);
-    dibujarLista('requisitos', nombresRequisitos, resultado.requisitos);
-
-    document.getElementById('acceso').classList.add('oculto');
-    document.getElementById('panel').classList.remove('oculto');
-
-    mostrarVista('cuenta');
-  }
-
-  function dibujarLista(id, nombres, valores) {
-    const contenedor = document.getElementById(id);
-    if (!contenedor) return;
-    contenedor.replaceChildren();
-
-    nombres.forEach(function(nombre, indice) {
-      const fila = document.createElement('div');
-      fila.className = 'fila';
-
-      const texto = document.createElement('span');
-      texto.className = 'detalle';
-      texto.textContent = nombre;
-
-      const aprobado = Array.isArray(valores) && valores[indice] === true;
-      const estado = document.createElement('span');
-      estado.className = 'estado ' + (aprobado ? 'aprobado' : 'pendiente');
-      estado.textContent = aprobado ? 'APROBADO' : 'PENDIENTE';
-
-      fila.append(texto, estado);
-      contenedor.appendChild(fila);
-    });
-  }
-
-  function cargarAsistencias() {
-    const datos = cacheAsistencias[programaActual] || [];
-    renderizarAsistencias(datos);
-  }
-
-  function renderizarAsistencias(datos) {
-    const lista = document.getElementById('listaAsistencias');
-    let totalAsistencias = 0;
-    let nivelNombreTitulo = programaActual === 'HOMBRIA' ? 'Nivel 1: Hombría al Máximo' : 'Bloque 1: Sanidad y Libertad';
-
-    datos.forEach(function(item) {
-      const val = String(item.estado || '').trim().toUpperCase();
-      if (val === 'PRESENTE' || val === 'RETARDO') totalAsistencias++;
-      if (item.curso || item.nivelCurso) {
-        nivelNombreTitulo = item.curso || item.nivelCurso;
-      }
-    });
-
-    document.getElementById('textoConteoProgreso').textContent = totalAsistencias + ' de 10 asistencias completadas';
-    document.getElementById('tituloResumenNivel').textContent = nivelNombreTitulo;
-
-    const porcentaje = Math.min(Math.round((totalAsistencias / 10) * 100), 100);
-    document.getElementById('barraProgresoFill').style.width = porcentaje + '%';
-
-    lista.replaceChildren();
-
-    if (datos.length === 0) {
-      const sinDatos = document.createElement('p');
-      sinDatos.className = 'subtitulo';
-      sinDatos.textContent = 'No hay asistencias registradas para este programa.';
-      lista.appendChild(sinDatos);
-      return;
-    }
-
-    datos.forEach(function(item) {
-      const fila = document.createElement('div');
-      fila.className = 'fila';
-
-      const detalle = document.createElement('div');
-      detalle.className = 'detalle';
-
-      const titulo = document.createElement('strong');
-      titulo.textContent = item.curso || item.nivelCurso || item.programa;
-
-      const info = document.createElement('div');
-      info.className = 'subtitulo';
-
-      let semTxt = item.sesion || 'Semana';
-      semTxt = semTxt.replace(/Sesión/gi, 'Semana');
-
-      info.textContent = [
-        item.fecha || '',
-        semTxt,
-        item.campus || ''
-      ].filter(Boolean).join(' · ');
-
-      detalle.append(titulo, info);
-
-      const valor = String(item.estado || '').trim().toUpperCase();
-      const estado = document.createElement('span');
-      estado.className = 'estado';
-      if (valor === 'PRESENTE') estado.classList.add('aprobado');
-      else if (valor === 'FALTA') estado.classList.add('falta');
-      else if (valor === 'RETARDO') estado.classList.add('retardo');
-      else estado.classList.add('pendiente');
-      estado.textContent = valor;
-
-      fila.append(detalle, estado);
-      lista.appendChild(fila);
-    });
-  }
-
-  function seleccionarProgEscaner(prog) {
-    esc_programaSeleccionado = prog;
-    const gridCampus = document.getElementById('gridCampusOpciones');
-    gridCampus.replaceChildren();
-
-    const listaCampus = prog === 'HOMBRIA' ? ['PUEBLA', 'HUEJOTZINGO'] : ['11 SUR', 'NACIONAL', 'HUEJOTZINGO'];
-
-    listaCampus.forEach(c => {
-      const btn = document.createElement('button');
-      btn.className = 'btn-campus-card';
-      btn.type = 'button';
-      btn.textContent = c;
-      btn.addEventListener('click', () => iniciarCamaraEscaneo(c));
-      gridCampus.appendChild(btn);
-    });
-
-    document.getElementById('escanerPasoPrograma').classList.add('oculto');
-    document.getElementById('escanerPasoCampus').classList.remove('oculto');
-  }
-
-  async function iniciarCamaraEscaneo(campus) {
-    esc_campusSeleccionado = campus;
-    document.getElementById('labelEscanerCampusActivo').textContent = esc_programaSeleccionado + ' · ' + esc_campusSeleccionado;
-
-    document.getElementById('escanerPasoCampus').classList.add('oculto');
-    document.getElementById('escanerPasoCamara').classList.remove('oculto');
-
-    await detenerCamara();
-
-    html5QrCodeDirecto = new Html5Qrcode("reader");
-    const config = { fps: 10, qrbox: { width: 220, height: 220 } };
-
-    html5QrCodeDirecto.start(
-      { facingMode: "environment" },
-      config,
-      onQRDetectado
-    ).catch(err => {
-      html5QrCodeDirecto.start({ facingMode: "user" }, config, onQRDetectado).catch(e => {
-        alert("No se pudo acceder a la cámara. Asegúrate de otorgar permisos en tu navegador.");
-      });
-    });
-  }
-
-  function onQRDetectado(decodedText) {
-    if (!permitoEscanearProximo) return;
-    permitoEscanearProximo = false;
-
-    const divRes = document.getElementById('resultadoEscaneo');
-    divRes.style.display = 'block';
-    divRes.className = '';
-    divRes.style.background = '#e2e8f0';
-    divRes.style.color = '#18232d';
-    divRes.textContent = 'Procesando código: ' + decodedText + '...';
-
-    try {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = audioCtx.createOscillator();
-      osc.connect(audioCtx.destination);
-      osc.frequency.value = 800;
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.15);
-    } catch(e) {}
-
-    const url = `${WEB_APP_URL}?action=registrarAsistencia&registro=${encodeURIComponent(decodedText)}&programa=${encodeURIComponent(esc_programaSeleccionado)}&campus=${encodeURIComponent(esc_campusSeleccionado)}&voluntarioRegistro=${encodeURIComponent(registroSesion)}`;
-
-    fetch(url)
+  // LOGIN
+  document.getElementById('formLogin').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const reg = document.getElementById('inputRegistro').value.trim();
+    const nacTxt = document.getElementById('inputNacimiento').value.trim();
+    const partes = nacTxt.split('/');
+    if (partes.length !== 3) return;
+    const nac = partes[2] + '-' + partes[1] + '-' + partes[0];
+
+    document.getElementById('msgLogin').textContent = 'Consultando datos...';
+
+    fetch(`${WEB_APP_URL}?action=buscarParticipante&registro=${encodeURIComponent(reg)}&nacimiento=${encodeURIComponent(nac)}`)
       .then(res => res.json())
       .then(res => {
-        if (res.exito) {
-          divRes.className = res.estado === 'RETARDO' ? 'res-retardo' : 'res-exito';
-          divRes.textContent = `✅ Registro ${decodedText}: ${res.mensaje}`;
+        if (res && res.encontrado) {
+          usuarioSesion = res;
+          document.getElementById('msgLogin').textContent = '';
+          document.getElementById('seccionLogin').classList.add('oculto');
+          document.getElementById('panelPrincipal').classList.remove('oculto');
+          cargarDatosEnPantalla(res);
         } else {
-          divRes.className = 'res-error';
-          divRes.textContent = `⚠️ Registro ${decodedText}: ${res.mensaje}`;
+          document.getElementById('msgLogin').textContent = 'Credenciales no encontradas.';
         }
-      })
-      .catch(err => {
-        divRes.className = 'res-error';
-        divRes.textContent = '❌ Error de conexión al registrar.';
-      })
-      .finally(() => {
-        setTimeout(() => { permitoEscanearProximo = true; }, 2500);
       });
+  });
+
+  function cargarDatosEnPantalla(res) {
+    const nombreFull = (res.nombre || '') + ' ' + (res.apellidos || '');
+    document.getElementById('userNombreHeader').textContent = nombreFull;
+    document.getElementById('drawerNombreUser').textContent = res.nombre || 'NACIONES';
+
+    // QR
+    document.getElementById('qrImgMain').src = 'https://quickchart.io/qr?text=' + encodeURIComponent(res.registro) + '&size=220&margin=1';
+    document.getElementById('qrNumMain').textContent = res.registro;
+
+    // ROL Y PERMISOS
+    const rol = String(res.rol || '').toUpperCase();
+    const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
+    document.getElementById('itemRegistro').classList.toggle('oculto', !esVoluntario);
+
+    // HOMBRÍA
+    if (res.proximaLeccion && res.proximaLeccion.HOMBRIA) {
+      document.getElementById('txtProxHombria').textContent = res.proximaLeccion.HOMBRIA.tema || '';
+      document.getElementById('sumHombriaTexto').innerHTML = 'Próxima sesión: ' + (res.proximaLeccion.HOMBRIA.tema || '');
+    }
+
+    if (res.asistencias && res.asistencias.HOMBRIA) {
+      renderizarListaAsistencias('listHombriaAsistencias', res.asistencias.HOMBRIA);
+    }
+
+    // FUNDAMENTOS
+    if (res.proximaLeccion && res.proximaLeccion.FUNDAMENTOS) {
+      document.getElementById('txtProxFundamentos').textContent = res.proximaLeccion.FUNDAMENTOS.tema || '';
+      document.getElementById('sumFundamentosTexto').innerHTML = 'Próxima sesión: ' + (res.proximaLeccion.FUNDAMENTOS.tema || '');
+    }
+
+    if (res.asistencias && res.asistencias.FUNDAMENTOS) {
+      renderizarListaAsistencias('listFundAsistencias', res.asistencias.FUNDAMENTOS);
+    }
   }
 
-  async function detenerCamara() {
-    if (html5QrCodeDirecto) {
-      try {
-        if (html5QrCodeDirecto.isScanning) {
-          await html5QrCodeDirecto.stop();
-        }
-      } catch(e) {}
-      html5QrCodeDirecto = null;
+  function renderizarListaAsistencias(contId, lista) {
+    const cont = document.getElementById(contId);
+    cont.innerHTML = '';
+    if (!lista || lista.length === 0) {
+      cont.innerHTML = '<div style="color: #71808e; font-size: 13px;">Sin registros recientes.</div>';
+      return;
     }
-    const divRes = document.getElementById('resultadoEscaneo');
-    if (divRes) divRes.style.display = 'none';
+    lista.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'attendance-row';
+      const st = String(item.estado || 'FALTA').toUpperCase();
+      let badgeClase = 'badge-falta';
+      if (st === 'PRESENTE') badgeClase = 'badge-presente';
+      if (st === 'RETARDO') badgeClase = 'badge-retardo';
+
+      row.innerHTML = `
+        <div>
+          <strong style="font-size: 14px; display: block;">${item.curso || ''}</strong>
+          <span style="font-size: 12px; color: #71808e;">${item.fecha || ''} • ${item.sesion || ''}</span>
+        </div>
+        <span class="badge-status ${badgeClase}">${st}</span>
+      `;
+      cont.appendChild(row);
+    });
   }
+
+  // NAVEGACIÓN ENTRE VISTAS
+  function navegarA(vista) {
+    document.getElementById('vistaInicio').classList.add('oculto');
+    document.getElementById('vistaHombria').classList.add('oculto');
+    document.getElementById('vistaFundamentos').classList.add('oculto');
+    document.getElementById('vistaEscaner').classList.add('oculto');
+
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+    if (vista === 'inicio' || vista === 'cuenta') {
+      document.getElementById('vistaInicio').classList.remove('oculto');
+      document.getElementById('navBtnInicio').classList.add('active');
+    } else if (vista === 'hombria') {
+      document.getElementById('vistaHombria').classList.remove('oculto');
+      document.getElementById('navBtnHombria').classList.add('active');
+    } else if (vista === 'fundamentos') {
+      document.getElementById('vistaFundamentos').classList.remove('oculto');
+      document.getElementById('navBtnFundamentos').classList.add('active');
+    } else if (vista === 'escaner') {
+      document.getElementById('vistaEscaner').classList.remove('oculto');
+    }
+  }
+
+  function toggleSubPestana(prog, pest) {
+    if (prog === 'hombria') {
+      document.getElementById('tabHombriaAsis').classList.toggle('active', pest === 'asis');
+      document.getElementById('tabHombriaProg').classList.toggle('active', pest === 'prog');
+      document.getElementById('secHombriaAsis').classList.toggle('oculto', pest !== 'asis');
+      document.getElementById('secHombriaProg').classList.toggle('oculto', pest !== 'prog');
+    } else {
+      document.getElementById('tabFundAsis').classList.toggle('active', pest === 'asis');
+      document.getElementById('tabFundProg').classList.toggle('active', pest === 'prog');
+      document.getElementById('secFundAsis').classList.toggle('oculto', pest !== 'asis');
+      document.getElementById('secFundProg').classList.toggle('oculto', pest !== 'prog');
+    }
+  }
+
+  // CARRUSEL
+  let slideIndex = 0;
+  function setSlide(idx) {
+    slideIndex = idx;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+  setInterval(() => {
+    slideIndex = (slideIndex + 1) % 2;
+    setSlide(slideIndex);
+  }, 5000);
+
+  // DRAWER
+  document.getElementById('btnHamburguesa').addEventListener('click', () => {
+    document.getElementById('drawerOverlay').classList.add('activo');
+    document.getElementById('drawerMenu').classList.add('activo');
+  });
+  function cerrarDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('activo');
+    document.getElementById('drawerMenu').classList.remove('activo');
+  }
+  document.getElementById('drawerOverlay').addEventListener('click', cerrarDrawer);
 
   function cerrarSesion() {
-    detenerCamara();
-    consultaActual++;
-    registroSesion = '';
-    nacimientoSesion = '';
-    programaActual = '';
-    cacheAsistencias = {};
-    cacheProximaLeccion = {};
-    permisosVoluntarioGlobal = { esVoluntario: false, programas: [] };
-    localStorage.removeItem('naciones_sesion');
-
-    document.getElementById('panel').classList.add('oculto');
-    document.getElementById('acceso').classList.remove('oculto');
-    btnHamburguesa.classList.add('oculto');
-    formulario.reset();
-    boton.disabled = false;
-    mensaje.textContent = '';
+    usuarioSesion = null;
+    document.getElementById('panelPrincipal').classList.add('oculto');
+    document.getElementById('seccionLogin').classList.remove('oculto');
+    document.getElementById('formLogin').reset();
   }
 </script>
 </body>
