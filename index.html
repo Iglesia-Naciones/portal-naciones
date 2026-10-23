@@ -20,7 +20,6 @@
   <style>
     * { box-sizing: border-box; }
     
-    /* FONDO GENERAL EN #ffffff */
     body {
       margin: 0; padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -29,7 +28,7 @@
       transition: background-color 0.3s ease;
     }
 
-    /* CARRUSEL PROPORCIÓN 3840x796 */
+    /* CARRUSEL RESPONSIVO */
     .hero-carousel {
       width: 100%;
       aspect-ratio: 3840 / 796;
@@ -51,7 +50,7 @@
     }
     .dot.active { background: #ffffff; }
 
-    /* NAVBAR PRINCIPAL CON CONEXIÓN BLANCA CONTINUA */
+    /* NAVBAR PRINCIPAL CON CONEXIÓN CONTINUA */
     .header-naciones {
       background-color: #dbe0e4;
       position: sticky; top: 0; z-index: 100;
@@ -74,7 +73,6 @@
       transition: all 0.2s ease; margin-bottom: 0;
     }
 
-    /* PESTAÑA ACTIVA UNIFICADA EN #ffffff */
     .nav-btn.active {
       background-color: #ffffff;
       color: #000000;
@@ -102,10 +100,9 @@
     .drawer-header { background: #005b92; color: white; padding: 24px 16px; font-weight: bold; }
     .drawer-item { padding: 16px 20px; font-size: 13.5px; font-weight: 700; color: #2b363f; border-bottom: 1px solid #f0f3f5; cursor: pointer; }
 
-    /* CONTENEDOR PRINCIPAL */
     .contenedor { max-width: 1080px; margin: 32px auto; padding: 0 20px; }
 
-    /* TARJETA INICIO PANORÁMICA DE PERFIL (#ffffff CON SOMBRA) */
+    /* TARJETA INICIO PANORÁMICA */
     .profile-card-desktop {
       background: #ffffff; border-radius: 24px; 
       box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
@@ -131,7 +128,7 @@
     .qr-card-float img { width: 180px; height: 180px; display: block; margin: 0 auto; }
     .qr-card-float .qr-num { font-size: 14px; font-style: italic; font-weight: 600; margin-top: 8px; }
 
-    /* VISTAS DE CURSOS (TARJETAS EN #dfe4e8 Y FONDO #ffffff) */
+    /* VISTAS DE CURSOS */
     .course-header-title { text-align: center; margin: 16px 0 28px; }
     .img-logo-hombria { height: 64px; width: auto; object-fit: contain; }
 
@@ -142,7 +139,6 @@
     .next-lesson-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
     .next-lesson-sub { font-size: 14px; color: #33414d; }
 
-    /* BOTONES DE PESTAÑAS (MIS ASISTENCIAS / MI PROGRESO) */
     .pill-tabs-nav { display: flex; gap: 12px; margin-bottom: 24px; }
     .pill-tab {
       flex: 1; padding: 14px; border-radius: 30px; border: 0; font-size: 14px; font-weight: 800;
@@ -180,16 +176,18 @@
       .nav-desktop { display: none; }
       .btn-menu-hamburguesa { display: block; }
       .profile-card-body { grid-template-columns: 1fr; }
+      .hero-carousel {
+        aspect-ratio: 16 / 9;
+        max-height: 320px;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- HERO CAROUSEL DINÁMICO 3840x796 -->
+<!-- HERO CAROUSEL DINÁMICO -->
 <div class="hero-carousel" id="heroCarousel">
-  <div id="slidesContainer">
-    <!-- Carga dinámica de anuncios desde Google Sheets -->
-  </div>
+  <div id="slidesContainer"></div>
   <div class="carousel-indicators" id="dotsContainer"></div>
 </div>
 
@@ -198,7 +196,6 @@
   <div class="header-inner">
     <div class="brand-box" onclick="navegarA('inicio')">
       <button id="btnHamburguesa" class="btn-menu-hamburguesa" type="button">☰</button>
-      <!-- LOGO NACIONES A COLOR -->
       <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones A Color" class="img-logo-naciones">
     </div>
 
@@ -242,7 +239,7 @@
   <!-- PANEL PRINCIPAL -->
   <div id="panelPrincipal" class="oculto">
 
-    <!-- VISTA INICIO (#ffffff) -->
+    <!-- VISTA INICIO -->
     <section id="vistaInicio">
       <div class="profile-card-desktop">
         <div class="profile-card-header" id="userNombreHeader">Cargando...</div>
@@ -267,7 +264,7 @@
             </div>
           </div>
 
-          <!-- TARJETA QR FLOTANTE (#ffffff CON SOMBRA) -->
+          <!-- TARJETA QR FLOTANTE -->
           <div class="qr-card-float">
             <img id="qrImgMain" src="" alt="Código QR">
             <div class="qr-num" id="qrNumMain"></div>
@@ -276,10 +273,9 @@
       </div>
     </section>
 
-    <!-- VISTA HOMBRÍA (FONDO #ffffff, TARJETAS #dfe4e8) -->
+    <!-- VISTA HOMBRÍA -->
     <section id="vistaHombria" class="oculto">
       <div class="course-header-title">
-        <!-- LOGO HOMBRÍA LIMPIO -->
         <img src="https://lh3.googleusercontent.com/d/1ueR5IQ38o-7XbWV7K6_21WpReyjaAY3H" alt="Hombría al Máximo" class="img-logo-hombria">
       </div>
 
@@ -406,6 +402,7 @@
           if (res.anuncios && res.anuncios.length > 0) {
             construirCarruselAnuncios(res.anuncios);
           }
+          
           cargarDatosEnPantalla(res);
         } else {
           document.getElementById('msgLogin').textContent = 'Credenciales no encontradas.';
@@ -413,19 +410,27 @@
       });
   });
 
-  function construirCarruselAnuncios(anuncios) {
-    listaAnuncios = anuncios;
+  function construirCarruselAnuncios(anunciosRaw) {
+    const esMovil = window.innerWidth < 768;
+    
+    // Selecciona automáticamente la imagen adecuada para el dispositivo
+    listaAnuncios = anunciosRaw.map(item => ({
+      nombre: item.nombre,
+      imagen: esMovil ? (item.imagenMovil || item.imagenEscritorio) : (item.imagenEscritorio || item.imagenMovil),
+      link: item.link
+    }));
+
     const slidesContainer = document.getElementById('slidesContainer');
     const dotsContainer = document.getElementById('dotsContainer');
     
     slidesContainer.innerHTML = '';
     dotsContainer.innerHTML = '';
 
-    anuncios.forEach((item, idx) => {
+    listaAnuncios.forEach((item, idx) => {
       const img = document.createElement('img');
       img.src = item.imagen;
       img.className = 'carousel-slide' + (idx === 0 ? ' active' : '');
-      img.alt = 'Anuncio ' + (idx + 1);
+      img.alt = item.nombre || ('Anuncio ' + (idx + 1));
       
       if (item.link) {
         img.onclick = () => window.open(item.link, '_blank');
