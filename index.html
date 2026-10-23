@@ -217,9 +217,8 @@
     input:focus, select:focus { outline: none; border-color: #005b92; }
 
     .phone-input-group { display: flex; align-items: center; gap: 8px; }
-    .phone-prefix {
-      background: #eef2f5; border: 1px solid #cbd3d9; padding: 12px; border-radius: 10px;
-      font-weight: 800; font-size: 14px; color: #005b92; user-select: none;
+    .phone-select-prefix {
+      width: 120px !important; flex-shrink: 0; font-weight: 700; color: #005b92; background: #eef2f5;
     }
 
     .btn-submit { width: 100%; margin-top: 22px; background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
@@ -259,7 +258,7 @@
   <div class="carousel-indicators" id="dotsContainer"></div>
 </div>
 
-<!-- NAVBAR ESCRITORIO (OCULTO EN LOGIN) -->
+<!-- NAVBAR ESCRITORIO -->
 <header class="header-naciones desktop-only oculto" id="headerNacionesDesktop">
   <div class="header-inner">
     <div class="brand-box" onclick="navegarA('inicio')">
@@ -276,7 +275,7 @@
   </div>
 </header>
 
-<!-- ENCABEZADO MÓVIL (OCULTO EN LOGIN) -->
+<!-- ENCABEZADO MÓVIL -->
 <header class="header-naciones-mobile mobile-only oculto" id="headerNacionesMobile">
   <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones" style="height: 30px; width: auto; object-fit: contain;">
 </header>
@@ -352,7 +351,23 @@
 
       <label>Teléfono *</label>
       <div class="phone-input-group">
-        <span class="phone-prefix">+52</span>
+        <select id="regLada" class="phone-select-prefix">
+          <option value="+52" selected>🇲🇽 +52</option>
+          <option value="+1">🇺🇸/🇨🇦 +1</option>
+          <option value="+54">🇦🇷 +54</option>
+          <option value="+57">🇨🇴 +57</option>
+          <option value="+506">🇨🇷 +506</option>
+          <option value="+503">🇸🇻 +503</option>
+          <option value="+34">🇪🇸 +34</option>
+          <option value="+502">🇬🇹 +502</option>
+          <option value="+504">🇭🇳 +504</option>
+          <option value="+505">🇳🇮 +505</option>
+          <option value="+507">🇵🇦 +507</option>
+          <option value="+51">🇵🇪 +51</option>
+          <option value="+595">🇵🇾 +595</option>
+          <option value="+598">🇺🇾 +598</option>
+          <option value="+58">🇻🇪 +58</option>
+        </select>
         <input id="regTelefono" type="tel" placeholder="10 dígitos" maxlength="10" required pattern="[0-9]{10}">
       </div>
 
@@ -711,8 +726,8 @@
     const apMaterno = document.getElementById('regApMaterno').value.trim();
     const estadoCivil = document.getElementById('regEstadoCivil').value;
     const correo = document.getElementById('regCorreo').value.trim();
+    const lada = document.getElementById('regLada').value;
     const telSinLada = document.getElementById('regTelefono').value.trim();
-    const telefono = '+52' + telSinLada;
     const nacTxt = document.getElementById('regNacimiento').value.trim();
     const campus = document.getElementById('regCampus').value;
 
@@ -722,7 +737,7 @@
       document.getElementById('msgRegistro').textContent = 'Ingresa una fecha válida (DD/MM/AAAA).';
       return;
     }
-    const nacimiento = partes[2] + '-' + partes[1] + '-' + partes[0];
+    const nacimiento = nacTxt; // Pasa DD/MM/AAAA para enviarlo formateado
 
     const msgBox = document.getElementById('msgRegistro');
     msgBox.style.color = '#005b92';
@@ -735,7 +750,8 @@
       apMaterno: apMaterno,
       estadoCivil: estadoCivil,
       correo: correo,
-      telefono: telefono,
+      lada: lada,
+      telefono: telSinLada,
       nacimiento: nacimiento,
       campus: campus
     });
