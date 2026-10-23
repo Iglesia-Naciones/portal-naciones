@@ -39,7 +39,7 @@
       overflow: hidden;
     }
     .carousel-slide {
-      width: 100%; height: 100%; object-fit: cover; display: none;
+      width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer;
     }
     .carousel-slide.active { display: block; }
     .carousel-indicators {
@@ -185,14 +185,12 @@
 </head>
 <body>
 
-<!-- HERO CAROUSEL 3840x796 PROPORCIONAL -->
+<!-- HERO CAROUSEL DINÁMICO 3840x796 -->
 <div class="hero-carousel" id="heroCarousel">
-  <img src="https://lh3.googleusercontent.com/d/1DO5NDXtEpJsnXlrzTOs-uLFYW7pTm1ow" class="carousel-slide active" alt="Anuncio 1">
-  <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" class="carousel-slide" alt="Anuncio 2">
-  <div class="carousel-indicators">
-    <div class="dot active" onclick="setSlide(0)"></div>
-    <div class="dot" onclick="setSlide(1)"></div>
+  <div id="slidesContainer">
+    <!-- Carga dinámica de anuncios desde Google Sheets -->
   </div>
+  <div class="carousel-indicators" id="dotsContainer"></div>
 </div>
 
 <!-- NAVBAR INTEGRADO -->
@@ -200,7 +198,7 @@
   <div class="header-inner">
     <div class="brand-box" onclick="navegarA('inicio')">
       <button id="btnHamburguesa" class="btn-menu-hamburguesa" type="button">☰</button>
-      <!-- LOGO DE NACIONES A COLOR -->
+      <!-- LOGO NACIONES A COLOR -->
       <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones A Color" class="img-logo-naciones">
     </div>
 
@@ -241,38 +239,38 @@
     <div id="msgLogin" style="margin-top: 12px; color: #a52828; font-weight: bold;"></div>
   </section>
 
-  <!-- PANEL PRINCIPAL DE CONTENIDO EN SESIÓN -->
+  <!-- PANEL PRINCIPAL -->
   <div id="panelPrincipal" class="oculto">
 
     <!-- VISTA INICIO (#ffffff) -->
     <section id="vistaInicio">
       <div class="profile-card-desktop">
-        <div class="profile-card-header" id="userNombreHeader">Esteban Bautista Moreno</div>
+        <div class="profile-card-header" id="userNombreHeader">Cargando...</div>
         <div class="profile-card-body">
           <div>
             <!-- HOMBRÍA -->
             <div class="program-summary-item" id="sumHombriaBox">
               <div class="program-summary-title" id="sumHombriaNivel">Hombría al Máximo - Nivel 1</div>
               <div class="program-progress-track">
-                <div class="program-progress-fill" id="sumHombriaFill" style="width: 70%;"></div>
+                <div class="program-progress-fill" id="sumHombriaFill" style="width: 0%;"></div>
               </div>
-              <div class="program-summary-sub" id="sumHombriaTexto">Asistencia 70%<br>Próxima sesión: Sentencia Máxima / Dejados fuera de Canaán</div>
+              <div class="program-summary-sub" id="sumHombriaTexto">Próxima sesión: -</div>
             </div>
 
             <!-- FUNDAMENTOS -->
             <div class="program-summary-item" id="sumFundamentosBox">
               <div class="program-summary-title" id="sumFundamentosNivel">Fundamentos - Sanidad y Libertad</div>
               <div class="program-progress-track">
-                <div class="program-progress-fill" id="sumFundamentosFill" style="width: 70%;"></div>
+                <div class="program-progress-fill" id="sumFundamentosFill" style="width: 0%;"></div>
               </div>
-              <div class="program-summary-sub" id="sumFundamentosTexto">Asistencia 70%<br>Próxima sesión: Sanidad Financiera</div>
+              <div class="program-summary-sub" id="sumFundamentosTexto">Próxima sesión: -</div>
             </div>
           </div>
 
           <!-- TARJETA QR FLOTANTE (#ffffff CON SOMBRA) -->
           <div class="qr-card-float">
             <img id="qrImgMain" src="" alt="Código QR">
-            <div class="qr-num" id="qrNumMain">10061</div>
+            <div class="qr-num" id="qrNumMain"></div>
           </div>
         </div>
       </div>
@@ -281,13 +279,13 @@
     <!-- VISTA HOMBRÍA (FONDO #ffffff, TARJETAS #dfe4e8) -->
     <section id="vistaHombria" class="oculto">
       <div class="course-header-title">
-        <!-- LOGO DE HOMBRÍA LIMPIO -->
+        <!-- LOGO HOMBRÍA LIMPIO -->
         <img src="https://lh3.googleusercontent.com/d/1ueR5IQ38o-7XbWV7K6_21WpReyjaAY3H" alt="Hombría al Máximo" class="img-logo-hombria">
       </div>
 
       <div class="card-rounded-gray" id="boxProxHombria">
         <div class="next-lesson-title">Tu próxima lección:</div>
-        <div class="next-lesson-sub" id="txtProxHombria">Lección 9: ¿Cómo pasar del fracaso al éxito?</div>
+        <div class="next-lesson-sub" id="txtProxHombria">Cargando...</div>
       </div>
 
       <div class="pill-tabs-nav">
@@ -297,10 +295,10 @@
 
       <div id="secHombriaAsis">
         <div class="card-rounded-gray">
-          <div style="font-weight: 800; font-size: 16px;" id="lblHombriaNivelAct">Nivel 5: Nunca Te Rindas</div>
-          <div style="font-size: 13px; color: #52606d;" id="lblHombriaConteo">6 de 10 asistencias completadas</div>
+          <div style="font-weight: 800; font-size: 16px;" id="lblHombriaNivelAct">Nivel Actual</div>
+          <div style="font-size: 13px; color: #52606d;" id="lblHombriaConteo">0 de 10 asistencias completadas</div>
           <div class="progress-bar-track">
-            <div class="progress-bar-fill" id="fillHombriaProgBar" style="width: 60%;"></div>
+            <div class="progress-bar-fill" id="fillHombriaProgBar" style="width: 0%;"></div>
           </div>
         </div>
 
@@ -336,7 +334,7 @@
 
       <div id="secFundAsis">
         <div class="card-rounded-gray">
-          <div style="font-weight: 800; font-size: 16px;" id="lblFundNivelAct">Bloque 1: Sanidad y Libertad</div>
+          <div style="font-weight: 800; font-size: 16px;" id="lblFundNivelAct">Bloque Actual</div>
           <div style="font-size: 13px; color: #52606d;" id="lblFundConteo">0 de 6 asistencias completadas</div>
           <div class="progress-bar-track">
             <div class="progress-bar-fill" id="fillFundProgBar" style="width: 0%;"></div>
@@ -372,6 +370,9 @@
 <script>
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
   let usuarioSesion = null;
+  let listaAnuncios = [];
+  let slideIndex = 0;
+  let timerCarrusel = null;
 
   document.getElementById('inputNacimiento').addEventListener('input', (e) => {
     let v = e.target.value.replace(/\D/g, '');
@@ -401,12 +402,64 @@
           document.getElementById('msgLogin').textContent = '';
           document.getElementById('seccionLogin').classList.add('oculto');
           document.getElementById('panelPrincipal').classList.remove('oculto');
+          
+          if (res.anuncios && res.anuncios.length > 0) {
+            construirCarruselAnuncios(res.anuncios);
+          }
           cargarDatosEnPantalla(res);
         } else {
           document.getElementById('msgLogin').textContent = 'Credenciales no encontradas.';
         }
       });
   });
+
+  function construirCarruselAnuncios(anuncios) {
+    listaAnuncios = anuncios;
+    const slidesContainer = document.getElementById('slidesContainer');
+    const dotsContainer = document.getElementById('dotsContainer');
+    
+    slidesContainer.innerHTML = '';
+    dotsContainer.innerHTML = '';
+
+    anuncios.forEach((item, idx) => {
+      const img = document.createElement('img');
+      img.src = item.imagen;
+      img.className = 'carousel-slide' + (idx === 0 ? ' active' : '');
+      img.alt = 'Anuncio ' + (idx + 1);
+      
+      if (item.link) {
+        img.onclick = () => window.open(item.link, '_blank');
+      }
+
+      slidesContainer.appendChild(img);
+
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (idx === 0 ? ' active' : '');
+      dot.onclick = () => setSlide(idx);
+      dotsContainer.appendChild(dot);
+    });
+
+    iniciarTemporizadorCarrusel();
+  }
+
+  function setSlide(idx) {
+    if (listaAnuncios.length === 0) return;
+    slideIndex = idx;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
+  function iniciarTemporizadorCarrusel() {
+    if (timerCarrusel) clearInterval(timerCarrusel);
+    timerCarrusel = setInterval(() => {
+      if (listaAnuncios.length > 1) {
+        slideIndex = (slideIndex + 1) % listaAnuncios.length;
+        setSlide(slideIndex);
+      }
+    }, 5000);
+  }
 
   function cargarDatosEnPantalla(res) {
     const nombreFull = (res.nombre || '') + ' ' + (res.apellidos || '');
@@ -500,19 +553,6 @@
       document.getElementById('secFundProg').classList.toggle('oculto', pest !== 'prog');
     }
   }
-
-  let slideIndex = 0;
-  function setSlide(idx) {
-    slideIndex = idx;
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dots = document.querySelectorAll('.dot');
-    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
-    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-  }
-  setInterval(() => {
-    slideIndex = (slideIndex + 1) % 2;
-    setSlide(slideIndex);
-  }, 5000);
 
   document.getElementById('btnHamburguesa').addEventListener('click', () => {
     document.getElementById('drawerOverlay').classList.add('activo');
