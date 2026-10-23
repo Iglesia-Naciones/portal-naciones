@@ -233,10 +233,13 @@
 
 <main class="contenedor">
 
-  <!-- ACCESO / LOGIN -->
+  <!-- ACCESO / LOGIN CON LOGO CENTRADO -->
   <section class="login-card" id="seccionLogin">
-    <div style="color: #71808e; font-size: 11px; font-weight: 700; text-transform: uppercase;">Iglesia Naciones</div>
-    <h1 style="margin: 4px 0 16px; font-size: 22px;">Portal de seguimiento</h1>
+    <div style="text-align: center; margin-bottom: 20px;">
+      <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones" style="height: 52px; width: auto; object-fit: contain;">
+    </div>
+    <div style="color: #71808e; font-size: 11px; font-weight: 700; text-transform: uppercase; text-align: center;">Iglesia Naciones</div>
+    <h1 style="margin: 4px 0 20px; font-size: 22px; text-align: center;">Portal de seguimiento</h1>
     <form id="formLogin">
       <label>Número de registro</label>
       <input id="inputRegistro" type="text" placeholder="Tu número de registro" required autocomplete="off">
@@ -244,7 +247,7 @@
       <input id="inputNacimiento" type="text" placeholder="DD/MM/AAAA" maxlength="10" required autocomplete="off">
       <button class="btn-submit" type="submit">Ingresar al Portal</button>
     </form>
-    <div id="msgLogin" style="margin-top: 12px; color: #a52828; font-weight: bold;"></div>
+    <div id="msgLogin" style="margin-top: 12px; color: #a52828; font-weight: bold; text-align: center;"></div>
   </section>
 
   <!-- PANEL PRINCIPAL -->
@@ -323,10 +326,10 @@
       </div>
     </section>
 
-    <!-- VISTA FUNDAMENTOS -->
+    <!-- VISTA FUNDAMENTOS CON LOGO ACTUALIZADO -->
     <section id="vistaFundamentos" class="oculto">
       <div class="course-header-title">
-        <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" alt="Fundamentos" style="max-height: 54px;">
+        <img src="https://lh3.googleusercontent.com/d/1ihlxSR7LNWOzcT8breTYLqqWZ7eaCz-v" alt="Fundamentos" class="img-logo-hombria">
       </div>
 
       <div class="card-rounded-gray" id="boxProxFundamentos">
@@ -476,7 +479,7 @@
     document.getElementById('seccionLogin').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.remove('oculto');
     
-    // MUESTRA EL HEADER SOLO TRAS INICIAR SESIÓN
+    // MOSTRAR LA BARRA SUPERIOR TRAS LOGIN
     document.getElementById('headerNaciones').classList.remove('oculto');
 
     if (res.anuncios && res.anuncios.length > 0) {
@@ -563,7 +566,7 @@
     const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
     document.getElementById('itemRegistro').classList.toggle('oculto', !esVoluntario);
 
-    // --- HOMBRÍA ---
+    // --- HOMBRÍA AL MÁXIMO ---
     if (res.asistencias && res.asistencias.HOMBRIA) {
       const listaH = res.asistencias.HOMBRIA;
       renderizarListaAsistencias('listHombriaAsistencias', listaH);
@@ -591,7 +594,7 @@
     }
 
     if (res.progresoHombria) {
-      renderizarListaProgreso('listHombriaProgreso', res.progresoHombria);
+      renderizarListaProgresoBloques('listHombriaProgreso', res.progresoHombria);
     }
 
     // --- FUNDAMENTOS ---
@@ -622,7 +625,7 @@
     }
 
     if (res.progresoFundamentos) {
-      renderizarListaProgreso('listFundProgreso', res.progresoFundamentos);
+      renderizarListaProgresoBloques('listFundProgreso', res.progresoFundamentos);
     }
   }
 
@@ -652,27 +655,37 @@
     });
   }
 
-  function renderizarListaProgreso(contId, listaProg) {
+  function renderizarListaProgresoBloques(contId, bloquesList) {
     const cont = document.getElementById(contId);
     cont.innerHTML = '';
-    if (!listaProg || listaProg.length === 0) {
+    if (!bloquesList || bloquesList.length === 0) {
       cont.innerHTML = '<div style="color: #71808e; font-size: 13px;">Sin información de progreso.</div>';
       return;
     }
-    listaProg.forEach(item => {
-      const row = document.createElement('div');
-      row.className = 'attendance-row';
-      const estaAprobado = item.completado === true;
-      const badgeClase = estaAprobado ? 'badge-aprobado' : 'badge-pendiente';
-      const txtEstado = estaAprobado ? 'APROBADO' : 'PENDIENTE';
 
-      row.innerHTML = `
-        <div>
-          <strong style="font-size: 14px; display: block;">${item.nombre}</strong>
-        </div>
-        <span class="badge-status ${badgeClase}">${txtEstado}</span>
-      `;
-      cont.appendChild(row);
+    bloquesList.forEach((bloqueObj, bIdx) => {
+      const blockHeader = document.createElement('div');
+      blockHeader.style.cssText = 'font-weight: 800; font-size: 15px; color: #18232d; margin-top: ' + (bIdx === 0 ? '4px' : '22px') + '; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #005b92; text-transform: uppercase;';
+      blockHeader.textContent = bloqueObj.bloque;
+      cont.appendChild(blockHeader);
+
+      if (bloqueObj.items && bloqueObj.items.length > 0) {
+        bloqueObj.items.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'attendance-row';
+          const estaAprobado = item.completado === true;
+          const badgeClase = estaAprobado ? 'badge-aprobado' : 'badge-pendiente';
+          const txtEstado = estaAprobado ? 'APROBADO' : 'PENDIENTE';
+
+          row.innerHTML = `
+            <div>
+              <strong style="font-size: 13.5px; display: block; color: ${item.esRequisito ? '#005b92' : '#18232d'};">${item.nombre}</strong>
+            </div>
+            <span class="badge-status ${badgeClase}">${txtEstado}</span>
+          `;
+          cont.appendChild(row);
+        });
+      }
     });
   }
 
