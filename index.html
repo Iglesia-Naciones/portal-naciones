@@ -27,7 +27,6 @@
       color: #18232d; min-height: 100vh;
     }
 
-    /* CARRUSEL RESPONSIVO SÓLO DENTRO DE SESIÓN (DIMENSIONES EXACTAS) */
     .hero-carousel {
       width: 100%;
       aspect-ratio: 3840 / 774;
@@ -51,7 +50,6 @@
     }
     .dot.active { background: #ffffff; }
 
-    /* NAVBAR ESCRITORIO (OCULTO EN LOGIN POR DEFECTO) */
     .header-naciones {
       background-color: #dbe0e4;
       position: sticky; top: 0; z-index: 100;
@@ -82,7 +80,6 @@
       box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
     }
 
-    /* ENCABEZADO MÓVIL CENTRADO (OCULTO EN LOGIN POR DEFECTO) */
     .header-naciones-mobile {
       background-color: #dbe0e4;
       position: sticky; top: 0; z-index: 90;
@@ -91,7 +88,6 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
 
-    /* DRAWER MÓVIL AUXILIAR */
     .drawer-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(0,0,0,0.5); z-index: 200; display: none;
@@ -109,7 +105,6 @@
 
     .contenedor { max-width: 1080px; margin: 32px auto; padding: 0 20px; }
 
-    /* TARJETA INICIO ESCRITORIO PANORÁMICA */
     .profile-card-desktop {
       background: #ffffff; border-radius: 24px; 
       box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
@@ -135,7 +130,6 @@
     .qr-card-float img { width: 180px; height: 180px; display: block; margin: 0 auto; }
     .qr-card-float .qr-num { font-size: 14px; font-style: italic; font-weight: 600; margin-top: 8px; }
 
-    /* COMPONENTES DISEÑO MÓVIL */
     .user-name-pill {
       background: #005b92; color: #ffffff;
       border-radius: 30px; font-weight: 800; font-size: 18px;
@@ -157,7 +151,6 @@
     .summary-title { font-size: 16px; font-weight: 800; color: #18232d; margin-bottom: 6px; }
     .summary-sub-text { font-size: 13.5px; color: #4a5764; margin-bottom: 4px; }
 
-    /* TARJETAS GRISES Y ELEMENTOS DE PESTAÑAS */
     .course-header-title { text-align: center; margin: 16px 0 28px; }
     .img-logo-hombria { height: 64px; width: auto; object-fit: contain; }
 
@@ -183,7 +176,6 @@
     .progress-bar-track { width: 100%; height: 8px; background: #ffffff; border-radius: 4px; overflow: hidden; margin-top: 8px; }
     .progress-bar-fill { height: 100%; background: #8a2a2a; border-radius: 4px; }
 
-    /* RENDERIZADO DE ASISTENCIAS RESPONSIVO */
     .attendance-row {
       display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #cbd2d8;
     }
@@ -200,110 +192,62 @@
     .badge-aprobado { background: #d8f3e1; color: #176b3a; }
     .badge-pendiente { background: #f0f3f5; color: #71808e; }
 
-    /* BARRA DE NAVEGACIÓN INFERIOR MÓVIL */
     .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 64px;
-      background: #ffffff;
-      border-top: 1px solid #e0e6ed;
-      z-index: 1000;
-      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
-      padding-bottom: env(safe-area-inset-bottom, 0px);
+      position: fixed; bottom: 0; left: 0; right: 0; width: 100%; height: 64px;
+      background: #ffffff; border-top: 1px solid #e0e6ed; z-index: 1000;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08); padding-bottom: env(safe-area-inset-bottom, 0px);
     }
-
     .bottom-nav-item {
-      flex: 1 1 0px !important;
-      width: 20% !important;
-      max-width: 20% !important;
-      height: 100% !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      background: transparent !important;
-      border: none !important;
-      outline: none !important;
-      padding: 2px 0 !important;
-      margin: 0 !important;
-      color: #71808e;
-      cursor: pointer;
-      text-decoration: none;
+      flex: 1 1 0px !important; width: 20% !important; max-width: 20% !important; height: 100% !important;
+      display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important;
+      background: transparent !important; border: none !important; outline: none !important; padding: 2px 0 !important; margin: 0 !important;
+      color: #71808e; cursor: pointer; text-decoration: none;
     }
+    .bottom-nav-item svg { width: 22px; height: 22px; fill: currentColor; margin-bottom: 2px; display: block; flex-shrink: 0; }
+    .bottom-nav-item span { font-size: 10px; font-weight: 700; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: center; display: block; }
+    .bottom-nav-item.active { color: #005b92 !important; }
 
-    .bottom-nav-item svg {
-      width: 22px;
-      height: 22px;
-      fill: currentColor;
-      margin-bottom: 2px;
-      display: block;
-      flex-shrink: 0;
-    }
-
-    .bottom-nav-item span {
-      font-size: 10px;
-      font-weight: 700;
-      line-height: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-      text-align: center;
-      display: block;
-    }
-
-    .bottom-nav-item.active {
-      color: #005b92 !important;
-    }
-
-    /* LOGIN CARD */
+    /* FORMULARIOS AUTENTICACIÓN */
     .login-card {
-      max-width: 420px; margin: 40px auto; background: #ffffff; border-radius: 24px; padding: 32px;
+      max-width: 460px; margin: 24px auto; background: #ffffff; border-radius: 24px; padding: 32px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
     }
-    label { display: block; font-weight: 700; margin: 16px 0 8px; font-size: 13.5px; }
-    input, select { width: 100%; padding: 13px; border: 1px solid #cbd3d9; border-radius: 10px; font-size: 15px; background: #fff; }
-    .btn-submit { width: 100%; margin-top: 24px; background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
+    label { display: block; font-weight: 700; margin: 14px 0 6px; font-size: 13px; color: #18232d; }
+    input, select { width: 100%; padding: 12px 14px; border: 1px solid #cbd3d9; border-radius: 10px; font-size: 14px; background: #fff; }
+    input:focus, select:focus { outline: none; border-color: #005b92; }
+
+    .phone-input-group { display: flex; align-items: center; gap: 8px; }
+    .phone-prefix {
+      background: #eef2f5; border: 1px solid #cbd3d9; padding: 12px; border-radius: 10px;
+      font-weight: 800; font-size: 14px; color: #005b92; user-select: none;
+    }
+
+    .btn-submit { width: 100%; margin-top: 22px; background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
     .btn-logout { width: 100%; margin-top: 20px; background: #a52828; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
 
-    /* CONMUTACIÓN ESCRITORIO vs MÓVIL */
+    .toggle-auth-link {
+      text-align: center; margin-top: 18px; font-size: 13.5px; color: #005b92; font-weight: 700; cursor: pointer; text-decoration: underline;
+    }
+
     .desktop-only { display: block; }
     .mobile-only { display: none; }
 
     @media (max-width: 767px) {
       .desktop-only { display: none !important; }
       .mobile-only { display: block; }
-      
       #bottomNav.mobile-only:not(.oculto) {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        justify-content: space-around !important;
-        align-items: center !important;
+        display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-around !important; align-items: center !important;
       }
-
       body { padding-bottom: 80px; background-color: #f4f6f8; }
       .contenedor { max-width: 500px; margin: 0 auto; padding: 16px; }
-      
-      /* DIMENSIÓN MÓVIL 1080 x 573 */
       .hero-carousel { aspect-ratio: 1080 / 573; max-height: 280px; }
-      
       .attendance-row {
-        background: #dfe4e8;
-        border-radius: 22px;
-        padding: 18px 20px;
-        margin-bottom: 12px;
-        border-bottom: none;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        background: #dfe4e8; border-radius: 22px; padding: 18px 20px; margin-bottom: 12px; border-bottom: none; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
       }
       .attendance-title { font-size: 15px; font-weight: 800; }
       .attendance-sub { font-size: 12.5px; color: #52606d; margin-top: 3px; }
     }
 
-    /* REGLA DE OCULTAMIENTO ABSOLUTO (OCULTA TODO EN LOGIN) */
     .oculto { display: none !important; }
   </style>
 </head>
@@ -352,21 +296,85 @@
 
 <main class="contenedor">
 
-  <!-- ACCESO / LOGIN CON LOGO CENTRADO (SIN NINGÚN MENÚ) -->
+  <!-- ACCESO / LOGIN -->
   <section class="login-card" id="seccionLogin">
-    <div style="text-align: center; margin-bottom: 20px;">
+    <div style="text-align: center; margin-bottom: 16px;">
       <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones" style="height: 52px; width: auto; object-fit: contain;">
     </div>
     <div style="color: #71808e; font-size: 11px; font-weight: 700; text-transform: uppercase; text-align: center;">Iglesia Naciones</div>
     <h1 style="margin: 4px 0 20px; font-size: 22px; text-align: center;">Portal de seguimiento</h1>
+    
     <form id="formLogin">
       <label>Número de registro</label>
       <input id="inputRegistro" type="text" placeholder="Tu número de registro" required autocomplete="off">
       <label>Fecha de nacimiento</label>
-      <input id="inputNacimiento" type="text" placeholder="DD/MM/AAAA" maxlength="10" required autocomplete="off">
+      <input id="inputNacimiento" class="input-fecha-mask" type="text" placeholder="DD/MM/AAAA" maxlength="10" required autocomplete="off">
       <button class="btn-submit" type="submit">Ingresar al Portal</button>
     </form>
-    <div id="msgLogin" style="margin-top: 12px; color: #a52828; font-weight: bold; text-align: center;"></div>
+    
+    <div id="msgLogin" style="margin-top: 12px; color: #a52828; font-weight: bold; text-align: center; font-size: 13.5px;"></div>
+    
+    <div class="toggle-auth-link" onclick="mostrarFormularioAuth('registro')">
+      ¿Eres nuevo? Crea una cuenta aquí
+    </div>
+  </section>
+
+  <!-- FORMULARIO CREAR CUENTA -->
+  <section class="login-card oculto" id="seccionRegistroUsuario">
+    <div style="text-align: center; margin-bottom: 12px;">
+      <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones" style="height: 48px; width: auto; object-fit: contain;">
+    </div>
+    <div style="color: #71808e; font-size: 11px; font-weight: 700; text-transform: uppercase; text-align: center;">Iglesia Naciones</div>
+    <h1 style="margin: 4px 0 16px; font-size: 20px; text-align: center;">Crear nueva cuenta</h1>
+    
+    <form id="formRegistroNuevo">
+      <label>Nombre(s) *</label>
+      <input id="regNombre" type="text" placeholder="Tu nombre" required>
+
+      <label>Apellido Paterno *</label>
+      <input id="regApPaterno" type="text" placeholder="Primer apellido" required>
+
+      <label>Apellido Materno</label>
+      <input id="regApMaterno" type="text" placeholder="Segundo apellido">
+
+      <label>Estado Civil *</label>
+      <select id="regEstadoCivil" required>
+        <option value="" disabled selected>Selecciona una opción</option>
+        <option value="Soltero(a)">Soltero(a)</option>
+        <option value="Casado(a)">Casado(a)</option>
+        <option value="Unión Libre">Unión Libre</option>
+        <option value="Divorciado(a)">Divorciado(a)</option>
+        <option value="Viudo(a)">Viudo(a)</option>
+      </select>
+
+      <label>Correo electrónico *</label>
+      <input id="regCorreo" type="email" placeholder="ejemplo@correo.com" required>
+
+      <label>Teléfono *</label>
+      <div class="phone-input-group">
+        <span class="phone-prefix">+52</span>
+        <input id="regTelefono" type="tel" placeholder="10 dígitos" maxlength="10" required pattern="[0-9]{10}">
+      </div>
+
+      <label>Fecha de nacimiento *</label>
+      <input id="regNacimiento" class="input-fecha-mask" type="text" placeholder="DD/MM/AAAA" maxlength="10" required>
+
+      <label>¿A qué campus asistes actualmente? *</label>
+      <select id="regCampus" required>
+        <option value="" disabled selected>Selecciona tu campus</option>
+        <option value="Nacional">Nacional</option>
+        <option value="11 Sur">11 Sur</option>
+        <option value="Huejotzingo">Huejotzingo</option>
+      </select>
+
+      <button class="btn-submit" type="submit">Registrarme</button>
+    </form>
+
+    <div id="msgRegistro" style="margin-top: 14px; font-weight: bold; text-align: center; font-size: 13.5px; line-height: 1.4;"></div>
+
+    <div class="toggle-auth-link" onclick="mostrarFormularioAuth('login')">
+      ¿Ya tienes cuenta? Inicia sesión aquí
+    </div>
   </section>
 
   <!-- PANEL PRINCIPAL AUTENTICADO -->
@@ -374,13 +382,11 @@
 
     <!-- VISTA INICIO -->
     <section id="vistaInicio">
-      <!-- 1. VISTA INICIO ESCRITORIO -->
       <div class="desktop-only">
         <div class="profile-card-desktop">
           <div class="profile-card-header" id="userNombreHeader">Cargando...</div>
           <div class="profile-card-body">
             <div>
-              <!-- HOMBRÍA -->
               <div class="program-summary-item">
                 <div class="program-summary-title" id="sumHombriaNivelDesktop">Hombría al Máximo - Nivel 1</div>
                 <div class="program-progress-track">
@@ -389,7 +395,6 @@
                 <div class="program-summary-sub" id="sumHombriaTextoDesktop">Próxima sesión: -</div>
               </div>
 
-              <!-- FUNDAMENTOS -->
               <div class="program-summary-item">
                 <div class="program-summary-title" id="sumFundamentosNivelDesktop">Fundamentos - Sanidad y Libertad</div>
                 <div class="program-progress-track">
@@ -399,7 +404,6 @@
               </div>
             </div>
 
-            <!-- TARJETA QR FLOTANTE -->
             <div class="qr-card-float">
               <img id="qrImgDesktop" src="" alt="Código QR">
               <div class="qr-num" id="qrNumDesktop">--</div>
@@ -408,20 +412,15 @@
         </div>
       </div>
 
-      <!-- 2. VISTA INICIO MÓVIL EXACTA -->
       <div class="mobile-only">
-        <!-- BOTÓN OVALADO NOMBRE USUARIO -->
         <div class="user-name-pill" id="userNamePillMobile">Cargando...</div>
 
-        <!-- TARJETA QR BLANCA PROMINENTE -->
         <div class="qr-card-mobile">
           <img id="qrImgMobile" src="" alt="Código QR">
           <div class="qr-num" id="qrNumMobile">--</div>
         </div>
 
-        <!-- TARJETA RESUMEN DE CURSOS BLANCA -->
         <div class="summary-card-mobile">
-          <!-- HOMBRÍA -->
           <div style="margin-bottom: 22px;">
             <div class="summary-title" id="sumHombriaNivelMobile">Hombría al Máximo - Nivel 1</div>
             <div class="program-progress-track">
@@ -431,7 +430,6 @@
             <div class="summary-sub-text" id="sumHombriaTextoMobile">Próxima sesión: -</div>
           </div>
 
-          <!-- FUNDAMENTOS -->
           <div>
             <div class="summary-title" id="sumFundamentosNivelMobile">Fundamentos - Sanidad y Libertad</div>
             <div class="program-progress-track">
@@ -612,7 +610,7 @@
   </div>
 </main>
 
-<!-- BARRA DE NAVEGACIÓN INFERIOR MÓVIL (OCULTA EN LOGIN POR DEFECTO) -->
+<!-- BARRA MÓVIL INFERIOR -->
 <nav class="bottom-nav mobile-only oculto" id="bottomNav">
   <button class="bottom-nav-item active" id="bnavInicio" onclick="navegarA('inicio')">
     <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -644,15 +642,29 @@
   let timerCarrusel = null;
   let html5QrcodeScanner = null;
 
-  document.getElementById('inputNacimiento').addEventListener('input', (e) => {
-    let v = e.target.value.replace(/\D/g, '');
-    if (v.length > 8) v = v.substring(0, 8);
-    let f = '';
-    if (v.length > 0) f += v.substring(0, 2);
-    if (v.length >= 3) f += '/' + v.substring(2, 4);
-    if (v.length >= 5) f += '/' + v.substring(4, 8);
-    e.target.value = f;
+  document.querySelectorAll('.input-fecha-mask').forEach(input => {
+    input.addEventListener('input', (e) => {
+      let v = e.target.value.replace(/\D/g, '');
+      if (v.length > 8) v = v.substring(0, 8);
+      let f = '';
+      if (v.length > 0) f += v.substring(0, 2);
+      if (v.length >= 3) f += '/' + v.substring(2, 4);
+      if (v.length >= 5) f += '/' + v.substring(4, 8);
+      e.target.value = f;
+    });
   });
+
+  function mostrarFormularioAuth(modo) {
+    document.getElementById('msgLogin').textContent = '';
+    document.getElementById('msgRegistro').textContent = '';
+    if (modo === 'registro') {
+      document.getElementById('seccionLogin').classList.add('oculto');
+      document.getElementById('seccionRegistroUsuario').classList.remove('oculto');
+    } else {
+      document.getElementById('seccionRegistroUsuario').classList.add('oculto');
+      document.getElementById('seccionLogin').classList.remove('oculto');
+    }
+  }
 
   window.addEventListener('DOMContentLoaded', () => {
     const sesionGuardada = localStorage.getItem('naciones_sesion');
@@ -691,13 +703,77 @@
       });
   });
 
+  document.getElementById('formRegistroNuevo').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const nombre = document.getElementById('regNombre').value.trim();
+    const apPaterno = document.getElementById('regApPaterno').value.trim();
+    const apMaterno = document.getElementById('regApMaterno').value.trim();
+    const estadoCivil = document.getElementById('regEstadoCivil').value;
+    const correo = document.getElementById('regCorreo').value.trim();
+    const telSinLada = document.getElementById('regTelefono').value.trim();
+    const telefono = '+52' + telSinLada;
+    const nacTxt = document.getElementById('regNacimiento').value.trim();
+    const campus = document.getElementById('regCampus').value;
+
+    const partes = nacTxt.split('/');
+    if (partes.length !== 3) {
+      document.getElementById('msgRegistro').style.color = '#a52828';
+      document.getElementById('msgRegistro').textContent = 'Ingresa una fecha válida (DD/MM/AAAA).';
+      return;
+    }
+    const nacimiento = partes[2] + '-' + partes[1] + '-' + partes[0];
+
+    const msgBox = document.getElementById('msgRegistro');
+    msgBox.style.color = '#005b92';
+    msgBox.textContent = 'Procesando registro... Por favor espera.';
+
+    const queryParams = new URLSearchParams({
+      action: 'registrarNuevoUsuario',
+      nombre: nombre,
+      apPaterno: apPaterno,
+      apMaterno: apMaterno,
+      estadoCivil: estadoCivil,
+      correo: correo,
+      telefono: telefono,
+      nacimiento: nacimiento,
+      campus: campus
+    });
+
+    fetch(`${WEB_APP_URL}?${queryParams.toString()}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res.exito) {
+          msgBox.style.color = '#176b3a';
+          msgBox.textContent = res.mensaje;
+          
+          setTimeout(() => {
+            document.getElementById('inputRegistro').value = res.registro;
+            document.getElementById('inputNacimiento').value = nacTxt;
+            document.getElementById('formRegistroNuevo').reset();
+            mostrarFormularioAuth('login');
+            document.getElementById('msgLogin').style.color = '#176b3a';
+            document.getElementById('msgLogin').textContent = '¡Cuenta creada! Haz clic en "Ingresar al Portal".';
+          }, 2500);
+
+        } else {
+          msgBox.style.color = '#a52828';
+          msgBox.textContent = res.mensaje;
+        }
+      })
+      .catch(() => {
+        msgBox.style.color = '#a52828';
+        msgBox.textContent = 'Ocurrió un error al conectar. Intenta de nuevo.';
+      });
+  });
+
   function iniciarSesionEnApp(res) {
     usuarioSesion = res;
     document.getElementById('msgLogin').textContent = '';
     document.getElementById('seccionLogin').classList.add('oculto');
+    document.getElementById('seccionRegistroUsuario').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.remove('oculto');
     
-    // MOSTRAR BARRAS SOLO TRAS AUTENTICACIÓN
     const hDesk = document.getElementById('headerNacionesDesktop');
     if (hDesk) hDesk.classList.remove('oculto');
     const hMob = document.getElementById('headerNacionesMobile');
@@ -775,7 +851,6 @@
   function cargarDatosEnPantalla(res) {
     const nombreFull = (res.nombre || '') + ' ' + (res.apellidos || '');
     
-    // Nombres
     const dHeader = document.getElementById('userNombreHeader');
     if (dHeader) dHeader.textContent = nombreFull;
     const mPill = document.getElementById('userNamePillMobile');
@@ -783,14 +858,12 @@
     const dDrawer = document.getElementById('drawerNombreUser');
     if (dDrawer) dDrawer.textContent = res.nombre || 'NACIONES';
 
-    // Datos cuenta
     document.getElementById('accNombreCompleto').textContent = nombreFull;
     document.getElementById('accCampus').textContent = res.campus || 'N/A';
     document.getElementById('accRegistro').textContent = res.registro || 'N/A';
     document.getElementById('accNacimiento').textContent = res.nacimientoTexto || 'N/A';
     document.getElementById('accCorreo').textContent = res.correo || 'No registrado';
 
-    // QR Codes
     const qrUrl = 'https://quickchart.io/qr?text=' + encodeURIComponent(res.registro) + '&size=260&margin=1';
     const dQr = document.getElementById('qrImgDesktop');
     if (dQr) dQr.src = qrUrl;
@@ -802,179 +875,10 @@
     const mQrNum = document.getElementById('qrNumMobile');
     if (mQrNum) mQrNum.textContent = res.registro;
 
-    // Permisos Voluntario
     const rol = String(res.rol || '').toUpperCase();
     const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
     const itemReg = document.getElementById('itemRegistro');
     if (itemReg) itemReg.classList.toggle('oculto', !esVoluntario);
-
-    // --- HOMBRÍA AL MÁXIMO ---
-    if (res.asistencias && res.asistencias.HOMBRIA) {
-      const listaH = res.asistencias.HOMBRIA;
-      renderizarListaAsistencias('listHombriaAsistenciasDesktop', listaH);
-      renderizarListaAsistencias('listHombriaAsistenciasMobile', listaH);
-
-      const asistidasH = listaH.filter(item => {
-        const st = String(item.estado || '').toUpperCase();
-        return st === 'PRESENTE' || st === 'RETARDO';
-      }).length;
-
-      const totalH = 10;
-      const porcH = Math.min(100, Math.round((asistidasH / totalH) * 100));
-      const nivelActH = (listaH.length > 0 && listaH[0].curso) ? listaH[0].curso : 'Hombría al Máximo';
-
-      // Escritorio
-      const lblHAct = document.getElementById('lblHombriaNivelAct');
-      if (lblHAct) lblHAct.textContent = nivelActH;
-      const sumHNivD = document.getElementById('sumHombriaNivelDesktop');
-      if (sumHNivD) sumHNivD.textContent = 'Hombría al Máximo - ' + nivelActH;
-      const sumHFillD = document.getElementById('sumHombriaFillDesktop');
-      if (sumHFillD) sumHFillD.style.width = porcH + '%';
-      const lblHContD = document.getElementById('lblHombriaConteoDesktop');
-      if (lblHContD) lblHContD.textContent = `${asistidasH} de ${totalH} asistencias completadas`;
-      const fillHBar = document.getElementById('fillHombriaProgBar');
-      if (fillHBar) fillHBar.style.width = porcH + '%';
-
-      // Móvil
-      const sumHNivM = document.getElementById('sumHombriaNivelMobile');
-      if (sumHNivM) sumHNivM.textContent = 'Hombría al Máximo - ' + nivelActH;
-      const sumHFillM = document.getElementById('sumHombriaFillMobile');
-      if (sumHFillM) sumHFillM.style.width = porcH + '%';
-      const sumHPorM = document.getElementById('sumHombriaPorcentajeMobile');
-      if (sumHPorM) sumHPorM.textContent = `Asistencia ${porcH}%`;
-    }
-
-    if (res.proximaLeccion && res.proximaLeccion.HOMBRIA) {
-      const temaH = res.proximaLeccion.HOMBRIA.tema || '';
-      const txtPH = document.getElementById('txtProxHombria');
-      if (txtPH) txtPH.textContent = temaH;
-
-      const sumHTxtD = document.getElementById('sumHombriaTextoDesktop');
-      if (sumHTxtD) sumHTxtD.textContent = 'Próxima sesión: ' + temaH;
-      const sumHTxtM = document.getElementById('sumHombriaTextoMobile');
-      if (sumHTxtM) sumHTxtM.textContent = 'Próxima sesión: ' + temaH;
-    }
-
-    if (res.progresoHombria) {
-      renderizarListaProgresoBloques('listHombriaProgresoDesktop', res.progresoHombria);
-      renderizarListaProgresoBloques('listHombriaProgresoMobile', res.progresoHombria);
-    }
-
-    // --- FUNDAMENTOS ---
-    if (res.asistencias && res.asistencias.FUNDAMENTOS) {
-      const listaF = res.asistencias.FUNDAMENTOS;
-      renderizarListaAsistencias('listFundAsistenciasDesktop', listaF);
-      renderizarListaAsistencias('listFundAsistenciasMobile', listaF);
-
-      const asistidasF = listaF.filter(item => {
-        const st = String(item.estado || '').toUpperCase();
-        return st === 'PRESENTE' || st === 'RETARDO';
-      }).length;
-
-      const totalF = 6;
-      const porcF = Math.min(100, Math.round((asistidasF / totalF) * 100));
-      const nivelActF = (listaF.length > 0 && listaF[0].curso) ? listaF[0].curso : 'Sanidad y Libertad';
-
-      // Escritorio
-      const lblFAct = document.getElementById('lblFundNivelAct');
-      if (lblFAct) lblFAct.textContent = nivelActF;
-      const sumFNivD = document.getElementById('sumFundamentosNivelDesktop');
-      if (sumFNivD) sumFNivD.textContent = 'Fundamentos - ' + nivelActF;
-      const sumFFillD = document.getElementById('sumFundamentosFillDesktop');
-      if (sumFFillD) sumFFillD.style.width = porcF + '%';
-      const lblFContD = document.getElementById('lblFundConteoDesktop');
-      if (lblFContD) lblFContD.textContent = `${asistidasF} de ${totalF} asistencias completadas`;
-      const fillFBar = document.getElementById('fillFundProgBar');
-      if (fillFBar) fillFBar.style.width = porcF + '%';
-
-      // Móvil
-      const sumFNivM = document.getElementById('sumFundamentosNivelMobile');
-      if (sumFNivM) sumFNivM.textContent = 'Fundamentos - ' + nivelActF;
-      const sumFFillM = document.getElementById('sumFundamentosFillMobile');
-      if (sumFFillM) sumFFillM.style.width = porcF + '%';
-      const sumFPorM = document.getElementById('sumFundamentosPorcentajeMobile');
-      if (sumFPorM) sumFPorM.textContent = `Asistencia ${porcF}%`;
-    }
-
-    if (res.proximaLeccion && res.proximaLeccion.FUNDAMENTOS) {
-      const temaF = res.proximaLeccion.FUNDAMENTOS.tema || '';
-      const txtPF = document.getElementById('txtProxFundamentos');
-      if (txtPF) txtPF.textContent = temaF;
-
-      const sumFTxtD = document.getElementById('sumFundamentosTextoDesktop');
-      if (sumFTxtD) sumFTxtD.textContent = 'Próxima sesión: ' + temaF;
-      const sumFTxtM = document.getElementById('sumFundamentosTextoMobile');
-      if (sumFTxtM) sumFTxtM.textContent = 'Próxima sesión: ' + temaF;
-    }
-
-    if (res.progresoFundamentos) {
-      renderizarListaProgresoBloques('listFundProgresoDesktop', res.progresoFundamentos);
-      renderizarListaProgresoBloques('listFundProgresoMobile', res.progresoFundamentos);
-    }
-  }
-
-  function renderizarListaAsistencias(contId, lista) {
-    const cont = document.getElementById(contId);
-    if (!cont) return;
-    cont.innerHTML = '';
-    if (!lista || lista.length === 0) {
-      cont.innerHTML = '<div style="color: #71808e; font-size: 13px; text-align: center; padding: 12px;">Sin registros recientes.</div>';
-      return;
-    }
-    lista.forEach(item => {
-      const row = document.createElement('div');
-      row.className = 'attendance-row';
-      const st = String(item.estado || 'FALTA').toUpperCase();
-      let badgeClase = 'badge-falta';
-      if (st === 'PRESENTE') badgeClase = 'badge-presente';
-      if (st === 'RETARDO') badgeClase = 'badge-retardo';
-
-      const campusTxt = item.campus ? ` · ${item.campus}` : '';
-
-      row.innerHTML = `
-        <div>
-          <strong class="attendance-title">${item.curso || ''}</strong>
-          <span class="attendance-sub">${item.fecha || ''} · ${item.sesion || ''}${campusTxt}</span>
-        </div>
-        <span class="badge-status ${badgeClase}">${st}</span>
-      `;
-      cont.appendChild(row);
-    });
-  }
-
-  function renderizarListaProgresoBloques(contId, bloquesList) {
-    const cont = document.getElementById(contId);
-    if (!cont) return;
-    cont.innerHTML = '';
-    if (!bloquesList || bloquesList.length === 0) {
-      cont.innerHTML = '<div style="color: #71808e; font-size: 13px; text-align: center; padding: 12px;">Sin información de progreso.</div>';
-      return;
-    }
-
-    bloquesList.forEach((bloqueObj, bIdx) => {
-      const blockHeader = document.createElement('div');
-      blockHeader.style.cssText = 'font-weight: 800; font-size: 15px; color: #18232d; margin-top: ' + (bIdx === 0 ? '4px' : '20px') + '; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 2px solid #005b92; text-transform: uppercase;';
-      blockHeader.textContent = bloqueObj.bloque;
-      cont.appendChild(blockHeader);
-
-      if (bloqueObj.items && bloqueObj.items.length > 0) {
-        bloqueObj.items.forEach(item => {
-          const row = document.createElement('div');
-          row.className = 'attendance-row';
-          const estaAprobado = item.completado === true;
-          const badgeClase = estaAprobado ? 'badge-aprobado' : 'badge-pendiente';
-          const txtEstado = estaAprobado ? 'APROBADO' : 'PENDIENTE';
-
-          row.innerHTML = `
-            <div>
-              <strong class="attendance-title" style="color: ${item.esRequisito ? '#005b92' : '#18232d'};">${item.nombre}</strong>
-            </div>
-            <span class="badge-status ${badgeClase}">${txtEstado}</span>
-          `;
-          cont.appendChild(row);
-        });
-      }
-    });
   }
 
   function navegarA(vista) {
@@ -1085,8 +989,10 @@
     
     document.getElementById('heroCarousel').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.add('oculto');
+    document.getElementById('seccionRegistroUsuario').classList.add('oculto');
     document.getElementById('seccionLogin').classList.remove('oculto');
     document.getElementById('formLogin').reset();
+    document.getElementById('formRegistroNuevo').reset();
   }
 </script>
 </body>
