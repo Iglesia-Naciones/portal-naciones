@@ -27,20 +27,21 @@
       color: #18232d; min-height: 100vh;
     }
 
-    /* CARRUSEL RESPONSIVO SÓLO DENTRO DE SESIÓN */
+    /* CARRUSEL RESPONSIVO SÓLO DENTRO DE SESIÓN (DIMENSIONES EXACTAS) */
     .hero-carousel {
       width: 100%;
-      aspect-ratio: 3840 / 796;
+      aspect-ratio: 3840 / 774;
       max-height: 480px;
-      background: #18232d;
+      background: transparent;
       position: relative;
       overflow: hidden;
-      margin: 0; border: none; outline: none;
+      margin: 0; padding: 0; border: none; outline: none;
+      line-height: 0;
     }
     .carousel-slide {
       width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; border: none;
     }
-    .carousel-slide.active { display: block; }
+    .carousel-slide.active { display: block; width: 100%; height: 100%; }
     .carousel-indicators {
       position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
       display: flex; gap: 8px; z-index: 10;
@@ -199,7 +200,7 @@
     .badge-aprobado { background: #d8f3e1; color: #176b3a; }
     .badge-pendiente { background: #f0f3f5; color: #71808e; }
 
-    /* BARRA DE NAVEGACIÓN INFERIOR MÓVIL (RIGIDA / IMPOSIBLE DE ENCINAR) */
+    /* BARRA DE NAVEGACIÓN INFERIOR MÓVIL */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -287,7 +288,8 @@
       body { padding-bottom: 80px; background-color: #f4f6f8; }
       .contenedor { max-width: 500px; margin: 0 auto; padding: 16px; }
       
-      .hero-carousel { aspect-ratio: 16 / 9; max-height: 280px; }
+      /* DIMENSIÓN MÓVIL 1080 x 573 */
+      .hero-carousel { aspect-ratio: 1080 / 573; max-height: 280px; }
       
       .attendance-row {
         background: #dfe4e8;
@@ -610,7 +612,7 @@
   </div>
 </main>
 
-<!-- BARRA DE NAVEGACIÓN INFERIOR MÓVIL ESTILIZADA (OCULTA EN LOGIN POR DEFECTO) -->
+<!-- BARRA DE NAVEGACIÓN INFERIOR MÓVIL (OCULTA EN LOGIN POR DEFECTO) -->
 <nav class="bottom-nav mobile-only oculto" id="bottomNav">
   <button class="bottom-nav-item active" id="bnavInicio" onclick="navegarA('inicio')">
     <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
