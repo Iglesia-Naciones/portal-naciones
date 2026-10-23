@@ -20,16 +20,16 @@
   <style>
     * { box-sizing: border-box; }
     
-    /* FONDO DE PÁGINA VARIABLE Y CONECTADO */
+    /* FONDO GENERAL EN #ffffff */
     body {
       margin: 0; padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f0f4f8; 
+      background-color: #ffffff; 
       color: #18232d; min-height: 100vh;
       transition: background-color 0.3s ease;
     }
 
-    /* CARRUSEL EN PROPORCIÓN EXACTA 3840x796 */
+    /* CARRUSEL PROPORCIÓN 3840x796 */
     .hero-carousel {
       width: 100%;
       aspect-ratio: 3840 / 796;
@@ -51,36 +51,35 @@
     }
     .dot.active { background: #ffffff; }
 
-    /* NAVBAR PRINCIPAL ALINEADO CON EL CONTENIDO (1080px) */
+    /* NAVBAR PRINCIPAL CON CONEXIÓN BLANCA CONTINUA */
     .header-naciones {
-      background-color: #e2e8ec;
+      background-color: #dbe0e4;
       position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      transition: background-color 0.3s ease;
     }
     .header-inner {
       max-width: 1080px; margin: 0 auto; padding: 0 20px;
-      display: flex; justify-content: space-between; align-items: center;
-      height: 56px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      height: 52px;
     }
 
-    .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .img-logo-naciones { height: 28px; width: auto; display: block; }
+    .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px; }
+    .img-logo-naciones { height: 32px; width: auto; display: block; object-fit: contain; }
 
     .nav-desktop {
-      display: flex; align-items: center; gap: 4px; height: 100%;
+      display: flex; align-items: flex-end; gap: 2px; height: 100%;
     }
     .nav-btn {
-      padding: 8px 18px; border: 0; background: transparent; font-size: 13.5px; font-weight: 700;
-      color: #2b363f; cursor: pointer; border-radius: 18px 18px 0 0; height: 42px; margin-top: 14px;
-      transition: all 0.25s ease;
+      padding: 10px 22px; border: 0; background: transparent; font-size: 13.5px; font-weight: 700;
+      color: #18232d; cursor: pointer; border-radius: 24px 24px 0 0;
+      transition: all 0.2s ease; margin-bottom: 0;
     }
 
-    /* PESTAÑA ACTIVA SE CONECTA DIRECTAMENTE AL FONDO GENERAL DE LA VISTA */
+    /* PESTAÑA ACTIVA UNIFICADA EN #ffffff */
     .nav-btn.active {
-      background-color: var(--color-fondo-vista, #f0f4f8);
-      color: #0d171e;
-      box-shadow: 0 -3px 8px rgba(0,0,0,0.04);
+      background-color: #ffffff;
+      color: #000000;
+      padding-top: 12px;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
     }
 
     .btn-menu-hamburguesa {
@@ -103,12 +102,13 @@
     .drawer-header { background: #005b92; color: white; padding: 24px 16px; font-weight: bold; }
     .drawer-item { padding: 16px 20px; font-size: 13.5px; font-weight: 700; color: #2b363f; border-bottom: 1px solid #f0f3f5; cursor: pointer; }
 
-    /* CONTENEDOR PRINCIPAL ESCRITORIO */
+    /* CONTENEDOR PRINCIPAL */
     .contenedor { max-width: 1080px; margin: 32px auto; padding: 0 20px; }
 
-    /* TARJETA INICIO PANORÁMICA DE PERFIL */
+    /* TARJETA INICIO PANORÁMICA DE PERFIL (#ffffff CON SOMBRA) */
     .profile-card-desktop {
-      background: #ffffff; border-radius: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      background: #ffffff; border-radius: 24px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
       overflow: hidden; display: flex; flex-direction: column; position: relative; margin-bottom: 32px;
     }
     .profile-card-header {
@@ -126,21 +126,23 @@
 
     .qr-card-float {
       background: #ffffff; border-radius: 20px; padding: 16px; text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.12); border: 1px solid #eef2f5;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1); border: 1px solid #eef2f5;
     }
     .qr-card-float img { width: 180px; height: 180px; display: block; margin: 0 auto; }
     .qr-card-float .qr-num { font-size: 14px; font-style: italic; font-weight: 600; margin-top: 8px; }
 
-    /* TARJETAS Y VISTAS DE CURSOS */
-    .course-header-title { text-align: center; margin-bottom: 24px; }
+    /* VISTAS DE CURSOS (TARJETAS EN #dfe4e8 Y FONDO #ffffff) */
+    .course-header-title { text-align: center; margin: 16px 0 28px; }
+    .img-logo-hombria { height: 64px; width: auto; object-fit: contain; }
 
     .card-rounded-gray {
-      background: #e5e9ec; border-radius: 24px; padding: 20px 28px; margin-bottom: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      background: #dfe4e8; border-radius: 24px; padding: 20px 28px; margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
     .next-lesson-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
     .next-lesson-sub { font-size: 14px; color: #33414d; }
 
+    /* BOTONES DE PESTAÑAS (MIS ASISTENCIAS / MI PROGRESO) */
     .pill-tabs-nav { display: flex; gap: 12px; margin-bottom: 24px; }
     .pill-tab {
       flex: 1; padding: 14px; border-radius: 30px; border: 0; font-size: 14px; font-weight: 800;
@@ -153,7 +155,7 @@
     .progress-bar-fill { height: 100%; background: #8a2a2a; border-radius: 4px; }
 
     .attendance-row {
-      display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #d8dfe4;
+      display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #cbd2d8;
     }
     .attendance-row:last-child { border-bottom: 0; }
     .badge-status {
@@ -166,7 +168,7 @@
     /* ESTILOS DE LOGIN */
     .login-card {
       max-width: 420px; margin: 40px auto; background: #ffffff; border-radius: 24px; padding: 32px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
     }
     label { display: block; font-weight: 700; margin: 16px 0 8px; font-size: 13.5px; }
     input { width: 100%; padding: 13px; border: 1px solid #cbd3d9; border-radius: 10px; font-size: 15px; }
@@ -193,12 +195,13 @@
   </div>
 </div>
 
-<!-- NAVBAR ALINEADO CON CONTENIDO (1080px) -->
+<!-- NAVBAR INTEGRADO -->
 <header class="header-naciones">
   <div class="header-inner">
     <div class="brand-box" onclick="navegarA('inicio')">
       <button id="btnHamburguesa" class="btn-menu-hamburguesa" type="button">☰</button>
-      <img src="https://lh3.googleusercontent.com/d/1CWjOrXs_fzYi9Jnn4ofJ8rSGNghZu26H" alt="Naciones" class="img-logo-naciones">
+      <!-- LOGO DE NACIONES A COLOR -->
+      <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones A Color" class="img-logo-naciones">
     </div>
 
     <nav class="nav-desktop">
@@ -238,10 +241,10 @@
     <div id="msgLogin" style="margin-top: 12px; color: #a52828; font-weight: bold;"></div>
   </section>
 
-  <!-- PANEL DE CONTENIDO EN SESIÓN -->
+  <!-- PANEL PRINCIPAL DE CONTENIDO EN SESIÓN -->
   <div id="panelPrincipal" class="oculto">
 
-    <!-- VISTA INICIO -->
+    <!-- VISTA INICIO (#ffffff) -->
     <section id="vistaInicio">
       <div class="profile-card-desktop">
         <div class="profile-card-header" id="userNombreHeader">Esteban Bautista Moreno</div>
@@ -266,7 +269,7 @@
             </div>
           </div>
 
-          <!-- TARJETA QR FLOTANTE -->
+          <!-- TARJETA QR FLOTANTE (#ffffff CON SOMBRA) -->
           <div class="qr-card-float">
             <img id="qrImgMain" src="" alt="Código QR">
             <div class="qr-num" id="qrNumMain">10061</div>
@@ -275,10 +278,11 @@
       </div>
     </section>
 
-    <!-- VISTA HOMBRÍA -->
+    <!-- VISTA HOMBRÍA (FONDO #ffffff, TARJETAS #dfe4e8) -->
     <section id="vistaHombria" class="oculto">
       <div class="course-header-title">
-        <h1 style="font-size: 28px; margin: 0;">Hombría al Máximo</h1>
+        <!-- LOGO DE HOMBRÍA LIMPIO -->
+        <img src="https://lh3.googleusercontent.com/d/1ueR5IQ38o-7XbWV7K6_21WpReyjaAY3H" alt="Hombría al Máximo" class="img-logo-hombria">
       </div>
 
       <div class="card-rounded-gray" id="boxProxHombria">
@@ -317,7 +321,7 @@
     <!-- VISTA FUNDAMENTOS -->
     <section id="vistaFundamentos" class="oculto">
       <div class="course-header-title">
-        <h1 style="font-size: 28px; margin: 0;">Fundamentos</h1>
+        <img src="https://lh3.googleusercontent.com/d/1hpO5Z2K6Lfg96_ILg9vN7-RGqYXlkVrr" alt="Fundamentos" style="max-height: 54px;">
       </div>
 
       <div class="card-rounded-gray" id="boxProxFundamentos">
@@ -461,7 +465,6 @@
     });
   }
 
-  // CAMBIO DINÁMICO DE VISTAS Y DE COLOR DE FONDO
   function navegarA(vista) {
     document.getElementById('vistaInicio').classList.add('oculto');
     document.getElementById('vistaHombria').classList.add('oculto');
@@ -470,28 +473,18 @@
 
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
-    let colorFondoVista = '#f0f4f8';
-
     if (vista === 'inicio' || vista === 'cuenta') {
       document.getElementById('vistaInicio').classList.remove('oculto');
       document.getElementById('navBtnInicio').classList.add('active');
-      colorFondoVista = '#f0f4f8';
     } else if (vista === 'hombria') {
       document.getElementById('vistaHombria').classList.remove('oculto');
       document.getElementById('navBtnHombria').classList.add('active');
-      colorFondoVista = '#e5e9ec';
     } else if (vista === 'fundamentos') {
       document.getElementById('vistaFundamentos').classList.remove('oculto');
       document.getElementById('navBtnFundamentos').classList.add('active');
-      colorFondoVista = '#e1e7ec';
     } else if (vista === 'escaner') {
       document.getElementById('vistaEscaner').classList.remove('oculto');
-      colorFondoVista = '#ffffff';
     }
-
-    // CONECTAR EL FONDO CON LA PESTAÑA SELECCIONADA
-    document.documentElement.style.setProperty('--color-fondo-vista', colorFondoVista);
-    document.body.style.backgroundColor = colorFondoVista;
   }
 
   function toggleSubPestana(prog, pest) {
@@ -508,7 +501,6 @@
     }
   }
 
-  // CARRUSEL
   let slideIndex = 0;
   function setSlide(idx) {
     slideIndex = idx;
@@ -522,7 +514,6 @@
     setSlide(slideIndex);
   }, 5000);
 
-  // DRAWER
   document.getElementById('btnHamburguesa').addEventListener('click', () => {
     document.getElementById('drawerOverlay').classList.add('activo');
     document.getElementById('drawerMenu').classList.add('activo');
