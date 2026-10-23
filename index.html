@@ -25,10 +25,9 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: #ffffff; 
       color: #18232d; min-height: 100vh;
-      transition: background-color 0.3s ease;
     }
 
-    /* CARRUSEL RESPONSIVO */
+    /* CARRUSEL RESPONSIVO SÓLO DENTRO DE SESIÓN - SIN MÁRGENES / LÍNEAS FEAS */
     .hero-carousel {
       width: 100%;
       aspect-ratio: 3840 / 796;
@@ -36,9 +35,10 @@
       background: #18232d;
       position: relative;
       overflow: hidden;
+      margin: 0; border: none; outline: none;
     }
     .carousel-slide {
-      width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer;
+      width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; border: none;
     }
     .carousel-slide.active { display: block; }
     .carousel-indicators {
@@ -50,10 +50,11 @@
     }
     .dot.active { background: #ffffff; }
 
-    /* NAVBAR PRINCIPAL CON CONEXIÓN CONTINUA */
+    /* NAVBAR PRINCIPAL CON CONEXIÓN PERFECTA */
     .header-naciones {
       background-color: #dbe0e4;
       position: sticky; top: 0; z-index: 100;
+      margin: 0; border: none;
     }
     .header-inner {
       max-width: 1080px; margin: 0 auto; padding: 0 20px;
@@ -128,7 +129,7 @@
     .qr-card-float img { width: 180px; height: 180px; display: block; margin: 0 auto; }
     .qr-card-float .qr-num { font-size: 14px; font-style: italic; font-weight: 600; margin-top: 8px; }
 
-    /* VISTAS DE CURSOS */
+    /* TARJETAS GRISES DE CURSOS Y MI CUENTA */
     .course-header-title { text-align: center; margin: 16px 0 28px; }
     .img-logo-hombria { height: 64px; width: auto; object-fit: contain; }
 
@@ -138,6 +139,12 @@
     }
     .next-lesson-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
     .next-lesson-sub { font-size: 14px; color: #33414d; }
+
+    .account-detail-item {
+      padding: 12px 0; border-bottom: 1px solid #cbd2d8; font-size: 15px;
+    }
+    .account-detail-item:last-child { border-bottom: none; }
+    .account-label { font-size: 12px; color: #52606d; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 2px; }
 
     .pill-tabs-nav { display: flex; gap: 12px; margin-bottom: 24px; }
     .pill-tab {
@@ -161,14 +168,15 @@
     .badge-presente { background: #d8f3e1; color: #176b3a; }
     .badge-retardo { background: #fef0cd; color: #895b00; }
 
-    /* ESTILOS DE LOGIN */
+    /* LOGIN */
     .login-card {
       max-width: 420px; margin: 40px auto; background: #ffffff; border-radius: 24px; padding: 32px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
     }
     label { display: block; font-weight: 700; margin: 16px 0 8px; font-size: 13.5px; }
-    input { width: 100%; padding: 13px; border: 1px solid #cbd3d9; border-radius: 10px; font-size: 15px; }
+    input, select { width: 100%; padding: 13px; border: 1px solid #cbd3d9; border-radius: 10px; font-size: 15px; background: #fff; }
     .btn-submit { width: 100%; margin-top: 24px; background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
+    .btn-logout { width: 100%; margin-top: 20px; background: #a52828; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
 
     .oculto { display: none !important; }
 
@@ -185,8 +193,8 @@
 </head>
 <body>
 
-<!-- HERO CAROUSEL DINÁMICO -->
-<div class="hero-carousel" id="heroCarousel">
+<!-- HERO CAROUSEL OCULTO POR DEFECTO (NO APARECE EN LOGIN) -->
+<div class="hero-carousel oculto" id="heroCarousel">
   <div id="slidesContainer"></div>
   <div class="carousel-indicators" id="dotsContainer"></div>
 </div>
@@ -216,6 +224,7 @@
   <div class="drawer-item" onclick="navegarA('inicio'); cerrarDrawer();">INICIO</div>
   <div class="drawer-item" onclick="navegarA('hombria'); cerrarDrawer();">HOMBRÍA AL MÁXIMO</div>
   <div class="drawer-item" onclick="navegarA('fundamentos'); cerrarDrawer();">FUNDAMENTOS</div>
+  <div class="drawer-item" onclick="navegarA('cuenta'); cerrarDrawer();">MI CUENTA</div>
   <div class="drawer-item oculto" id="itemRegistro" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO (ESCANEAR QR)</div>
   <div class="drawer-item" onclick="cerrarSesion(); cerrarDrawer();" style="color: #a52828; margin-top: auto;">CERRAR SESIÓN</div>
 </aside>
@@ -351,10 +360,51 @@
       </div>
     </section>
 
+    <!-- VISTA MI CUENTA -->
+    <section id="vistaCuenta" class="oculto">
+      <div class="card-rounded-gray">
+        <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 20px; color: #005b92;">Información Personal</h2>
+        
+        <div class="account-detail-item">
+          <span class="account-label">Nombre</span>
+          <strong id="accNombreCompleto">-</strong>
+        </div>
+
+        <div class="account-detail-item">
+          <span class="account-label">Campus</span>
+          <strong id="accCampus">-</strong>
+        </div>
+
+        <div class="account-detail-item">
+          <span class="account-label"># de Registro</span>
+          <strong id="accRegistro">-</strong>
+        </div>
+
+        <div class="account-detail-item">
+          <span class="account-label">Fecha de Nacimiento</span>
+          <strong id="accNacimiento">-</strong>
+        </div>
+
+        <div class="account-detail-item">
+          <span class="account-label">Correo Electrónico</span>
+          <strong id="accCorreo">-</strong>
+        </div>
+
+        <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+      </div>
+    </section>
+
     <!-- VISTA ESCÁNER QR -->
     <section id="vistaEscaner" class="oculto">
       <div class="card-rounded-gray" style="background: #ffffff; text-align: center;">
         <h2 style="margin-top: 0; color: #005b92;">Escáner de Asistencia QR</h2>
+        <div style="margin-bottom: 16px;">
+          <label>Programa a registrar:</label>
+          <select id="selectProgEscaner">
+            <option value="HOMBRIA">HOMBRÍA AL MÁXIMO</option>
+            <option value="FUNDAMENTOS">FUNDAMENTOS</option>
+          </select>
+        </div>
         <div id="reader" style="width: 100%; min-height: 280px; background: #000; border-radius: 16px;"></div>
         <div id="resEscaneoMsg" style="margin-top: 12px; font-weight: bold;"></div>
       </div>
@@ -369,7 +419,9 @@
   let listaAnuncios = [];
   let slideIndex = 0;
   let timerCarrusel = null;
+  let html5QrcodeScanner = null;
 
+  // FORMATO DE FECHA DD/MM/AAAA
   document.getElementById('inputNacimiento').addEventListener('input', (e) => {
     let v = e.target.value.replace(/\D/g, '');
     if (v.length > 8) v = v.substring(0, 8);
@@ -378,6 +430,19 @@
     if (v.length >= 3) f += '/' + v.substring(2, 4);
     if (v.length >= 5) f += '/' + v.substring(4, 8);
     e.target.value = f;
+  });
+
+  // VERIFICA SI EXISTE SESIÓN GUARDADA EN PERSISTENCIA (LOCALSTORAGE)
+  window.addEventListener('DOMContentLoaded', () => {
+    const sesionGuardada = localStorage.getItem('naciones_sesion');
+    if (sesionGuardada) {
+      try {
+        const datos = JSON.parse(sesionGuardada);
+        iniciarSesionEnApp(datos);
+      } catch (e) {
+        localStorage.removeItem('naciones_sesion');
+      }
+    }
   });
 
   document.getElementById('formLogin').addEventListener('submit', (e) => {
@@ -394,26 +459,37 @@
       .then(res => res.json())
       .then(res => {
         if (res && res.encontrado) {
-          usuarioSesion = res;
-          document.getElementById('msgLogin').textContent = '';
-          document.getElementById('seccionLogin').classList.add('oculto');
-          document.getElementById('panelPrincipal').classList.remove('oculto');
-          
-          if (res.anuncios && res.anuncios.length > 0) {
-            construirCarruselAnuncios(res.anuncios);
-          }
-          
-          cargarDatosEnPantalla(res);
+          localStorage.setItem('naciones_sesion', JSON.stringify(res));
+          iniciarSesionEnApp(res);
         } else {
           document.getElementById('msgLogin').textContent = 'Credenciales no encontradas.';
         }
+      })
+      .catch(() => {
+        document.getElementById('msgLogin').textContent = 'Error de conexión. Revisa tu red.';
       });
   });
+
+  function iniciarSesionEnApp(res) {
+    usuarioSesion = res;
+    document.getElementById('msgLogin').textContent = '';
+    document.getElementById('seccionLogin').classList.add('oculto');
+    document.getElementById('panelPrincipal').classList.remove('oculto');
+
+    if (res.anuncios && res.anuncios.length > 0) {
+      document.getElementById('heroCarousel').classList.remove('oculto');
+      construirCarruselAnuncios(res.anuncios);
+    } else {
+      document.getElementById('heroCarousel').classList.add('oculto');
+    }
+
+    cargarDatosEnPantalla(res);
+    navegarA('inicio');
+  }
 
   function construirCarruselAnuncios(anunciosRaw) {
     const esMovil = window.innerWidth < 768;
     
-    // Selecciona automáticamente la imagen adecuada para el dispositivo
     listaAnuncios = anunciosRaw.map(item => ({
       nombre: item.nombre,
       imagen: esMovil ? (item.imagenMovil || item.imagenEscritorio) : (item.imagenEscritorio || item.imagenMovil),
@@ -471,6 +547,13 @@
     document.getElementById('userNombreHeader').textContent = nombreFull;
     document.getElementById('drawerNombreUser').textContent = res.nombre || 'NACIONES';
 
+    // DATOS PESTAÑA MI CUENTA
+    document.getElementById('accNombreCompleto').textContent = nombreFull;
+    document.getElementById('accCampus').textContent = res.campus || 'N/A';
+    document.getElementById('accRegistro').textContent = res.registro || 'N/A';
+    document.getElementById('accNacimiento').textContent = res.nacimientoTexto || 'N/A';
+    document.getElementById('accCorreo').textContent = res.correo || 'No registrado';
+
     document.getElementById('qrImgMain').src = 'https://quickchart.io/qr?text=' + encodeURIComponent(res.registro) + '&size=220&margin=1';
     document.getElementById('qrNumMain').textContent = res.registro;
 
@@ -527,11 +610,12 @@
     document.getElementById('vistaInicio').classList.add('oculto');
     document.getElementById('vistaHombria').classList.add('oculto');
     document.getElementById('vistaFundamentos').classList.add('oculto');
+    document.getElementById('vistaCuenta').classList.add('oculto');
     document.getElementById('vistaEscaner').classList.add('oculto');
 
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
-    if (vista === 'inicio' || vista === 'cuenta') {
+    if (vista === 'inicio') {
       document.getElementById('vistaInicio').classList.remove('oculto');
       document.getElementById('navBtnInicio').classList.add('active');
     } else if (vista === 'hombria') {
@@ -540,9 +624,40 @@
     } else if (vista === 'fundamentos') {
       document.getElementById('vistaFundamentos').classList.remove('oculto');
       document.getElementById('navBtnFundamentos').classList.add('active');
+    } else if (vista === 'cuenta') {
+      document.getElementById('vistaCuenta').classList.remove('oculto');
+      document.getElementById('navBtnCuenta').classList.add('active');
     } else if (vista === 'escaner') {
       document.getElementById('vistaEscaner').classList.remove('oculto');
+      iniciarEscanerCamara();
     }
+  }
+
+  function iniciarEscanerCamara() {
+    if (html5QrcodeScanner) return;
+    html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render((decodedText) => {
+      const prog = document.getElementById('selectProgEscaner').value;
+      const resBox = document.getElementById('resEscaneoMsg');
+      resBox.style.color = '#005b92';
+      resBox.textContent = 'Procesando registro...';
+
+      fetch(`${WEB_APP_URL}?action=registrarAsistencia&registro=${encodeURIComponent(decodedText)}&programa=${encodeURIComponent(prog)}&campus=${encodeURIComponent(usuarioSesion.campus)}&voluntarioRegistro=${encodeURIComponent(usuarioSesion.registro)}`)
+        .then(r => r.json())
+        .then(res => {
+          if (res.exito) {
+            resBox.style.color = '#176b3a';
+            resBox.textContent = res.mensaje;
+          } else {
+            resBox.style.color = '#a52828';
+            resBox.textContent = res.mensaje;
+          }
+        })
+        .catch(() => {
+          resBox.style.color = '#a52828';
+          resBox.textContent = 'Error al conectar con el servidor.';
+        });
+    });
   }
 
   function toggleSubPestana(prog, pest) {
@@ -570,7 +685,9 @@
   document.getElementById('drawerOverlay').addEventListener('click', cerrarDrawer);
 
   function cerrarSesion() {
+    localStorage.removeItem('naciones_sesion');
     usuarioSesion = null;
+    document.getElementById('heroCarousel').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.add('oculto');
     document.getElementById('seccionLogin').classList.remove('oculto');
     document.getElementById('formLogin').reset();
