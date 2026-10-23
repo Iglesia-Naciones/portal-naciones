@@ -27,7 +27,7 @@
       color: #18232d; min-height: 100vh;
     }
 
-    /* CARRUSEL RESPONSIVO SÓLO DENTRO DE SESIÓN - SIN MÁRGENES / LÍNEAS FEAS */
+    /* CARRUSEL RESPONSIVO SÓLO DENTRO DE SESIÓN */
     .hero-carousel {
       width: 100%;
       aspect-ratio: 3840 / 796;
@@ -50,7 +50,7 @@
     }
     .dot.active { background: #ffffff; }
 
-    /* NAVBAR PRINCIPAL CON CONEXIÓN PERFECTA */
+    /* NAVBAR PRINCIPAL (OCULTO EN LOGIN) */
     .header-naciones {
       background-color: #dbe0e4;
       position: sticky; top: 0; z-index: 100;
@@ -119,7 +119,7 @@
     .program-summary-item { margin-bottom: 20px; }
     .program-summary-title { font-size: 15px; font-weight: 800; color: #18232d; margin-bottom: 6px; }
     .program-progress-track { width: 100%; height: 10px; background: #e8ecef; border-radius: 5px; overflow: hidden; margin-bottom: 6px; }
-    .program-progress-fill { height: 100%; background: #a17852; border-radius: 5px; width: 70%; }
+    .program-progress-fill { height: 100%; background: #a17852; border-radius: 5px; width: 0%; }
     .program-summary-sub { font-size: 12.5px; color: #71808e; }
 
     .qr-card-float {
@@ -167,6 +167,8 @@
     .badge-falta { background: #fce4e4; color: #a52828; }
     .badge-presente { background: #d8f3e1; color: #176b3a; }
     .badge-retardo { background: #fef0cd; color: #895b00; }
+    .badge-aprobado { background: #d8f3e1; color: #176b3a; }
+    .badge-pendiente { background: #f0f3f5; color: #71808e; }
 
     /* LOGIN */
     .login-card {
@@ -193,14 +195,14 @@
 </head>
 <body>
 
-<!-- HERO CAROUSEL OCULTO POR DEFECTO (NO APARECE EN LOGIN) -->
+<!-- HERO CAROUSEL OCULTO POR DEFECTO -->
 <div class="hero-carousel oculto" id="heroCarousel">
   <div id="slidesContainer"></div>
   <div class="carousel-indicators" id="dotsContainer"></div>
 </div>
 
-<!-- NAVBAR INTEGRADO -->
-<header class="header-naciones">
+<!-- NAVBAR INTEGRADO (OCULTO EN LOGIN) -->
+<header class="header-naciones oculto" id="headerNaciones">
   <div class="header-inner">
     <div class="brand-box" onclick="navegarA('inicio')">
       <button id="btnHamburguesa" class="btn-menu-hamburguesa" type="button">☰</button>
@@ -421,7 +423,6 @@
   let timerCarrusel = null;
   let html5QrcodeScanner = null;
 
-  // FORMATO DE FECHA DD/MM/AAAA
   document.getElementById('inputNacimiento').addEventListener('input', (e) => {
     let v = e.target.value.replace(/\D/g, '');
     if (v.length > 8) v = v.substring(0, 8);
@@ -432,7 +433,6 @@
     e.target.value = f;
   });
 
-  // VERIFICA SI EXISTE SESIÓN GUARDADA EN PERSISTENCIA (LOCALSTORAGE)
   window.addEventListener('DOMContentLoaded', () => {
     const sesionGuardada = localStorage.getItem('naciones_sesion');
     if (sesionGuardada) {
@@ -475,6 +475,9 @@
     document.getElementById('msgLogin').textContent = '';
     document.getElementById('seccionLogin').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.remove('oculto');
+    
+    // MUESTRA EL HEADER SOLO TRAS INICIAR SESIÓN
+    document.getElementById('headerNaciones').classList.remove('oculto');
 
     if (res.anuncios && res.anuncios.length > 0) {
       document.getElementById('heroCarousel').classList.remove('oculto');
@@ -547,7 +550,6 @@
     document.getElementById('userNombreHeader').textContent = nombreFull;
     document.getElementById('drawerNombreUser').textContent = res.nombre || 'NACIONES';
 
-    // DATOS PESTAÑA MI CUENTA
     document.getElementById('accNombreCompleto').textContent = nombreFull;
     document.getElementById('accCampus').textContent = res.campus || 'N/A';
     document.getElementById('accRegistro').textContent = res.registro || 'N/A';
@@ -561,13 +563,57 @@
     const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
     document.getElementById('itemRegistro').classList.toggle('oculto', !esVoluntario);
 
+    // --- HOMBRÍA ---
+    if (res.asistencias && res.asistencias.HOMBRIA) {
+      const listaH = res.asistencias.HOMBRIA;
+      renderizarListaAsistencias('listHombriaAsistencias', listaH);
+
+      const asistidasH = listaH.filter(item => {
+        const st = String(item.estado || '').toUpperCase();
+        return st === 'PRESENTE' || st === 'RETARDO';
+      }).length;
+
+      const totalH = 10;
+      const porcH = Math.min(100, Math.round((asistidasH / totalH) * 100));
+
+      const nivelActH = (listaH.length > 0 && listaH[0].curso) ? listaH[0].curso : 'Hombría al Máximo';
+      document.getElementById('lblHombriaNivelAct').textContent = nivelActH;
+      document.getElementById('sumHombriaNivel').textContent = 'Hombría al Máximo - ' + nivelActH;
+
+      document.getElementById('lblHombriaConteo').textContent = `${asistidasH} de ${totalH} asistencias completadas`;
+      document.getElementById('fillHombriaProgBar').style.width = porcH + '%';
+      document.getElementById('sumHombriaFill').style.width = porcH + '%';
+    }
+
     if (res.proximaLeccion && res.proximaLeccion.HOMBRIA) {
       document.getElementById('txtProxHombria').textContent = res.proximaLeccion.HOMBRIA.tema || '';
       document.getElementById('sumHombriaTexto').innerHTML = 'Próxima sesión: ' + (res.proximaLeccion.HOMBRIA.tema || '');
     }
 
-    if (res.asistencias && res.asistencias.HOMBRIA) {
-      renderizarListaAsistencias('listHombriaAsistencias', res.asistencias.HOMBRIA);
+    if (res.progresoHombria) {
+      renderizarListaProgreso('listHombriaProgreso', res.progresoHombria);
+    }
+
+    // --- FUNDAMENTOS ---
+    if (res.asistencias && res.asistencias.FUNDAMENTOS) {
+      const listaF = res.asistencias.FUNDAMENTOS;
+      renderizarListaAsistencias('listFundAsistencias', listaF);
+
+      const asistidasF = listaF.filter(item => {
+        const st = String(item.estado || '').toUpperCase();
+        return st === 'PRESENTE' || st === 'RETARDO';
+      }).length;
+
+      const totalF = 6;
+      const porcF = Math.min(100, Math.round((asistidasF / totalF) * 100));
+
+      const nivelActF = (listaF.length > 0 && listaF[0].curso) ? listaF[0].curso : 'Sanidad y Libertad';
+      document.getElementById('lblFundNivelAct').textContent = nivelActF;
+      document.getElementById('sumFundamentosNivel').textContent = 'Fundamentos - ' + nivelActF;
+
+      document.getElementById('lblFundConteo').textContent = `${asistidasF} de ${totalF} asistencias completadas`;
+      document.getElementById('fillFundProgBar').style.width = porcF + '%';
+      document.getElementById('sumFundamentosFill').style.width = porcF + '%';
     }
 
     if (res.proximaLeccion && res.proximaLeccion.FUNDAMENTOS) {
@@ -575,8 +621,8 @@
       document.getElementById('sumFundamentosTexto').innerHTML = 'Próxima sesión: ' + (res.proximaLeccion.FUNDAMENTOS.tema || '');
     }
 
-    if (res.asistencias && res.asistencias.FUNDAMENTOS) {
-      renderizarListaAsistencias('listFundAsistencias', res.asistencias.FUNDAMENTOS);
+    if (res.progresoFundamentos) {
+      renderizarListaProgreso('listFundProgreso', res.progresoFundamentos);
     }
   }
 
@@ -601,6 +647,30 @@
           <span style="font-size: 12px; color: #71808e;">${item.fecha || ''} • ${item.sesion || ''}</span>
         </div>
         <span class="badge-status ${badgeClase}">${st}</span>
+      `;
+      cont.appendChild(row);
+    });
+  }
+
+  function renderizarListaProgreso(contId, listaProg) {
+    const cont = document.getElementById(contId);
+    cont.innerHTML = '';
+    if (!listaProg || listaProg.length === 0) {
+      cont.innerHTML = '<div style="color: #71808e; font-size: 13px;">Sin información de progreso.</div>';
+      return;
+    }
+    listaProg.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'attendance-row';
+      const estaAprobado = item.completado === true;
+      const badgeClase = estaAprobado ? 'badge-aprobado' : 'badge-pendiente';
+      const txtEstado = estaAprobado ? 'APROBADO' : 'PENDIENTE';
+
+      row.innerHTML = `
+        <div>
+          <strong style="font-size: 14px; display: block;">${item.nombre}</strong>
+        </div>
+        <span class="badge-status ${badgeClase}">${txtEstado}</span>
       `;
       cont.appendChild(row);
     });
@@ -687,6 +757,7 @@
   function cerrarSesion() {
     localStorage.removeItem('naciones_sesion');
     usuarioSesion = null;
+    document.getElementById('headerNaciones').classList.add('oculto');
     document.getElementById('heroCarousel').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.add('oculto');
     document.getElementById('seccionLogin').classList.remove('oculto');
