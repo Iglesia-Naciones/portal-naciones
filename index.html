@@ -180,7 +180,7 @@
       display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #cbd2d8;
     }
     .attendance-row:last-child { border-bottom: 0; }
-    .attendance-title { font-size: 14px; display: block; color: #18232d; }
+    .attendance-title { font-size: 14px; display: block; color: #18232d; font-weight: 700; }
     .attendance-sub { font-size: 12px; color: #71808e; display: block; margin-top: 2px; }
 
     .badge-status {
@@ -207,7 +207,6 @@
     .bottom-nav-item span { font-size: 10px; font-weight: 700; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: center; display: block; }
     .bottom-nav-item.active { color: #005b92 !important; }
 
-    /* FORMULARIOS AUTENTICACIÓN */
     .login-card {
       max-width: 460px; margin: 24px auto; background: #ffffff; border-radius: 24px; padding: 32px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
@@ -359,7 +358,7 @@
           <option value="+506">🇨🇷 +506</option>
           <option value="+503">🇸🇻 +503</option>
           <option value="+34">🇪🇸 +34</option>
-          <option value="+502">🇬🇹 +502</option>
+          <option value="+502">🇬TW +502</option>
           <option value="+504">🇭🇳 +504</option>
           <option value="+505">🇳🇮 +505</option>
           <option value="+507">🇵🇦 +507</option>
@@ -517,7 +516,7 @@
 
       <div class="card-rounded-gray" id="boxProxFundamentos">
         <div class="next-lesson-title">Tu próxima lección:</div>
-        <div class="next-lesson-sub" id="txtProxFundamentos">Lección de Fundamentos</div>
+        <div class="next-lesson-sub" id="txtProxFundamentos">Cargando...</div>
       </div>
 
       <div class="pill-tabs-nav">
@@ -588,18 +587,23 @@
         </div>
 
         <div class="account-detail-item">
-          <span class="account-label"># de Registro</span>
+          <span class="account-label"># de registro</span>
           <strong id="accRegistro">-</strong>
         </div>
 
         <div class="account-detail-item">
-          <span class="account-label">Fecha de Nacimiento</span>
+          <span class="account-label">Fecha de nacimiento</span>
           <strong id="accNacimiento">-</strong>
         </div>
 
         <div class="account-detail-item">
-          <span class="account-label">Correo Electrónico</span>
+          <span class="account-label">Correo electrónico</span>
           <strong id="accCorreo">-</strong>
+        </div>
+
+        <div class="account-detail-item">
+          <span class="account-label">Teléfono</span>
+          <strong id="accTelefono">-</strong>
         </div>
 
         <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
@@ -737,7 +741,6 @@
       document.getElementById('msgRegistro').textContent = 'Ingresa una fecha válida (DD/MM/AAAA).';
       return;
     }
-    const nacimiento = nacTxt; // Pasa DD/MM/AAAA para enviarlo formateado
 
     const msgBox = document.getElementById('msgRegistro');
     msgBox.style.color = '#005b92';
@@ -752,7 +755,7 @@
       correo: correo,
       lada: lada,
       telefono: telSinLada,
-      nacimiento: nacimiento,
+      nacimiento: nacTxt,
       campus: campus
     });
 
@@ -865,8 +868,17 @@
   }
 
   function cargarDatosEnPantalla(res) {
-    const nombreFull = (res.nombre || '') + ' ' + (res.apellidos || '');
+    const nombreFull = ((res.nombre || '') + ' ' + (res.apellidos || '')).trim();
     
+    // 1. MI CUENTA
+    document.getElementById('accNombreCompleto').textContent = nombreFull || 'N/A';
+    document.getElementById('accCampus').textContent = res.campus || 'N/A';
+    document.getElementById('accRegistro').textContent = res.registro || 'N/A';
+    document.getElementById('accNacimiento').textContent = res.nacimientoTexto || 'N/A';
+    document.getElementById('accCorreo').textContent = res.correo || 'No registrado';
+    document.getElementById('accTelefono').textContent = res.telefono || 'No registrado';
+
+    // 2. HEADERS
     const dHeader = document.getElementById('userNombreHeader');
     if (dHeader) dHeader.textContent = nombreFull;
     const mPill = document.getElementById('userNamePillMobile');
@@ -874,27 +886,145 @@
     const dDrawer = document.getElementById('drawerNombreUser');
     if (dDrawer) dDrawer.textContent = res.nombre || 'NACIONES';
 
-    document.getElementById('accNombreCompleto').textContent = nombreFull;
-    document.getElementById('accCampus').textContent = res.campus || 'N/A';
-    document.getElementById('accRegistro').textContent = res.registro || 'N/A';
-    document.getElementById('accNacimiento').textContent = res.nacimientoTexto || 'N/A';
-    document.getElementById('accCorreo').textContent = res.correo || 'No registrado';
-
+    // 3. QR CODES
     const qrUrl = 'https://quickchart.io/qr?text=' + encodeURIComponent(res.registro) + '&size=260&margin=1';
-    const dQr = document.getElementById('qrImgDesktop');
-    if (dQr) dQr.src = qrUrl;
-    const dQrNum = document.getElementById('qrNumDesktop');
-    if (dQrNum) dQrNum.textContent = res.registro;
+    document.getElementById('qrImgDesktop').src = qrUrl;
+    document.getElementById('qrNumDesktop').textContent = res.registro;
+    document.getElementById('qrImgMobile').src = qrUrl;
+    document.getElementById('qrNumMobile').textContent = res.registro;
 
-    const mQr = document.getElementById('qrImgMobile');
-    if (mQr) mQr.src = qrUrl;
-    const mQrNum = document.getElementById('qrNumMobile');
-    if (mQrNum) mQrNum.textContent = res.registro;
+    // 4. PRÓXIMAS LECCIONES
+    if (res.proximaLeccion) {
+      if (res.proximaLeccion.HOMBRIA) {
+        const h = res.proximaLeccion.HOMBRIA;
+        const txtH = `${h.nivelCurso} - ${h.semana} (${h.fecha || 'Sin fecha'}): ${h.tema}`;
+        document.getElementById('txtProxHombria').textContent = txtH;
+        document.getElementById('sumHombriaTextoDesktop').textContent = 'Próxima: ' + h.tema;
+        document.getElementById('sumHombriaTextoMobile').textContent = 'Próxima: ' + h.tema;
+      }
+      if (res.proximaLeccion.FUNDAMENTOS) {
+        const f = res.proximaLeccion.FUNDAMENTOS;
+        const txtF = `${f.nivelCurso} - ${f.semana} (${f.fecha || 'Sin fecha'}): ${f.tema}`;
+        document.getElementById('txtProxFundamentos').textContent = txtF;
+        document.getElementById('sumFundamentosTextoDesktop').textContent = 'Próxima: ' + f.tema;
+        document.getElementById('sumFundamentosTextoMobile').textContent = 'Próxima: ' + f.tema;
+      }
+    }
 
+    // 5. ASISTENCIAS
+    if (res.asistencias) {
+      renderizarListaAsistencias('HOMBRIA', res.asistencias.HOMBRIA || []);
+      renderizarListaAsistencias('FUNDAMENTOS', res.asistencias.FUNDAMENTOS || []);
+    }
+
+    // 6. PROGRESO DE NIVELES / BLOQUES
+    renderizarListaProgreso('HOMBRIA', res.progresoHombria || []);
+    renderizarListaProgreso('FUNDAMENTOS', res.progresoFundamentos || []);
+
+    // 7. PERMISOS VOLUNTARIO
     const rol = String(res.rol || '').toUpperCase();
     const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
     const itemReg = document.getElementById('itemRegistro');
     if (itemReg) itemReg.classList.toggle('oculto', !esVoluntario);
+  }
+
+  function renderizarListaAsistencias(programa, lista) {
+    const suffix = programa === 'HOMBRIA' ? 'Hombria' : 'Fund';
+    const contDesk = document.getElementById(`list${suffix}AsistenciasDesktop`);
+    const contMob = document.getElementById(`list${suffix}AsistenciasMobile`);
+    
+    if (!contDesk || !contMob) return;
+    contDesk.innerHTML = '';
+    contMob.innerHTML = '';
+
+    if (!lista || lista.length === 0) {
+      const msgEmpty = '<div style="color:#71808e; font-size:13px; text-align:center; padding:12px;">No hay asistencias registradas aún.</div>';
+      contDesk.innerHTML = msgEmpty;
+      contMob.innerHTML = msgEmpty;
+      return;
+    }
+
+    let presentesCount = 0;
+
+    lista.forEach(item => {
+      const isPresente = item.estado === 'PRESENTE';
+      if (isPresente || item.estado === 'RETARDO') presentesCount++;
+
+      const badgeClass = item.estado === 'PRESENTE' ? 'badge-presente' : (item.estado === 'RETARDO' ? 'badge-retardo' : 'badge-falta');
+
+      const htmlRow = `
+        <div class="attendance-row">
+          <div>
+            <span class="attendance-title">${item.sesion} - ${item.leccion}</span>
+            <span class="attendance-sub">${item.fecha} (${item.campus || 'General'})</span>
+          </div>
+          <span class="badge-status ${badgeClass}">${item.estado}</span>
+        </div>
+      `;
+
+      contDesk.innerHTML += htmlRow;
+      contMob.innerHTML += htmlRow;
+    });
+
+    const pct = Math.min(Math.round((presentesCount / Math.max(lista.length, 1)) * 100), 100);
+    
+    if (programa === 'HOMBRIA') {
+      document.getElementById('lblHombriaConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias registradas`;
+      document.getElementById('fillHombriaProgBar').style.width = pct + '%';
+      document.getElementById('sumHombriaFillDesktop').style.width = pct + '%';
+      document.getElementById('sumHombriaFillMobile').style.width = pct + '%';
+      document.getElementById('sumHombriaPorcentajeMobile').textContent = `Asistencia ${pct}%`;
+    } else {
+      document.getElementById('lblFundConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias registradas`;
+      document.getElementById('fillFundProgBar').style.width = pct + '%';
+      document.getElementById('sumFundamentosFillDesktop').style.width = pct + '%';
+      document.getElementById('sumFundamentosFillMobile').style.width = pct + '%';
+      document.getElementById('sumFundamentosPorcentajeMobile').textContent = `Asistencia ${pct}%`;
+    }
+  }
+
+  function renderizarListaProgreso(programa, bloques) {
+    const suffix = programa === 'HOMBRIA' ? 'Hombria' : 'Fund';
+    const contDesk = document.getElementById(`list${suffix}ProgresoDesktop`);
+    const contMob = document.getElementById(`list${suffix}ProgresoMobile`);
+
+    if (!contDesk || !contMob) return;
+    contDesk.innerHTML = '';
+    contMob.innerHTML = '';
+
+    if (!bloques || bloques.length === 0) {
+      const msgEmpty = '<div style="color:#71808e; font-size:13px; text-align:center; padding:12px;">Sin información de progreso.</div>';
+      contDesk.innerHTML = msgEmpty;
+      contMob.innerHTML = msgEmpty;
+      return;
+    }
+
+    bloques.forEach(blq => {
+      let itemsHtml = '';
+      blq.items.forEach(it => {
+        const badgeClass = it.completado ? 'badge-aprobado' : 'badge-pendiente';
+        const stTxt = it.completado ? 'APROBADO' : 'PENDIENTE';
+
+        itemsHtml += `
+          <div class="attendance-row">
+            <div>
+              <span class="attendance-title">${it.nombre}</span>
+            </div>
+            <span class="badge-status ${badgeClass}">${stTxt}</span>
+          </div>
+        `;
+      });
+
+      const blockBox = `
+        <div style="margin-bottom: 20px;">
+          <div style="font-weight: 800; font-size: 14px; color: #005b92; margin-bottom: 8px;">${blq.bloque}</div>
+          ${itemsHtml}
+        </div>
+      `;
+
+      contDesk.innerHTML += blockBox;
+      contMob.innerHTML += blockBox;
+    });
   }
 
   function navegarA(vista) {
