@@ -221,11 +221,17 @@
     }
 
     .btn-submit { width: 100%; margin-top: 22px; background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
+    .btn-secondary { width: 100%; margin-top: 10px; background: #eef2f5; color: #005b92; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 800; border: 0; cursor: pointer; }
     .btn-logout { width: 100%; margin-top: 20px; background: #a52828; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
 
     .toggle-auth-link {
       text-align: center; margin-top: 18px; font-size: 13.5px; color: #005b92; font-weight: 700; cursor: pointer; text-decoration: underline;
     }
+
+    .success-badge-box {
+      background: #f0f7fc; border: 2px dashed #005b92; border-radius: 20px; padding: 20px; text-align: center; margin: 20px 0;
+    }
+    .reg-number-big { font-size: 38px; font-weight: 900; color: #005b92; letter-spacing: 2px; margin: 8px 0; }
 
     .desktop-only { display: block; }
     .mobile-only { display: none; }
@@ -389,6 +395,31 @@
     <div class="toggle-auth-link" onclick="mostrarFormularioAuth('login')">
       ¿Ya tienes cuenta? Inicia sesión aquí
     </div>
+  </section>
+
+  <!-- PANTALLA DE ÉXITO INTERACTIVA TRAS REGISTRO -->
+  <section class="login-card oculto" id="seccionExitoRegistro">
+    <div style="text-align: center; margin-bottom: 12px;">
+      <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones" style="height: 48px; width: auto; object-fit: contain;">
+    </div>
+    
+    <h2 style="margin: 8px 0 4px; font-size: 20px; text-align: center; color: #005b92;">¡Registro Exitoso!</h2>
+    <p style="text-align: center; color: #52606d; font-size: 14px; margin-top: 0; font-weight: 600;">
+      Bienvenido al proceso de discipulado de Iglesia Naciones.
+    </p>
+
+    <div class="success-badge-box">
+      <span style="font-size: 12px; color: #52606d; font-weight: 800; text-transform: uppercase;">Tu número de registro asignado:</span>
+      <div class="reg-number-big" id="exitoNumRegistro">10062</div>
+      <span style="font-size: 12.5px; color: #71808e; display: block;">Guarda este número para ingresar al portal en el futuro.</span>
+    </div>
+
+    <p style="font-size: 13px; color: #52606d; text-align: center; line-height: 1.4;">
+      📧 También hemos enviado una copia de tus datos a tu correo electrónico.
+    </p>
+
+    <button class="btn-secondary" onclick="copiarNumeroRegistro()">📋 Copiar mi # de Registro</button>
+    <button class="btn-submit" id="btnAutoLogin" onclick="autoIniciarSesionPostRegistro()">🚀 Ingresar a Mi Portal</button>
   </section>
 
   <!-- PANEL PRINCIPAL AUTENTICADO -->
@@ -656,6 +687,7 @@
 <script>
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
   let usuarioSesion = null;
+  let datosUltimoRegistroExitoso = null;
   let listaAnuncios = [];
   let slideIndex = 0;
   let timerCarrusel = null;
@@ -676,6 +708,7 @@
   function mostrarFormularioAuth(modo) {
     document.getElementById('msgLogin').textContent = '';
     document.getElementById('msgRegistro').textContent = '';
+    document.getElementById('seccionExitoRegistro').classList.add('oculto');
     if (modo === 'registro') {
       document.getElementById('seccionLogin').classList.add('oculto');
       document.getElementById('seccionRegistroUsuario').classList.remove('oculto');
@@ -701,6 +734,10 @@
     e.preventDefault();
     const reg = document.getElementById('inputRegistro').value.trim();
     const nacTxt = document.getElementById('inputNacimiento').value.trim();
+    ejecutarLogin(reg, nacTxt);
+  });
+
+  function ejecutarLogin(reg, nacTxt) {
     const partes = nacTxt.split('/');
     if (partes.length !== 3) return;
     const nac = partes[2] + '-' + partes[1] + '-' + partes[0];
@@ -720,7 +757,7 @@
       .catch(() => {
         document.getElementById('msgLogin').textContent = 'Error de conexión. Revisa tu red.';
       });
-  });
+  }
 
   document.getElementById('formRegistroNuevo').addEventListener('submit', (e) => {
     e.preventDefault();
@@ -763,17 +800,15 @@
       .then(r => r.json())
       .then(res => {
         if (res.exito) {
-          msgBox.style.color = '#176b3a';
-          msgBox.textContent = res.mensaje;
-          
-          setTimeout(() => {
-            document.getElementById('inputRegistro').value = res.registro;
-            document.getElementById('inputNacimiento').value = nacTxt;
-            document.getElementById('formRegistroNuevo').reset();
-            mostrarFormularioAuth('login');
-            document.getElementById('msgLogin').style.color = '#176b3a';
-            document.getElementById('msgLogin').textContent = '¡Cuenta creada! Haz clic en "Ingresar al Portal".';
-          }, 2500);
+          datosUltimoRegistroExitoso = {
+            registro: res.registro,
+            nacimiento: res.nacimiento || nacTxt
+          };
+
+          document.getElementById('exitoNumRegistro').textContent = res.registro;
+          document.getElementById('seccionRegistroUsuario').classList.add('oculto');
+          document.getElementById('seccionExitoRegistro').classList.remove('oculto');
+          document.getElementById('formRegistroNuevo').reset();
 
         } else {
           msgBox.style.color = '#a52828';
@@ -786,11 +821,28 @@
       });
   });
 
+  function copiarNumeroRegistro() {
+    if (!datosUltimoRegistroExitoso) return;
+    navigator.clipboard.writeText(datosUltimoRegistroExitoso.registro).then(() => {
+      alert('¡# de Registro copiado al portapapeles!');
+    }).catch(() => {
+      alert('Tu # de Registro es: ' + datosUltimoRegistroExitoso.registro);
+    });
+  }
+
+  function autoIniciarSesionPostRegistro() {
+    if (!datosUltimoRegistroExitoso) return;
+    document.getElementById('seccionExitoRegistro').classList.add('oculto');
+    document.getElementById('seccionLogin').classList.remove('oculto');
+    ejecutarLogin(datosUltimoRegistroExitoso.registro, datosUltimoRegistroExitoso.nacimiento);
+  }
+
   function iniciarSesionEnApp(res) {
     usuarioSesion = res;
     document.getElementById('msgLogin').textContent = '';
     document.getElementById('seccionLogin').classList.add('oculto');
     document.getElementById('seccionRegistroUsuario').classList.add('oculto');
+    document.getElementById('seccionExitoRegistro').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.remove('oculto');
     
     const hDesk = document.getElementById('headerNacionesDesktop');
@@ -1126,6 +1178,7 @@
   function cerrarSesion() {
     localStorage.removeItem('naciones_sesion');
     usuarioSesion = null;
+    datosUltimoRegistroExitoso = null;
     const hDesk = document.getElementById('headerNacionesDesktop');
     if (hDesk) hDesk.classList.add('oculto');
     const hMob = document.getElementById('headerNacionesMobile');
@@ -1136,6 +1189,7 @@
     document.getElementById('heroCarousel').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.add('oculto');
     document.getElementById('seccionRegistroUsuario').classList.add('oculto');
+    document.getElementById('seccionExitoRegistro').classList.add('oculto');
     document.getElementById('seccionLogin').classList.remove('oculto');
     document.getElementById('formLogin').reset();
     document.getElementById('formRegistroNuevo').reset();
