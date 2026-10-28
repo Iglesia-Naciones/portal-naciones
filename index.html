@@ -184,26 +184,15 @@
     .success-badge-box { background: #f0f7fc; border: 2px dashed #005b92; border-radius: 20px; padding: 20px; text-align: center; margin: 20px 0; }
     .reg-number-big { font-size: 38px; font-weight: 900; color: #005b92; letter-spacing: 2px; margin: 8px 0; }
 
-    .tour-overlay {
+    .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.75); z-index: 2000; display: none;
-      backdrop-filter: blur(2px);
+      background: rgba(0, 0, 0, 0.6); z-index: 3000; display: none;
+      align-items: center; justify-content: center; backdrop-filter: blur(3px);
     }
-    .tour-overlay.active { display: block; }
-    
-    .tour-card {
-      position: fixed; z-index: 2001; background: #ffffff; border-radius: 20px; padding: 20px;
-      width: 88%; max-width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      left: 50%; transform: translateX(-50%); transition: all 0.3s ease; text-align: center;
-    }
-    .tour-card h3 { margin: 0 0 8px 0; font-size: 17px; color: #005b92; font-weight: 800; }
-    .tour-card p { margin: 0 0 16px 0; font-size: 13.5px; color: #4a5764; line-height: 1.4; }
-    .tour-btn { background: #005b92; color: #fff; border: 0; padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; width: 100%; }
-    
-    .tour-spotlight-active {
-      z-index: 2001 !important; position: relative !important;
-      box-shadow: 0 0 0 8px #005b92, 0 0 20px rgba(0,0,0,0.5) !important;
-      border-radius: 20px !important; background: #ffffff !important;
+    .modal-overlay.active { display: flex; }
+    .modal-card {
+      background: #ffffff; border-radius: 24px; padding: 28px; width: 90%; max-width: 480px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto;
     }
 
     .desktop-only { display: block; }
@@ -230,11 +219,31 @@
 </head>
 <body>
 
-<div id="tourOverlay" class="tour-overlay"></div>
-<div id="tourCard" class="tour-card oculto">
-  <h3 id="tourTitle">¡Bienvenido!</h3>
-  <p id="tourText">Te mostramos rápidamente cómo usar tu portal.</p>
-  <button class="tour-btn" id="tourNextBtn" onclick="avanzarTour()">Entendido 👍</button>
+<!-- MODAL DE INSCRIPCIÓN Y DESGLOSE -->
+<div id="modalInscripcion" class="modal-overlay">
+  <div class="modal-card">
+    <h3 style="margin-top: 0; color: #005b92; font-size: 18px;" id="modalTituloCurso">Detalles del Curso</h3>
+    
+    <div style="background: #f0f7fc; border-radius: 12px; padding: 14px; margin: 12px 0;">
+      <strong style="font-size: 13px; color: #52606d; display: block; text-transform: uppercase;">Tus Niveles Aprobados:</strong>
+      <div id="modalNivelesAprobados" style="font-size: 13.5px; color: #18232d; font-weight: 700; margin-top: 4px;">-</div>
+    </div>
+
+    <div style="background: #eef2f5; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+      <strong style="font-size: 13px; color: #005b92; display: block; text-transform: uppercase;">Siguiente Nivel Sugerido:</strong>
+      <div id="modalProximoNivel" style="font-size: 15px; color: #005b92; font-weight: 800; margin-top: 2px;">-</div>
+    </div>
+
+    <label style="margin-top: 0;">Descripción del Curso:</label>
+    <p id="modalDescripcionCurso" style="font-size: 13.5px; color: #52606d; line-height: 1.5; margin-bottom: 20px;">
+      Cargando información...
+    </p>
+
+    <div style="display: flex; gap: 10px;">
+      <button class="btn-secondary" style="margin: 0; flex: 1;" onclick="cerrarModalInscripcion()">Cancelar</button>
+      <button class="btn-submit" style="margin: 0; flex: 1;" id="btnConfirmarInscripcionModal">Inscribirme</button>
+    </div>
+  </div>
 </div>
 
 <div class="hero-carousel oculto" id="heroCarousel">
@@ -276,6 +285,7 @@
 
 <main class="contenedor">
 
+  <!-- INICIO DE SESIÓN -->
   <section class="login-card" id="seccionLogin">
     <div style="text-align: center; margin-bottom: 16px;">
       <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones" style="height: 52px; width: auto; object-fit: contain;">
@@ -298,6 +308,7 @@
     </div>
   </section>
 
+  <!-- CREAR NUEVA CUENTA -->
   <section class="login-card oculto" id="seccionRegistroUsuario">
     <div style="text-align: center; margin-bottom: 12px;">
       <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones" style="height: 48px; width: auto; object-fit: contain;">
@@ -362,7 +373,7 @@
         <option value="Nacional">Nacional</option>
       </select>
 
-      <button class="btn-submit" type="submit">Registrarme</button>
+      <button class="btn-submit" type="submit" id="btnSubmitRegistro">Registrarme</button>
     </form>
 
     <div id="msgRegistro" style="margin-top: 14px; font-weight: bold; text-align: center; font-size: 13.5px; line-height: 1.4;"></div>
@@ -372,6 +383,7 @@
     </div>
   </section>
 
+  <!-- CONFIRMACIÓN REGISTRO EXITOSO -->
   <section class="login-card oculto" id="seccionExitoRegistro">
     <div style="text-align: center; margin-bottom: 12px;">
       <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones" style="height: 48px; width: auto; object-fit: contain;">
@@ -384,7 +396,7 @@
 
     <div class="success-badge-box">
       <span style="font-size: 12px; color: #52606d; font-weight: 800; text-transform: uppercase;">Tu número de registro asignado:</span>
-      <div class="reg-number-big" id="exitoNumRegistro">10062</div>
+      <div class="reg-number-big" id="exitoNumRegistro">10000</div>
       <span style="font-size: 12.5px; color: #71808e; display: block;">Guarda este número para ingresar al portal en el futuro.</span>
     </div>
 
@@ -396,6 +408,7 @@
     <button class="btn-submit" id="btnAutoLogin" onclick="autoIniciarSesionPostRegistro()">🚀 Ingresar a Mi Portal</button>
   </section>
 
+  <!-- PANEL PRINCIPAL -->
   <div id="panelPrincipal" class="oculto">
 
     <section id="vistaInicio">
@@ -404,20 +417,24 @@
           <div class="profile-card-header" id="userNombreHeader">Cargando...</div>
           <div class="profile-card-body">
             <div>
-              <div class="program-summary-item">
-                <div class="program-summary-title" id="sumHombriaNivelDesktop">Hombría al Máximo - Nivel 1</div>
+              <div class="program-summary-item" id="boxSummaryHombriaDesktop">
+                <div class="program-summary-title" id="sumHombriaNivelDesktop">Hombría al Máximo</div>
                 <div class="program-progress-track">
                   <div class="program-progress-fill" id="sumHombriaFillDesktop" style="width: 0%;"></div>
                 </div>
                 <div class="program-summary-sub" id="sumHombriaTextoDesktop">Próxima sesión: -</div>
               </div>
 
-              <div class="program-summary-item">
-                <div class="program-summary-title" id="sumFundamentosNivelDesktop">Fundamentos - Sanidad y Libertad</div>
+              <div class="program-summary-item" id="boxSummaryFundamentosDesktop">
+                <div class="program-summary-title" id="sumFundamentosNivelDesktop">Fundamentos</div>
                 <div class="program-progress-track">
                   <div class="program-progress-fill" id="sumFundamentosFillDesktop" style="width: 0%;"></div>
                 </div>
                 <div class="program-summary-sub" id="sumFundamentosTextoDesktop">Próxima sesión: -</div>
+              </div>
+
+              <div id="msgSinCursosInicioDesktop" class="oculto" style="color: #71808e; font-size: 14px; font-weight: 600; padding: 10px 0;">
+                Actualmente no estás inscrito en ningún curso para esta temporada.
               </div>
             </div>
 
@@ -438,8 +455,8 @@
         </div>
 
         <div class="summary-card-mobile" id="targetSummaryMobile">
-          <div style="margin-bottom: 22px;">
-            <div class="summary-title" id="sumHombriaNivelMobile">Hombría al Máximo - Nivel 1</div>
+          <div id="boxSummaryHombriaMobile" style="margin-bottom: 22px;">
+            <div class="summary-title" id="sumHombriaNivelMobile">Hombría al Máximo</div>
             <div class="program-progress-track">
               <div class="program-progress-fill" id="sumHombriaFillMobile" style="width: 0%;"></div>
             </div>
@@ -447,13 +464,17 @@
             <div class="summary-sub-text" id="sumHombriaTextoMobile">Próxima sesión: -</div>
           </div>
 
-          <div>
-            <div class="summary-title" id="sumFundamentosNivelMobile">Fundamentos - Sanidad y Libertad</div>
+          <div id="boxSummaryFundamentosMobile">
+            <div class="summary-title" id="sumFundamentosNivelMobile">Fundamentos</div>
             <div class="program-progress-track">
               <div class="program-progress-fill" id="sumFundamentosFillMobile" style="width: 0%;"></div>
             </div>
             <div class="summary-sub-text" id="sumFundamentosPorcentajeMobile">Asistencia 0%</div>
             <div class="summary-sub-text" id="sumFundamentosTextoMobile">Próxima sesión: -</div>
+          </div>
+
+          <div id="msgSinCursosInicioMobile" class="oculto" style="color: #71808e; font-size: 13.5px; font-weight: 600; text-align: center;">
+            Actualmente no estás inscrito en ningún curso para esta temporada.
           </div>
         </div>
       </div>
@@ -475,11 +496,11 @@
       </div>
 
       <div class="card-rounded-gray" id="boxProxHombria">
-        <div class="next-lesson-title">Tu próxima lección:</div>
+        <div class="next-lesson-title" id="titleProxHombria">Tu próxima lección:</div>
         <div class="next-lesson-sub" id="txtProxHombria">Cargando...</div>
       </div>
 
-      <div class="pill-tabs-nav">
+      <div class="pill-tabs-nav" id="navTabsHombria">
         <button class="pill-tab active" id="tabHombriaAsis" onclick="toggleSubPestana('hombria', 'asis')">Mis asistencias</button>
         <button class="pill-tab" id="tabHombriaProg" onclick="toggleSubPestana('hombria', 'prog')">Mi progreso</button>
       </div>
@@ -526,11 +547,11 @@
       </div>
 
       <div class="card-rounded-gray" id="boxProxFundamentos">
-        <div class="next-lesson-title">Tu próxima lección:</div>
+        <div class="next-lesson-title" id="titleProxFundamentos">Tu próxima lección:</div>
         <div class="next-lesson-sub" id="txtProxFundamentos">Cargando...</div>
       </div>
 
-      <div class="pill-tabs-nav">
+      <div class="pill-tabs-nav" id="navTabsFundamentos">
         <button class="pill-tab active" id="tabFundAsis" onclick="toggleSubPestana('fundamentos', 'asis')">Mis asistencias</button>
         <button class="pill-tab" id="tabFundProg" onclick="toggleSubPestana('fundamentos', 'prog')">Mi progreso</button>
       </div>
@@ -663,24 +684,26 @@
 <script>
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
   let usuarioSesion = null;
-  let datosUltimoRegistroExitoso = null;
-  let esNuevoUsuario = false;
-  let tourPaso = 0;
+  let datosOfertaCargada = null;
+  let idOfertaSeleccionada = null;
+  let ultimoRegistroCreado = null;
 
-  let listaAnuncios = [];
-  let slideIndex = 0;
-  let timerCarrusel = null;
-  let html5QrcodeScanner = null;
-
+  // AUTO-FORMATO CORREGIDO PARA FECHAS (DD/MM/AAAA)
   document.querySelectorAll('.input-fecha-mask').forEach(input => {
     input.addEventListener('input', (e) => {
-      let v = e.target.value.replace(/\D/g, '');
-      if (v.length > 8) v = v.substring(0, 8);
-      let f = '';
-      if (v.length > 0) f += v.substring(0, 2);
-      if (v.length >= 3) f += '/' + v.substring(2, 4);
-      if (v.length >= 5) f += '/' + v.substring(4, 8);
-      e.target.value = f;
+      let val = e.target.value.replace(/\D/g, '');
+      if (val.length > 8) val = val.substring(0, 8);
+      let formatted = '';
+      if (val.length > 0) {
+        formatted += val.substring(0, 2);
+        if (val.length >= 3) {
+          formatted += '/' + val.substring(2, 4);
+          if (val.length >= 5) {
+            formatted += '/' + val.substring(4, 8);
+          }
+        }
+      }
+      e.target.value = formatted;
     });
   });
 
@@ -709,6 +732,7 @@
     }
   });
 
+  // INICIO DE SESIÓN
   document.getElementById('formLogin').addEventListener('submit', (e) => {
     e.preventDefault();
     const reg = document.getElementById('inputRegistro').value.trim();
@@ -718,7 +742,10 @@
 
   function ejecutarLogin(reg, nacTxt) {
     const partes = nacTxt.split('/');
-    if (partes.length !== 3) return;
+    if (partes.length !== 3) {
+      document.getElementById('msgLogin').textContent = 'Ingresa una fecha válida (DD/MM/AAAA)';
+      return;
+    }
     const nac = partes[2] + '-' + partes[1] + '-' + partes[0];
 
     document.getElementById('msgLogin').textContent = 'Consultando datos...';
@@ -738,31 +765,35 @@
       });
   }
 
+  // CREACIÓN DE NUEVA CUENTA
   document.getElementById('formRegistroNuevo').addEventListener('submit', (e) => {
     e.preventDefault();
-    
+
+    const btn = document.getElementById('btnSubmitRegistro');
+    const msg = document.getElementById('msgRegistro');
+
     const nombre = document.getElementById('regNombre').value.trim();
     const apPaterno = document.getElementById('regApPaterno').value.trim();
     const apMaterno = document.getElementById('regApMaterno').value.trim();
     const estadoCivil = document.getElementById('regEstadoCivil').value;
     const correo = document.getElementById('regCorreo').value.trim();
     const lada = document.getElementById('regLada').value;
-    const telSinLada = document.getElementById('regTelefono').value.trim();
-    const nacTxt = document.getElementById('regNacimiento').value.trim();
+    const telefono = document.getElementById('regTelefono').value.trim();
+    const nacimiento = document.getElementById('regNacimiento').value.trim();
     const campus = document.getElementById('regCampus').value;
 
-    const partes = nacTxt.split('/');
-    if (partes.length !== 3) {
-      document.getElementById('msgRegistro').style.color = '#a52828';
-      document.getElementById('msgRegistro').textContent = 'Ingresa una fecha válida (DD/MM/AAAA).';
+    if (!nombre || !apPaterno || !estadoCivil || !correo || !telefono || !nacimiento || !campus) {
+      msg.style.color = '#a52828';
+      msg.textContent = 'Por favor completa todos los campos requeridos.';
       return;
     }
 
-    const msgBox = document.getElementById('msgRegistro');
-    msgBox.style.color = '#005b92';
-    msgBox.textContent = 'Procesando registro... Por favor espera.';
+    btn.disabled = true;
+    btn.textContent = 'Creando cuenta...';
+    msg.style.color = '#005b92';
+    msg.textContent = 'Guardando tus datos...';
 
-    const queryParams = new URLSearchParams({
+    const params = new URLSearchParams({
       action: 'registrarNuevoUsuario',
       nombre: nombre,
       apPaterno: apPaterno,
@@ -770,50 +801,49 @@
       estadoCivil: estadoCivil,
       correo: correo,
       lada: lada,
-      telefono: telSinLada,
-      nacimiento: nacTxt,
+      telefono: telefono,
+      nacimiento: nacimiento,
       campus: campus
     });
 
-    fetch(`${WEB_APP_URL}?${queryParams.toString()}`)
-      .then(r => r.json())
-      .then(res => {
-        if (res.exito) {
-          datosUltimoRegistroExitoso = {
-            registro: res.registro,
-            nacimiento: res.nacimiento || nacTxt
-          };
-          esNuevoUsuario = true;
+    fetch(`${WEB_APP_URL}?${params.toString()}`)
+      .then(res => res.json())
+      .then(data => {
+        btn.disabled = false;
+        btn.textContent = 'Registrarme';
 
-          document.getElementById('exitoNumRegistro').textContent = res.registro;
+        if (data && data.exito) {
+          ultimoRegistroCreado = {
+            registro: data.registro,
+            nacimientoTexto: data.nacimiento
+          };
+          document.getElementById('exitoNumRegistro').textContent = data.registro;
           document.getElementById('seccionRegistroUsuario').classList.add('oculto');
           document.getElementById('seccionExitoRegistro').classList.remove('oculto');
-          document.getElementById('formRegistroNuevo').reset();
-
         } else {
-          msgBox.style.color = '#a52828';
-          msgBox.textContent = res.mensaje;
+          msg.style.color = '#a52828';
+          msg.textContent = data.mensaje || 'Error al registrar la cuenta.';
         }
       })
-      .catch(() => {
-        msgBox.style.color = '#a52828';
-        msgBox.textContent = 'Ocurrió un error al conectar. Intenta de nuevo.';
+      .catch(err => {
+        btn.disabled = false;
+        btn.textContent = 'Registrarme';
+        msg.style.color = '#a52828';
+        msg.textContent = 'Error de conexión. Intenta nuevamente.';
       });
   });
 
-  function copiarNumeroRegistro() {
-    if (!datosUltimoRegistroExitoso) return;
-    navigator.clipboard.writeText(datosUltimoRegistroExitoso.registro).then(() => {
-      alert('¡# de Registro copiado al portapapeles!');
-    }).catch(() => {
-      alert('Tu # de Registro es: ' + datosUltimoRegistroExitoso.registro);
-    });
+  function autoIniciarSesionPostRegistro() {
+    if (ultimoRegistroCreado) {
+      ejecutarLogin(ultimoRegistroCreado.registro, ultimoRegistroCreado.nacimientoTexto);
+    }
   }
 
-  function autoIniciarSesionPostRegistro() {
-    if (!datosUltimoRegistroExitoso) return;
-    document.getElementById('seccionExitoRegistro').classList.add('oculto');
-    ejecutarLogin(datosUltimoRegistroExitoso.registro, datosUltimoRegistroExitoso.nacimiento);
+  function copiarNumeroRegistro() {
+    if (ultimoRegistroCreado) {
+      navigator.clipboard.writeText(ultimoRegistroCreado.registro);
+      alert('Número de registro copiado al portapapeles: ' + ultimoRegistroCreado.registro);
+    }
   }
 
   function iniciarSesionEnApp(res) {
@@ -824,13 +854,9 @@
     document.getElementById('seccionExitoRegistro').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.remove('oculto');
     
-    const hDesk = document.getElementById('headerNacionesDesktop');
-    if (hDesk) hDesk.classList.remove('oculto');
-    const hMob = document.getElementById('headerNacionesMobile');
-    if (hMob) hMob.classList.remove('oculto');
-
-    const bNav = document.getElementById('bottomNav');
-    if (bNav) bNav.classList.remove('oculto');
+    document.getElementById('headerNacionesDesktop').classList.remove('oculto');
+    document.getElementById('headerNacionesMobile').classList.remove('oculto');
+    document.getElementById('bottomNav').classList.remove('oculto');
 
     if (res.anuncios && res.anuncios.length > 0) {
       document.getElementById('heroCarousel').classList.remove('oculto');
@@ -842,10 +868,6 @@
     cargarDatosEnPantalla(res);
     cargarOfertaInscripciones();
     navegarA('inicio');
-
-    if (esNuevoUsuario) {
-      setTimeout(iniciarTourGuiado, 600);
-    }
   }
 
   function cargarOfertaInscripciones() {
@@ -854,111 +876,290 @@
     fetch(`${WEB_APP_URL}?action=consultarOferta&registro=${encodeURIComponent(usuarioSesion.registro)}&nacimiento=${encodeURIComponent(usuarioSesion.nacimientoTexto)}`)
       .then(r => r.json())
       .then(res => {
+        datosOfertaCargada = res;
         const cont = document.getElementById('contenedorCursosOfertados');
         cont.innerHTML = '';
 
-        if (!res.exito || (res.ofertaHombria.length === 0 && res.ofertaFundamentos.length === 0)) {
-          cont.innerHTML = '<div style="color: #71808e; font-size: 13px;">No hay cursos abiertos disponibles para tu campus/nivel actual o requieres cumplir prerrequisitos previos.</div>';
+        const hayOferta = res.exito && ((res.ofertaHombria && res.ofertaHombria.length > 0) || (res.ofertaFundamentos && res.ofertaFundamentos.length > 0));
+
+        if (!usuarioSesion.inscripcionesActivas.HOMBRIA) {
+          document.getElementById('titleProxHombria').textContent = 'Estado de Inscripción:';
+          if (hayOferta) {
+            document.getElementById('txtProxHombria').innerHTML = '<strong>¡Inscripciones Abiertas!</strong> Elige tu curso en la sección de inscripciones abajo para iniciar esta temporada.';
+          } else {
+            document.getElementById('txtProxHombria').textContent = 'Mantente al pendiente de las próximas inscripciones.';
+          }
+        }
+
+        if (!usuarioSesion.inscripcionesActivas.FUNDAMENTOS) {
+          document.getElementById('titleProxFundamentos').textContent = 'Estado de Inscripción:';
+          if (hayOferta) {
+            document.getElementById('txtProxFundamentos').innerHTML = '<strong>¡Inscripciones Abiertas!</strong> Elige tu curso en la sección de inscripciones abajo para iniciar esta temporada.';
+          } else {
+            document.getElementById('txtProxFundamentos').textContent = 'Mantente al pendiente de las próximas inscripciones.';
+          }
+        }
+
+        if (!hayOferta) {
+          cont.innerHTML = '<div style="color: #71808e; font-size: 13px;">No hay cursos abiertos disponibles por el momento para tu campus. Mantente al pendiente de las próximas fechas.</div>';
           return;
         }
 
-        const renderCursoCard = (item) => `
+        const renderCursoCard = (item, progTipo) => `
           <div style="background: #f0f7fc; border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
             <div>
               <strong style="color: #005b92; font-size: 14px; display: block;">${item.cursoNivel}</strong>
               <span style="font-size: 12px; color: #52606d;">📅 ${item.horario} | Campus: ${item.campus}</span>
             </div>
-            <button class="btn-submit" style="width: auto; margin: 0; padding: 8px 16px; font-size: 12px;" onclick="confirmarInscripcion('${item.idOferta}')">Inscribirme</button>
+            <button class="btn-submit" style="width: auto; margin: 0; padding: 8px 16px; font-size: 12px;" onclick="abrirModalInscripcion('${item.idOferta}', '${progTipo}')">Inscripción</button>
           </div>
         `;
 
-        res.ofertaHombria.forEach(c => cont.innerHTML += renderCursoCard(c));
-        res.ofertaFundamentos.forEach(c => cont.innerHTML += renderCursoCard(c));
+        if (res.ofertaHombria) res.ofertaHombria.forEach(c => cont.innerHTML += renderCursoCard(c, 'HOMBRIA'));
+        if (res.ofertaFundamentos) res.ofertaFundamentos.forEach(c => cont.innerHTML += renderCursoCard(c, 'FUNDAMENTOS'));
       });
   }
 
-  function confirmarInscripcion(idOferta) {
-    if (!confirm('¿Deseas confirmar tu inscripción a este curso?')) return;
+  function abrirModalInscripcion(idOferta, progTipo) {
+    if (!datosOfertaCargada) return;
 
-    fetch(`${WEB_APP_URL}?action=procesarInscripcion&registro=${encodeURIComponent(usuarioSesion.registro)}&idOferta=${encodeURIComponent(idOferta)}`)
+    let curso = null;
+    if (progTipo === 'HOMBRIA') {
+      curso = datosOfertaCargada.ofertaHombria.find(c => c.idOferta === idOferta);
+    } else {
+      curso = datosOfertaCargada.ofertaFundamentos.find(c => c.idOferta === idOferta);
+    }
+
+    if (!curso) return;
+
+    idOfertaSeleccionada = idOferta;
+
+    document.getElementById('modalTituloCurso').textContent = curso.cursoNivel;
+    document.getElementById('modalProximoNivel').textContent = curso.cursoNivel;
+    document.getElementById('modalDescripcionCurso').textContent = curso.descripcion || 'Sin descripción disponible.';
+
+    const listaAprobados = curso.nivelesAprobados && curso.nivelesAprobados.length > 0 ? curso.nivelesAprobados.join(', ') : 'Ninguno (Nuevo Ingreso)';
+    document.getElementById('modalNivelesAprobados').textContent = listaAprobados;
+
+    document.getElementById('btnConfirmarInscripcionModal').onclick = () => procesarInscripcion();
+
+    document.getElementById('modalInscripcion').classList.add('active');
+  }
+
+  function cerrarModalInscripcion() {
+    document.getElementById('modalInscripcion').classList.remove('active');
+    idOfertaSeleccionada = null;
+  }
+
+  function procesarInscripcion() {
+    if (!idOfertaSeleccionada || !usuarioSesion) return;
+
+    const btn = document.getElementById('btnConfirmarInscripcionModal');
+    btn.disabled = true;
+    btn.textContent = 'Procesando...';
+
+    fetch(`${WEB_APP_URL}?action=procesarInscripcion&registro=${encodeURIComponent(usuarioSesion.registro)}&idOferta=${encodeURIComponent(idOfertaSeleccionada)}`)
       .then(r => r.json())
       .then(res => {
         alert(res.mensaje);
-        if (res.exito) location.reload();
+        if (res.exito) {
+          cerrarModalInscripcion();
+          ejecutarLogin(usuarioSesion.registro, usuarioSesion.nacimientoTexto);
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Inscribirme';
+        }
+      })
+      .catch(() => {
+        alert('Error al procesar inscripción. Intenta de nuevo.');
+        btn.disabled = false;
+        btn.textContent = 'Inscribirme';
       });
   }
 
-  function iniciarTourGuiado() {
-    tourPaso = 1;
-    document.getElementById('tourOverlay').classList.add('active');
-    document.getElementById('tourCard').classList.remove('oculto');
-    actualizarPasoTour();
+  function cargarDatosEnPantalla(res) {
+    const nombreFull = ((res.nombre || '') + ' ' + (res.apellidos || '')).trim();
+    
+    document.getElementById('accNombreCompleto').textContent = nombreFull || 'N/A';
+    document.getElementById('accCampus').textContent = res.campus || 'N/A';
+    document.getElementById('accRegistro').textContent = res.registro || 'N/A';
+    document.getElementById('accNacimiento').textContent = res.nacimientoTexto || 'N/A';
+    document.getElementById('accCorreo').textContent = res.correo || 'No registrado';
+    document.getElementById('accTelefono').textContent = res.telefono || 'No registrado';
+
+    document.getElementById('userNombreHeader').textContent = nombreFull;
+    document.getElementById('userNamePillMobile').textContent = nombreFull;
+    document.getElementById('drawerNombreUser').textContent = res.nombre || 'NACIONES';
+
+    const qrUrl = 'https://quickchart.io/qr?text=' + encodeURIComponent(res.registro) + '&size=260&margin=1';
+    document.getElementById('qrImgDesktop').src = qrUrl;
+    document.getElementById('qrNumDesktop').textContent = res.registro;
+    document.getElementById('qrImgMobile').src = qrUrl;
+    document.getElementById('qrNumMobile').textContent = res.registro;
+
+    const insci = res.inscripcionesActivas || { HOMBRIA: false, FUNDAMENTOS: false };
+
+    const estaEnAlgunCurso = insci.HOMBRIA || insci.FUNDAMENTOS;
+
+    document.getElementById('boxSummaryHombriaDesktop').classList.toggle('oculto', !insci.HOMBRIA);
+    document.getElementById('boxSummaryFundamentosDesktop').classList.toggle('oculto', !insci.FUNDAMENTOS);
+    document.getElementById('msgSinCursosInicioDesktop').classList.toggle('oculto', estaEnAlgunCurso);
+
+    document.getElementById('boxSummaryHombriaMobile').classList.toggle('oculto', !insci.HOMBRIA);
+    document.getElementById('boxSummaryFundamentosMobile').classList.toggle('oculto', !insci.FUNDAMENTOS);
+    document.getElementById('msgSinCursosInicioMobile').classList.toggle('oculto', estaEnAlgunCurso);
+
+    document.getElementById('navTabsHombria').classList.toggle('oculto', !insci.HOMBRIA);
+    document.getElementById('secHombriaAsis').classList.toggle('oculto', !insci.HOMBRIA);
+    document.getElementById('secHombriaProg').classList.toggle('oculto', insci.HOMBRIA);
+
+    document.getElementById('navTabsFundamentos').classList.toggle('oculto', !insci.FUNDAMENTOS);
+    document.getElementById('secFundAsis').classList.toggle('oculto', !insci.FUNDAMENTOS);
+    document.getElementById('secFundProg').classList.toggle('oculto', insci.FUNDAMENTOS);
+
+    if (insci.HOMBRIA && res.proximaLeccion && res.proximaLeccion.HOMBRIA) {
+      const h = res.proximaLeccion.HOMBRIA;
+      document.getElementById('titleProxHombria').textContent = 'Tu próxima lección:';
+      document.getElementById('txtProxHombria').textContent = `${h.nivelCurso} - ${h.semana} (${h.fecha || 'Sin fecha'}): ${h.tema}`;
+      document.getElementById('sumHombriaNivelDesktop').textContent = 'Hombría - ' + (insci.cursoHombria || h.nivelCurso);
+      document.getElementById('sumHombriaNivelMobile').textContent = 'Hombría - ' + (insci.cursoHombria || h.nivelCurso);
+      document.getElementById('sumHombriaTextoDesktop').textContent = 'Próxima: ' + h.tema;
+      document.getElementById('sumHombriaTextoMobile').textContent = 'Próxima: ' + h.tema;
+    }
+
+    if (insci.FUNDAMENTOS && res.proximaLeccion && res.proximaLeccion.FUNDAMENTOS) {
+      const f = res.proximaLeccion.FUNDAMENTOS;
+      document.getElementById('titleProxFundamentos').textContent = 'Tu próxima lección:';
+      document.getElementById('txtProxFundamentos').textContent = `${f.nivelCurso} - ${f.semana} (${f.fecha || 'Sin fecha'}): ${f.tema}`;
+      document.getElementById('sumFundamentosNivelDesktop').textContent = 'Fundamentos - ' + (insci.cursoFundamentos || f.nivelCurso);
+      document.getElementById('sumFundamentosNivelMobile').textContent = 'Fundamentos - ' + (insci.cursoFundamentos || f.nivelCurso);
+      document.getElementById('sumFundamentosTextoDesktop').textContent = 'Próxima: ' + f.tema;
+      document.getElementById('sumFundamentosTextoMobile').textContent = 'Próxima: ' + f.tema;
+    }
+
+    if (res.asistencias) {
+      renderizarListaAsistencias('HOMBRIA', res.asistencias.HOMBRIA || []);
+      renderizarListaAsistencias('FUNDAMENTOS', res.asistencias.FUNDAMENTOS || []);
+    }
+
+    renderizarListaProgreso('HOMBRIA', res.progresoHombria || []);
+    renderizarListaProgreso('FUNDAMENTOS', res.progresoFundamentos || []);
+
+    const rol = String(res.rol || '').toUpperCase();
+    const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
+    document.getElementById('itemRegistro').classList.toggle('oculto', !esVoluntario);
   }
 
-  function actualizarPasoTour() {
-    limpiarSpotlights();
-    const esMovil = window.innerWidth < 768;
-    const card = document.getElementById('tourCard');
-    const title = document.getElementById('tourTitle');
-    const text = document.getElementById('tourText');
-    const btn = document.getElementById('tourNextBtn');
+  function renderizarListaAsistencias(programa, lista) {
+    const suffix = programa === 'HOMBRIA' ? 'Hombria' : 'Fund';
+    const contDesk = document.getElementById(`list${suffix}AsistenciasDesktop`);
+    const contMob = document.getElementById(`list${suffix}AsistenciasMobile`);
+    
+    if (!contDesk || !contMob) return;
+    contDesk.innerHTML = '';
+    contMob.innerHTML = '';
 
-    if (tourPaso === 1) {
-      title.textContent = '📌 Tu Código QR Personal';
-      text.textContent = 'Presenta este código QR en cada sesión para registrar tu asistencia de forma automática.';
-      const target = esMovil ? document.getElementById('targetQrMobile') : document.getElementById('targetQrDesktop');
-      if (target) target.classList.add('tour-spotlight-active');
-      card.style.top = esMovil ? '60%' : '35%';
-      btn.textContent = 'Siguiente →';
+    if (!lista || lista.length === 0) {
+      const msgEmpty = '<div style="color:#71808e; font-size:13px; text-align:center; padding:12px;">No hay asistencias registradas aún.</div>';
+      contDesk.innerHTML = msgEmpty;
+      contMob.innerHTML = msgEmpty;
+      return;
+    }
 
-    } else if (tourPaso === 2) {
-      title.textContent = '📘 Pestañas Hombría y Fundamentos';
-      text.textContent = 'Desde aquí podrás consultar tus asistencias registradas y los niveles que vas aprobando.';
-      const target = esMovil ? document.getElementById('bottomNav') : document.getElementById('headerNacionesDesktop');
-      if (target) target.classList.add('tour-spotlight-active');
-      card.style.top = esMovil ? '30%' : '20%';
-      btn.textContent = 'Entendido 👍';
+    let presentesCount = 0;
 
+    lista.forEach(item => {
+      const isPresente = item.estado === 'PRESENTE';
+      if (isPresente || item.estado === 'RETARDO') presentesCount++;
+
+      const badgeClass = item.estado === 'PRESENTE' ? 'badge-presente' : (item.estado === 'RETARDO' ? 'badge-retardo' : 'badge-falta');
+
+      const htmlRow = `
+        <div class="attendance-row">
+          <div>
+            <span class="attendance-title">${item.sesion} - ${item.leccion}</span>
+            <span class="attendance-sub">${item.fecha} (${item.campus || 'General'})</span>
+          </div>
+          <span class="badge-status ${badgeClass}">${item.estado}</span>
+        </div>
+      `;
+
+      contDesk.innerHTML += htmlRow;
+      contMob.innerHTML += htmlRow;
+    });
+
+    const pct = Math.min(Math.round((presentesCount / Math.max(lista.length, 1)) * 100), 100);
+    
+    if (programa === 'HOMBRIA') {
+      document.getElementById('lblHombriaConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias registradas`;
+      document.getElementById('fillHombriaProgBar').style.width = pct + '%';
+      document.getElementById('sumHombriaFillDesktop').style.width = pct + '%';
+      document.getElementById('sumHombriaFillMobile').style.width = pct + '%';
+      document.getElementById('sumHombriaPorcentajeMobile').textContent = `Asistencia ${pct}%`;
     } else {
-      finalizarTour();
+      document.getElementById('lblFundConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias registradas`;
+      document.getElementById('fillFundProgBar').style.width = pct + '%';
+      document.getElementById('sumFundamentosFillDesktop').style.width = pct + '%';
+      document.getElementById('sumFundamentosFillMobile').style.width = pct + '%';
+      document.getElementById('sumFundamentosPorcentajeMobile').textContent = `Asistencia ${pct}%`;
     }
   }
 
-  function avanzarTour() {
-    tourPaso++;
-    actualizarPasoTour();
+  function renderizarListaProgreso(programa, bloques) {
+    const suffix = programa === 'HOMBRIA' ? 'Hombria' : 'Fund';
+    const contDesk = document.getElementById(`list${suffix}ProgresoDesktop`);
+    const contMob = document.getElementById(`list${suffix}ProgresoMobile`);
+
+    if (!contDesk || !contMob) return;
+    contDesk.innerHTML = '';
+    contMob.innerHTML = '';
+
+    if (!bloques || bloques.length === 0) {
+      const msgEmpty = '<div style="color:#71808e; font-size:13px; text-align:center; padding:12px;">Sin información de progreso.</div>';
+      contDesk.innerHTML = msgEmpty;
+      contMob.innerHTML = msgEmpty;
+      return;
+    }
+
+    bloques.forEach(blq => {
+      let itemsHtml = '';
+      blq.items.forEach(it => {
+        const badgeClass = it.completado ? 'badge-aprobado' : 'badge-pendiente';
+        const stTxt = it.completado ? 'APROBADO' : 'PENDIENTE';
+
+        itemsHtml += `
+          <div class="attendance-row">
+            <div>
+              <span class="attendance-title">${it.nombre}</span>
+            </div>
+            <span class="badge-status ${badgeClass}">${stTxt}</span>
+          </div>
+        `;
+      });
+
+      const blockBox = `
+        <div style="margin-bottom: 20px;">
+          <div style="font-weight: 800; font-size: 14px; color: #005b92; margin-bottom: 8px;">${blq.bloque}</div>
+          ${itemsHtml}
+        </div>
+      `;
+
+      contDesk.innerHTML += blockBox;
+      contMob.innerHTML += blockBox;
+    });
   }
 
-  function limpiarSpotlights() {
-    document.querySelectorAll('.tour-spotlight-active').forEach(el => el.classList.remove('tour-spotlight-active'));
-  }
+  function navegarA(vista) {
+    document.getElementById('vistaInicio').classList.add('oculto');
+    document.getElementById('vistaHombria').classList.add('oculto');
+    document.getElementById('vistaFundamentos').classList.add('oculto');
+    document.getElementById('vistaRecursos').classList.add('oculto');
+    document.getElementById('vistaCuenta').classList.add('oculto');
+    document.getElementById('vistaEscaner').classList.add('oculto');
 
-  function finalizarTour() {
-    limpiarSpotlights();
-    document.getElementById('tourOverlay').classList.remove('active');
-    document.getElementById('tourCard').classList.add('oculto');
-    esNuevoUsuario = false;
-  }
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
 
-  function construirCarruselAnuncios(anunciosRaw) {
-    const esMovil = window.innerWidth < 768;
-    
-    listaAnuncios = anunciosRaw.map(item => ({
-      nombre: item.nombre,
-      imagen: esMovil ? (item.imagenMovil || item.imagenEscritorio) : (item.imagenEscritorio || item.imagenMovil),
-      link: item.link
-    }));
-
-    const slidesContainer = document.getElementById('slidesContainer');
-    const dotsContainer = document.getElementById('dotsContainer');
-    
-    slidesContainer.innerHTML = '';
-    dotsContainer.innerHTML = '';
-
-    listaAnuncios.forEach((item, idx) => {
-      const img = document.createElement('img');
-      img.src = item.imagen;
-      img.className = 'carousel-slide' + (idx === 0 ? ' active' : '');
-      img.alt = item.nombre || ('Anuncio ' + (idx + 1));
-      
-      if (item.
+    if (vista === 'inicio') {
+      document.getElementById('vistaInicio').classList.remove('oculto');
+      document.
