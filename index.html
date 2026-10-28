@@ -37,67 +37,37 @@
       margin: 0; padding: 0; border: none; outline: none;
       line-height: 0;
     }
-    .carousel-slide {
-      width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; border: none;
-    }
+    .carousel-slide { width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; border: none; }
     .carousel-slide.active { display: block; width: 100%; height: 100%; }
     .carousel-indicators {
       position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
       display: flex; gap: 8px; z-index: 10;
     }
-    .dot {
-      width: 32px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; cursor: pointer;
-    }
+    .dot { width: 32px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; cursor: pointer; }
     .dot.active { background: #ffffff; }
 
-    .header-naciones {
-      background-color: #dbe0e4;
-      position: sticky; top: 0; z-index: 100;
-      margin: 0; border: none;
-    }
-    .header-inner {
-      max-width: 1080px; margin: 0 auto; padding: 0 20px;
-      display: flex; justify-content: space-between; align-items: flex-end;
-      height: 52px;
-    }
-
+    .header-naciones { background-color: #dbe0e4; position: sticky; top: 0; z-index: 100; margin: 0; border: none; }
+    .header-inner { max-width: 1080px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: flex-end; height: 52px; }
     .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px; }
     .img-logo-naciones { height: 32px; width: auto; display: block; object-fit: contain; }
 
-    .nav-desktop {
-      display: flex; align-items: flex-end; gap: 2px; height: 100%;
-    }
+    .nav-desktop { display: flex; align-items: flex-end; gap: 2px; height: 100%; }
     .nav-btn {
       padding: 10px 22px; border: 0; background: transparent; font-size: 13.5px; font-weight: 700;
-      color: #18232d; cursor: pointer; border-radius: 24px 24px 0 0;
-      transition: all 0.2s ease; margin-bottom: 0;
+      color: #18232d; cursor: pointer; border-radius: 24px 24px 0 0; transition: all 0.2s ease; margin-bottom: 0;
     }
-
-    .nav-btn.active {
-      background-color: #ffffff;
-      color: #000000;
-      padding-top: 12px;
-      box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
-    }
+    .nav-btn.active { background-color: #ffffff; color: #000000; padding-top: 12px; box-shadow: 0 -4px 10px rgba(0,0,0,0.03); }
 
     .header-naciones-mobile {
-      background-color: #dbe0e4;
-      position: sticky; top: 0; z-index: 90;
-      padding: 10px 16px;
-      display: flex; justify-content: center; align-items: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      background-color: #dbe0e4; position: sticky; top: 0; z-index: 90; padding: 10px 16px;
+      display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
 
-    .drawer-overlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.5); z-index: 200; display: none;
-    }
+    .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 200; display: none; }
     .drawer-overlay.activo { display: block; }
-
     .drawer-menu {
-      position: fixed; top: 0; left: -270px; width: 270px; height: 100vh;
-      background: #ffffff; z-index: 201; transition: left 0.3s ease;
-      display: flex; flex-direction: column; box-shadow: 4px 0 16px rgba(0,0,0,0.15);
+      position: fixed; top: 0; left: -270px; width: 270px; height: 100vh; background: #ffffff; z-index: 201;
+      transition: left 0.3s ease; display: flex; flex-direction: column; box-shadow: 4px 0 16px rgba(0,0,0,0.15);
     }
     .drawer-menu.activo { left: 0; }
     .drawer-header { background: #005b92; color: white; padding: 24px 16px; font-weight: bold; }
@@ -106,16 +76,11 @@
     .contenedor { max-width: 1080px; margin: 32px auto; padding: 0 20px; }
 
     .profile-card-desktop {
-      background: #ffffff; border-radius: 24px; 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
+      background: #ffffff; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
       overflow: hidden; display: flex; flex-direction: column; position: relative; margin-bottom: 32px;
     }
-    .profile-card-header {
-      background: #005b92; color: #ffffff; padding: 20px 32px; font-size: 24px; font-weight: 800;
-    }
-    .profile-card-body {
-      display: grid; grid-template-columns: 1fr 300px; padding: 28px 32px; gap: 24px; align-items: center;
-    }
+    .profile-card-header { background: #005b92; color: #ffffff; padding: 20px 32px; font-size: 24px; font-weight: 800; }
+    .profile-card-body { display: grid; grid-template-columns: 1fr 300px; padding: 28px 32px; gap: 24px; align-items: center; }
 
     .program-summary-item { margin-bottom: 20px; }
     .program-summary-title { font-size: 15px; font-weight: 800; color: #18232d; margin-bottom: 6px; }
@@ -125,28 +90,26 @@
 
     .qr-card-float {
       background: #ffffff; border-radius: 20px; padding: 16px; text-align: center;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1); border: 1px solid #eef2f5;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1); border: 1px solid #eef2f5; position: relative; z-index: 5;
     }
     .qr-card-float img { width: 180px; height: 180px; display: block; margin: 0 auto; }
     .qr-card-float .qr-num { font-size: 14px; font-style: italic; font-weight: 600; margin-top: 8px; }
 
     .user-name-pill {
-      background: #005b92; color: #ffffff;
-      border-radius: 30px; font-weight: 800; font-size: 18px;
-      text-align: center; padding: 14px 20px; margin: 8px 0 20px;
-      box-shadow: 0 4px 14px rgba(0,91,146,0.25); letter-spacing: -0.2px;
+      background: #005b92; color: #ffffff; border-radius: 30px; font-weight: 800; font-size: 18px;
+      text-align: center; padding: 14px 20px; margin: 8px 0 20px; box-shadow: 0 4px 14px rgba(0,91,146,0.25);
     }
 
     .qr-card-mobile {
       background: #ffffff; border-radius: 28px; padding: 28px 20px 20px; text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eef2f5; margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eef2f5; margin-bottom: 24px; position: relative; z-index: 5;
     }
     .qr-card-mobile img { width: 220px; height: 220px; display: block; margin: 0 auto; }
-    .qr-card-mobile .qr-num { font-size: 16px; font-weight: 600; color: #18232d; margin-top: 14px; letter-spacing: 1px; font-style: italic; }
+    .qr-card-mobile .qr-num { font-size: 16px; font-weight: 600; color: #18232d; margin-top: 14px; font-style: italic; }
 
     .summary-card-mobile {
       background: #ffffff; border-radius: 28px; padding: 24px 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eef2f5; margin-bottom: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eef2f5; margin-bottom: 24px; position: relative; z-index: 5;
     }
     .summary-title { font-size: 16px; font-weight: 800; color: #18232d; margin-bottom: 6px; }
     .summary-sub-text { font-size: 13.5px; color: #4a5764; margin-bottom: 4px; }
@@ -155,8 +118,7 @@
     .img-logo-hombria { height: 64px; width: auto; object-fit: contain; }
 
     .card-rounded-gray {
-      background: #dfe4e8; border-radius: 24px; padding: 20px 28px; margin-bottom: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      background: #dfe4e8; border-radius: 24px; padding: 20px 28px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
     .next-lesson-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
     .next-lesson-sub { font-size: 14px; color: #33414d; }
@@ -169,23 +131,18 @@
     .pill-tab {
       flex: 1; padding: 14px; border-radius: 30px; border: 0; font-size: 14px; font-weight: 800;
       color: #ffffff; background: #5a646e; cursor: pointer; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: background 0.2s ease;
     }
     .pill-tab.active { background: #8a2a2a; }
 
     .progress-bar-track { width: 100%; height: 8px; background: #ffffff; border-radius: 4px; overflow: hidden; margin-top: 8px; }
     .progress-bar-fill { height: 100%; background: #8a2a2a; border-radius: 4px; }
 
-    .attendance-row {
-      display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #cbd2d8;
-    }
+    .attendance-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #cbd2d8; }
     .attendance-row:last-child { border-bottom: 0; }
     .attendance-title { font-size: 14px; display: block; color: #18232d; font-weight: 700; }
     .attendance-sub { font-size: 12px; color: #71808e; display: block; margin-top: 2px; }
 
-    .badge-status {
-      padding: 6px 16px; border-radius: 16px; font-size: 11px; font-weight: 800; text-transform: uppercase;
-    }
+    .badge-status { padding: 6px 16px; border-radius: 16px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
     .badge-falta { background: #fce4e4; color: #a52828; }
     .badge-presente { background: #d8f3e1; color: #176b3a; }
     .badge-retardo { background: #fef0cd; color: #895b00; }
@@ -216,22 +173,39 @@
     input:focus, select:focus { outline: none; border-color: #005b92; }
 
     .phone-input-group { display: flex; align-items: center; gap: 8px; }
-    .phone-select-prefix {
-      width: 120px !important; flex-shrink: 0; font-weight: 700; color: #005b92; background: #eef2f5;
-    }
+    .phone-select-prefix { width: 120px !important; flex-shrink: 0; font-weight: 700; color: #005b92; background: #eef2f5; }
 
     .btn-submit { width: 100%; margin-top: 22px; background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
     .btn-secondary { width: 100%; margin-top: 10px; background: #eef2f5; color: #005b92; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 800; border: 0; cursor: pointer; }
     .btn-logout { width: 100%; margin-top: 20px; background: #a52828; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
 
-    .toggle-auth-link {
-      text-align: center; margin-top: 18px; font-size: 13.5px; color: #005b92; font-weight: 700; cursor: pointer; text-decoration: underline;
-    }
+    .toggle-auth-link { text-align: center; margin-top: 18px; font-size: 13.5px; color: #005b92; font-weight: 700; cursor: pointer; text-decoration: underline; }
 
-    .success-badge-box {
-      background: #f0f7fc; border: 2px dashed #005b92; border-radius: 20px; padding: 20px; text-align: center; margin: 20px 0;
-    }
+    .success-badge-box { background: #f0f7fc; border: 2px dashed #005b92; border-radius: 20px; padding: 20px; text-align: center; margin: 20px 0; }
     .reg-number-big { font-size: 38px; font-weight: 900; color: #005b92; letter-spacing: 2px; margin: 8px 0; }
+
+    /* ESTILOS PARA EL TUTORIAL / ONBOARDING TOUR */
+    .tour-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.75); z-index: 2000; display: none;
+      backdrop-filter: blur(2px);
+    }
+    .tour-overlay.active { display: block; }
+    
+    .tour-card {
+      position: fixed; z-index: 2001; background: #ffffff; border-radius: 20px; padding: 20px;
+      width: 88%; max-width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      left: 50%; transform: translateX(-50%); transition: all 0.3s ease; text-align: center;
+    }
+    .tour-card h3 { margin: 0 0 8px 0; font-size: 17px; color: #005b92; font-weight: 800; }
+    .tour-card p { margin: 0 0 16px 0; font-size: 13.5px; color: #4a5764; line-height: 1.4; }
+    .tour-btn { background: #005b92; color: #fff; border: 0; padding: 10px 20px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; width: 100%; }
+    
+    .tour-spotlight-active {
+      z-index: 2001 !important; position: relative !important;
+      box-shadow: 0 0 0 8px #005b92, 0 0 20px rgba(0,0,0,0.5) !important;
+      border-radius: 20px !important; background: #ffffff !important;
+    }
 
     .desktop-only { display: block; }
     .mobile-only { display: none; }
@@ -256,6 +230,14 @@
   </style>
 </head>
 <body>
+
+<!-- OVERLAY ONBOARDING TOUR -->
+<div id="tourOverlay" class="tour-overlay"></div>
+<div id="tourCard" class="tour-card oculto">
+  <h3 id="tourTitle">¡Bienvenido!</h3>
+  <p id="tourText">Te mostramos rápidamente cómo usar tu portal.</p>
+  <button class="tour-btn" id="tourNextBtn" onclick="avanzarTour()">Entendido 👍</button>
+</div>
 
 <!-- HERO CAROUSEL BANNER -->
 <div class="hero-carousel oculto" id="heroCarousel">
@@ -449,7 +431,7 @@
               </div>
             </div>
 
-            <div class="qr-card-float">
+            <div class="qr-card-float" id="targetQrDesktop">
               <img id="qrImgDesktop" src="" alt="Código QR">
               <div class="qr-num" id="qrNumDesktop">--</div>
             </div>
@@ -460,12 +442,12 @@
       <div class="mobile-only">
         <div class="user-name-pill" id="userNamePillMobile">Cargando...</div>
 
-        <div class="qr-card-mobile">
+        <div class="qr-card-mobile" id="targetQrMobile">
           <img id="qrImgMobile" src="" alt="Código QR">
           <div class="qr-num" id="qrNumMobile">--</div>
         </div>
 
-        <div class="summary-card-mobile">
+        <div class="summary-card-mobile" id="targetSummaryMobile">
           <div style="margin-bottom: 22px;">
             <div class="summary-title" id="sumHombriaNivelMobile">Hombría al Máximo - Nivel 1</div>
             <div class="program-progress-track">
@@ -688,6 +670,9 @@
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
   let usuarioSesion = null;
   let datosUltimoRegistroExitoso = null;
+  let esNuevoUsuario = false;
+  let tourPaso = 0;
+
   let listaAnuncios = [];
   let slideIndex = 0;
   let timerCarrusel = null;
@@ -804,6 +789,7 @@
             registro: res.registro,
             nacimiento: res.nacimiento || nacTxt
           };
+          esNuevoUsuario = true;
 
           document.getElementById('exitoNumRegistro').textContent = res.registro;
           document.getElementById('seccionRegistroUsuario').classList.add('oculto');
@@ -833,7 +819,6 @@
   function autoIniciarSesionPostRegistro() {
     if (!datosUltimoRegistroExitoso) return;
     document.getElementById('seccionExitoRegistro').classList.add('oculto');
-    document.getElementById('seccionLogin').classList.remove('oculto');
     ejecutarLogin(datosUltimoRegistroExitoso.registro, datosUltimoRegistroExitoso.nacimiento);
   }
 
@@ -862,6 +847,63 @@
 
     cargarDatosEnPantalla(res);
     navegarA('inicio');
+
+    if (esNuevoUsuario) {
+      setTimeout(iniciarTourGuiado, 600);
+    }
+  }
+
+  /* SISTEMA DE TUTORIAL ONBOARDING TOUR */
+  function iniciarTourGuiado() {
+    tourPaso = 1;
+    document.getElementById('tourOverlay').classList.add('active');
+    document.getElementById('tourCard').classList.remove('oculto');
+    actualizarPasoTour();
+  }
+
+  function actualizarPasoTour() {
+    limpiarSpotlights();
+    const esMovil = window.innerWidth < 768;
+    const card = document.getElementById('tourCard');
+    const title = document.getElementById('tourTitle');
+    const text = document.getElementById('tourText');
+    const btn = document.getElementById('tourNextBtn');
+
+    if (tourPaso === 1) {
+      title.textContent = '📌 Tu Código QR Personal';
+      text.textContent = 'Presenta este código QR en cada sesión para registrar tu asistencia de forma automática.';
+      const target = esMovil ? document.getElementById('targetQrMobile') : document.getElementById('targetQrDesktop');
+      if (target) target.classList.add('tour-spotlight-active');
+      card.style.top = esMovil ? '60%' : '35%';
+      btn.textContent = 'Siguiente →';
+
+    } else if (tourPaso === 2) {
+      title.textContent = '📘 Pestañas Hombría y Fundamentos';
+      text.textContent = 'Desde aquí podrás consultar tus asistencias registradas y los niveles que vas aprobando.';
+      const target = esMovil ? document.getElementById('bottomNav') : document.getElementById('headerNacionesDesktop');
+      if (target) target.classList.add('tour-spotlight-active');
+      card.style.top = esMovil ? '30%' : '20%';
+      btn.textContent = 'Entendido 👍';
+
+    } else {
+      finalizarTour();
+    }
+  }
+
+  function avanzarTour() {
+    tourPaso++;
+    actualizarPasoTour();
+  }
+
+  function limpiarSpotlights() {
+    document.querySelectorAll('.tour-spotlight-active').forEach(el => el.classList.remove('tour-spotlight-active'));
+  }
+
+  function finalizarTour() {
+    limpiarSpotlights();
+    document.getElementById('tourOverlay').classList.remove('active');
+    document.getElementById('tourCard').classList.add('oculto');
+    esNuevoUsuario = false;
   }
 
   function construirCarruselAnuncios(anunciosRaw) {
@@ -922,7 +964,6 @@
   function cargarDatosEnPantalla(res) {
     const nombreFull = ((res.nombre || '') + ' ' + (res.apellidos || '')).trim();
     
-    // 1. MI CUENTA
     document.getElementById('accNombreCompleto').textContent = nombreFull || 'N/A';
     document.getElementById('accCampus').textContent = res.campus || 'N/A';
     document.getElementById('accRegistro').textContent = res.registro || 'N/A';
@@ -930,7 +971,6 @@
     document.getElementById('accCorreo').textContent = res.correo || 'No registrado';
     document.getElementById('accTelefono').textContent = res.telefono || 'No registrado';
 
-    // 2. HEADERS
     const dHeader = document.getElementById('userNombreHeader');
     if (dHeader) dHeader.textContent = nombreFull;
     const mPill = document.getElementById('userNamePillMobile');
@@ -938,14 +978,12 @@
     const dDrawer = document.getElementById('drawerNombreUser');
     if (dDrawer) dDrawer.textContent = res.nombre || 'NACIONES';
 
-    // 3. QR CODES
     const qrUrl = 'https://quickchart.io/qr?text=' + encodeURIComponent(res.registro) + '&size=260&margin=1';
     document.getElementById('qrImgDesktop').src = qrUrl;
     document.getElementById('qrNumDesktop').textContent = res.registro;
     document.getElementById('qrImgMobile').src = qrUrl;
     document.getElementById('qrNumMobile').textContent = res.registro;
 
-    // 4. PRÓXIMAS LECCIONES
     if (res.proximaLeccion) {
       if (res.proximaLeccion.HOMBRIA) {
         const h = res.proximaLeccion.HOMBRIA;
@@ -963,17 +1001,14 @@
       }
     }
 
-    // 5. ASISTENCIAS
     if (res.asistencias) {
       renderizarListaAsistencias('HOMBRIA', res.asistencias.HOMBRIA || []);
       renderizarListaAsistencias('FUNDAMENTOS', res.asistencias.FUNDAMENTOS || []);
     }
 
-    // 6. PROGRESO DE NIVELES / BLOQUES
     renderizarListaProgreso('HOMBRIA', res.progresoHombria || []);
     renderizarListaProgreso('FUNDAMENTOS', res.progresoFundamentos || []);
 
-    // 7. PERMISOS VOLUNTARIO
     const rol = String(res.rol || '').toUpperCase();
     const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
     const itemReg = document.getElementById('itemRegistro');
@@ -1179,6 +1214,8 @@
     localStorage.removeItem('naciones_sesion');
     usuarioSesion = null;
     datosUltimoRegistroExitoso = null;
+    esNuevoUsuario = false;
+    
     const hDesk = document.getElementById('headerNacionesDesktop');
     if (hDesk) hDesk.classList.add('oculto');
     const hMob = document.getElementById('headerNacionesMobile');
