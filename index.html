@@ -185,15 +185,51 @@
     .success-badge-box { background: #f0f7fc; border: 2px dashed #005b92; border-radius: 20px; padding: 20px; text-align: center; margin: 20px 0; }
     .reg-number-big { font-size: 38px; font-weight: 900; color: #005b92; letter-spacing: 2px; margin: 8px 0; }
 
+    /* ESTILOS MODAL DIVIDIDO PROPUESTA */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.6); z-index: 3000; display: none;
-      align-items: center; justify-content: center; backdrop-filter: blur(3px);
+      background: rgba(0, 0, 0, 0.65); z-index: 3000; display: none;
+      align-items: center; justify-content: center; backdrop-filter: blur(4px);
     }
     .modal-overlay.active { display: flex; }
-    .modal-card {
-      background: #ffffff; border-radius: 24px; padding: 28px; width: 90%; max-width: 480px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto;
+    
+    .modal-card-split {
+      background: #ffffff; border-radius: 28px; overflow: hidden; width: 92%; max-width: 840px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3); display: grid; grid-template-columns: 1fr 1fr;
+      position: relative; max-height: 90vh;
+    }
+
+    .modal-close-btn {
+      position: absolute; top: 16px; right: 20px; font-size: 24px; font-weight: 800;
+      color: #52606d; cursor: pointer; z-index: 20; background: rgba(255,255,255,0.8);
+      width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .modal-split-left {
+      background: #e4e8eb; padding: 36px 32px; display: flex; flex-direction: column;
+      justify-content: space-between; overflow-y: auto;
+    }
+
+    .modal-split-right {
+      background: #ffffff; padding: 32px; display: flex; align-items: center;
+      justify-content: center; overflow: hidden;
+    }
+
+    .modal-logo-prog { height: 42px; width: auto; object-fit: contain; display: block; margin-bottom: 20px; }
+
+    .btn-inscribirme-modal {
+      background: #8a2a2a; color: #ffffff; border: none; padding: 14px 40px;
+      border-radius: 30px; font-size: 16px; font-weight: 800; cursor: pointer;
+      align-self: center; margin-top: 24px; box-shadow: 0 6px 16px rgba(138,42,42,0.35);
+      transition: all 0.2s ease;
+    }
+    .btn-inscribirme-modal:hover { transform: translateY(-2px); background: #a52828; }
+
+    .placeholder-fundamentos-box {
+      width: 220px; height: 300px; background: #dfe4e8; border-radius: 16px;
+      border: 2px dashed #a0abb6; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 20px; text-align: center;
     }
 
     .desktop-only { display: block; }
@@ -213,6 +249,12 @@
       }
       .attendance-title { font-size: 15px; font-weight: 800; }
       .attendance-sub { font-size: 12.5px; color: #52606d; margin-top: 3px; }
+
+      .modal-card-split {
+        grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; width: 95%;
+      }
+      .modal-split-right { order: -1; padding: 24px 20px 10px; }
+      .modal-split-left { padding: 20px 24px 28px; }
     }
 
     .oculto { display: none !important; }
@@ -220,29 +262,42 @@
 </head>
 <body>
 
-<!-- MODAL DE INSCRIPCIÓN Y DESGLOSE -->
+<!-- MODAL DE INSCRIPCIÓN DISEÑO PROPUESTA -->
 <div id="modalInscripcion" class="modal-overlay">
-  <div class="modal-card">
-    <h3 style="margin-top: 0; color: #005b92; font-size: 18px;" id="modalTituloCurso">Detalles del Curso</h3>
-    
-    <div style="background: #f0f7fc; border-radius: 12px; padding: 14px; margin: 12px 0;">
-      <strong style="font-size: 13px; color: #52606d; display: block; text-transform: uppercase;">Tus Niveles Aprobados:</strong>
-      <div id="modalNivelesAprobados" style="font-size: 13.5px; color: #18232d; font-weight: 700; margin-top: 4px;">-</div>
+  <div class="modal-card-split">
+    <div class="modal-close-btn" onclick="cerrarModalInscripcion()">✕</div>
+
+    <!-- PANEL IZQUIERDO -->
+    <div class="modal-split-left">
+      <div>
+        <img id="modalLogoPrograma" src="" alt="Programa" class="modal-logo-prog">
+        
+        <h2 id="modalTituloCurso" style="font-size: 22px; font-weight: 800; color: #18232d; margin: 0 0 12px;">
+          Nivel 1: Hombría Al Máximo
+        </h2>
+
+        <p id="modalDescripcionCurso" style="font-size: 14px; color: #33414d; line-height: 1.5; margin: 0 0 16px;">
+          Cargando información del curso...
+        </p>
+
+        <div id="modalBoxLibro" class="oculto" style="background: rgba(255,255,255,0.6); padding: 10px 14px; border-radius: 12px; border: 1px solid #cbd2d8; margin-bottom: 16px;">
+          <strong style="font-size: 11px; color: #005b92; text-transform: uppercase; display: block;">📖 Libro de Lectura:</strong>
+          <span id="modalTextoLibro" style="font-size: 13px; font-weight: 700; color: #18232d;">-</span>
+        </div>
+      </div>
+
+      <button class="btn-inscribirme-modal" id="btnConfirmarInscripcionModal">Inscribirme</button>
     </div>
 
-    <div style="background: #eef2f5; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
-      <strong style="font-size: 13px; color: #005b92; display: block; text-transform: uppercase;">Siguiente Nivel Sugerido:</strong>
-      <div id="modalProximoNivel" style="font-size: 15px; color: #005b92; font-weight: 800; margin-top: 2px;">-</div>
-    </div>
-
-    <label style="margin-top: 0;">Descripción del Curso:</label>
-    <p id="modalDescripcionCurso" style="font-size: 13.5px; color: #52606d; line-height: 1.5; margin-bottom: 20px;">
-      Cargando información...
-    </p>
-
-    <div style="display: flex; gap: 10px;">
-      <button class="btn-secondary" style="margin: 0; flex: 1;" onclick="cerrarModalInscripcion()">Cancelar</button>
-      <button class="btn-submit" style="margin: 0; flex: 1;" id="btnConfirmarInscripcionModal">Inscribirme</button>
+    <!-- PANEL DERECHO -->
+    <div class="modal-split-right">
+      <img id="modalImgPortada" src="" alt="Portada del libro" style="max-width: 260px; width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0px 12px 20px rgba(0,0,0,0.25));" class="oculto">
+      
+      <div id="modalPlaceholderPortada" class="placeholder-fundamentos-box oculto">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="#71808e" style="margin-bottom: 12px;"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+        <strong id="modalPlaceholderTitulo" style="font-size: 14px; color: #33414d;">Fundamentos</strong>
+        <span style="font-size: 11px; color: #71808e; margin-top: 6px;">Programa de Discipulado</span>
+      </div>
     </div>
   </div>
 </div>
@@ -484,7 +539,7 @@
       </div>
 
       <section id="seccionOfertaInscripciones" class="card-rounded-gray" style="background: #ffffff; border: 2px solid #005b92; margin-top: 20px;">
-        <h3 style="margin-top: 0; color: #005b92; font-size: 18px;">✍️ Inscripciones Abiertas</h3>
+        <h3 style="margin-top: 0; color: #005b92; font-size: 18px;">Inscripciones Abiertas</h3>
         <p style="font-size: 13.5px; color: #52606d; margin-bottom: 16px;">
           Cursos disponibles para tu campus y nivel actual:
         </p>
@@ -680,7 +735,7 @@
     <span>Recursos</span>
   </button>
   <button class="bottom-nav-item" id="bnavCuenta" onclick="navegarA('cuenta')">
-    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
     <span>Mi cuenta</span>
   </button>
 </nav>
@@ -953,7 +1008,7 @@
               <strong style="color: #005b92; font-size: 14px; display: block;">${item.cursoNivel}</strong>
               <span style="font-size: 12px; color: #52606d;">📅 ${item.horario} | Campus: ${item.campus}</span>
             </div>
-            <button class="btn-submit" style="width: auto; margin: 0; padding: 8px 16px; font-size: 12px;" onclick="abrirModalInscripcion('${item.idOferta}', '${progTipo}')">Inscripción</button>
+            <button class="btn-submit" style="width: auto; margin: 0; padding: 8px 16px; font-size: 12px;" onclick="abrirModalInscripcion('${item.idOferta}', '${progTipo}')">Más Información</button>
           </div>
         `;
 
@@ -967,21 +1022,47 @@
 
     let curso = null;
     if (progTipo === 'HOMBRIA') {
-      curso = datosOfertaCargada.ofertaHombria.find(c => c.idOferta === idOferta);
+      curso = (datosOfertaCargada.ofertaHombria || []).find(c => c.idOferta === idOferta);
     } else {
-      curso = datosOfertaCargada.ofertaFundamentos.find(c => c.idOferta === idOferta);
+      curso = (datosOfertaCargada.ofertaFundamentos || []).find(c => c.idOferta === idOferta);
     }
 
     if (!curso) return;
 
     idOfertaSeleccionada = idOferta;
 
+    const logoImg = document.getElementById('modalLogoPrograma');
+    if (progTipo === 'HOMBRIA') {
+      logoImg.src = 'https://lh3.googleusercontent.com/d/1ueR5IQ38o-7XbWV7K6_21WpReyjaAY3H';
+      logoImg.alt = 'Hombría al Máximo';
+    } else {
+      logoImg.src = 'https://lh3.googleusercontent.com/d/1ihlxSR7LNWOzcT8breTYLqqWZ7eaCz-v';
+      logoImg.alt = 'Fundamentos';
+    }
+
     document.getElementById('modalTituloCurso').textContent = curso.cursoNivel;
-    document.getElementById('modalProximoNivel').textContent = curso.cursoNivel;
     document.getElementById('modalDescripcionCurso').textContent = curso.descripcion || 'Sin descripción disponible.';
 
-    const listaAprobados = curso.nivelesAprobados && curso.nivelesAprobados.length > 0 ? curso.nivelesAprobados.join(', ') : 'Ninguno (Nuevo Ingreso)';
-    document.getElementById('modalNivelesAprobados').textContent = listaAprobados;
+    const boxLibro = document.getElementById('modalBoxLibro');
+    if (curso.libroInfo) {
+      document.getElementById('modalTextoLibro').textContent = curso.libroInfo;
+      boxLibro.classList.remove('oculto');
+    } else {
+      boxLibro.classList.add('oculto');
+    }
+
+    const imgPortada = document.getElementById('modalImgPortada');
+    const placeholderPortada = document.getElementById('modalPlaceholderPortada');
+
+    if (curso.imagenUrl) {
+      imgPortada.src = curso.imagenUrl;
+      imgPortada.classList.remove('oculto');
+      placeholderPortada.classList.add('oculto');
+    } else {
+      imgPortada.classList.add('oculto');
+      placeholderPortada.classList.remove('oculto');
+      document.getElementById('modalPlaceholderTitulo').textContent = curso.cursoNivel;
+    }
 
     document.getElementById('btnConfirmarInscripcionModal').onclick = () => procesarInscripcion();
 
