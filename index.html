@@ -61,6 +61,7 @@
     .header-naciones-mobile {
       background-color: #dbe0e4; position: sticky; top: 0; z-index: 90; padding: 10px 16px;
       display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      position: relative;
     }
 
     .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 200; display: none; }
@@ -268,10 +269,13 @@
 </header>
 
 <header class="header-naciones-mobile mobile-only oculto" id="headerNacionesMobile">
+  <button onclick="abrirDrawer()" style="background:none; border:none; padding:0; cursor:pointer; position:absolute; left:16px;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#18232d"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+  </button>
   <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones" style="height: 30px; width: auto; object-fit: contain;">
 </header>
 
-<div id="drawerOverlay" class="drawer-overlay"></div>
+<div id="drawerOverlay" class="drawer-overlay" onclick="cerrarDrawer()"></div>
 <aside id="drawerMenu" class="drawer-menu">
   <div class="drawer-header" id="drawerNombreUser">NACIONES</div>
   <div class="drawer-item" onclick="navegarA('inicio'); cerrarDrawer();">INICIO</div>
@@ -687,20 +691,49 @@
   let datosOfertaCargada = null;
   let idOfertaSeleccionada = null;
   let ultimoRegistroCreado = null;
+  let html5QrcodeScanner = null;
+  let carruselInterval = null;
 
-  // AUTO-FORMATO CORREGIDO PARA FECHAS (DD/MM/AAAA)
+  // NORMALIZADOR FLEXIBLE DE FECHAS CLIENTE
+  function normalizarFechaInputCliente(nacTxt) {
+    if (!nacTxt) return null;
+    let str = nacTxt.trim();
+    let partes = str.split(/[\/\-\.]/);
+    if (partes.length === 3) {
+      if (partes[0].length === 4) {
+        return `${partes[0]}-${partes[1].padStart(2, '0')}-${partes[2].padStart(2, '0')}`;
+      } else {
+        const d = partes[0].padStart(2, '0');
+        const m = partes[1].padStart(2, '0');
+        const a = partes[2].length === 2 ? '20' + partes[2] : partes[2];
+        return `${a}-${m}-${d}`;
+      }
+    }
+    let digitos = str.replace(/\D/g, '');
+    if (digitos.length === 8) {
+      let d = digitos.substring(0, 2);
+      let m = digitos.substring(2, 4);
+      let a = digitos.substring(4, 8);
+      return `${a}-${m}-${d}`;
+    }
+    return null;
+  }
+
+  // AUTO-FORMATO DINÁMICO PARA FECHAS (DD/MM/AAAA)
   document.querySelectorAll('.input-fecha-mask').forEach(input => {
     input.addEventListener('input', (e) => {
       let val = e.target.value.replace(/\D/g, '');
       if (val.length > 8) val = val.substring(0, 8);
       let formatted = '';
       if (val.length > 0) {
-        formatted += val.substring(0, 2);
-        if (val.length >= 3) {
-          formatted += '/' + val.substring(2, 4);
-          if (val.length >= 5) {
-            formatted += '/' + val.substring(4, 8);
-          }
+        if (val.length <= 2) {
+          formatted = val;
+          if (val.length === 2 && e.inputType !== 'deleteContentBackward') formatted += '/';
+        } else if (val.length <= 4) {
+          formatted = val.substring(0, 2) + '/' + val.substring(2);
+          if (val.length === 4 && e.inputType !== 'deleteContentBackward') formatted += '/';
+        } else {
+          formatted = val.substring(0, 2) + '/' + val.substring(2, 4) + '/' + val.substring(4);
         }
       }
       e.target.value = formatted;
@@ -741,23 +774,22 @@
   });
 
   function ejecutarLogin(reg, nacTxt) {
-    const partes = nacTxt.split('/');
-    if (partes.length !== 3) {
+    const nacNorm = normalizarFechaInputCliente(nacTxt);
+    if (!nacNorm) {
       document.getElementById('msgLogin').textContent = 'Ingresa una fecha válida (DD/MM/AAAA)';
       return;
     }
-    const nac = partes[2] + '-' + partes[1] + '-' + partes[0];
 
     document.getElementById('msgLogin').textContent = 'Consultando datos...';
 
-    fetch(`${WEB_APP_URL}?action=buscarParticipante&registro=${encodeURIComponent(reg)}&nacimiento=${encodeURIComponent(nac)}`)
+    fetch(`${WEB_APP_URL}?action=buscarParticipante&registro=${encodeURIComponent(reg)}&nacimiento=${encodeURIComponent(nacNorm)}`)
       .then(res => res.json())
       .then(res => {
         if (res && res.encontrado) {
           localStorage.setItem('naciones_sesion', JSON.stringify(res));
           iniciarSesionEnApp(res);
         } else {
-          document.getElementById('msgLogin').textContent = 'Credenciales no encontradas.';
+          document.getElementById('msgLogin').textContent = 'Credenciales no encontradas. Verifica tu # de registro y fecha.';
         }
       })
       .catch(() => {
@@ -779,14 +811,24 @@
     const correo = document.getElementById('regCorreo').value.trim();
     const lada = document.getElementById('regLada').value;
     const telefono = document.getElementById('regTelefono').value.trim();
-    const nacimiento = document.getElementById('regNacimiento').value.trim();
+    const nacimientoRaw = document.getElementById('regNacimiento').value.trim();
     const campus = document.getElementById('regCampus').value;
 
-    if (!nombre || !apPaterno || !estadoCivil || !correo || !telefono || !nacimiento || !campus) {
+    if (!nombre || !apPaterno || !estadoCivil || !correo || !telefono || !nacimientoRaw || !campus) {
       msg.style.color = '#a52828';
       msg.textContent = 'Por favor completa todos los campos requeridos.';
       return;
     }
+
+    const nacNorm = normalizarFechaInputCliente(nacimientoRaw);
+    if (!nacNorm) {
+      msg.style.color = '#a52828';
+      msg.textContent = 'Ingresa una fecha de nacimiento válida (DD/MM/AAAA).';
+      return;
+    }
+
+    const partesNac = nacNorm.split('-');
+    const nacimientoFormateado = `${partesNac[2]}/${partesNac[1]}/${partesNac[0]}`;
 
     btn.disabled = true;
     btn.textContent = 'Creando cuenta...';
@@ -802,7 +844,7 @@
       correo: correo,
       lada: lada,
       telefono: telefono,
-      nacimiento: nacimiento,
+      nacimiento: nacimientoFormateado,
       campus: campus
     });
 
@@ -1162,4 +1204,225 @@
 
     if (vista === 'inicio') {
       document.getElementById('vistaInicio').classList.remove('oculto');
-      document.
+      const bDesk = document.getElementById('navBtnInicio');
+      if (bDesk) bDesk.classList.add('active');
+      const bMob = document.getElementById('bnavInicio');
+      if (bMob) bMob.classList.add('active');
+    } else if (vista === 'hombria') {
+      document.getElementById('vistaHombria').classList.remove('oculto');
+      const bDesk = document.getElementById('navBtnHombria');
+      if (bDesk) bDesk.classList.add('active');
+      const bMob = document.getElementById('bnavHombria');
+      if (bMob) bMob.classList.add('active');
+    } else if (vista === 'fundamentos') {
+      document.getElementById('vistaFundamentos').classList.remove('oculto');
+      const bDesk = document.getElementById('navBtnFundamentos');
+      if (bDesk) bDesk.classList.add('active');
+      const bMob = document.getElementById('bnavFundamentos');
+      if (bMob) bMob.classList.add('active');
+    } else if (vista === 'recursos') {
+      document.getElementById('vistaRecursos').classList.remove('oculto');
+      const bDesk = document.getElementById('navBtnRecursos');
+      if (bDesk) bDesk.classList.add('active');
+      const bMob = document.getElementById('bnavRecursos');
+      if (bMob) bMob.classList.add('active');
+    } else if (vista === 'cuenta') {
+      document.getElementById('vistaCuenta').classList.remove('oculto');
+      const bDesk = document.getElementById('navBtnCuenta');
+      if (bDesk) bDesk.classList.add('active');
+      const bMob = document.getElementById('bnavCuenta');
+      if (bMob) bMob.classList.add('active');
+    } else if (vista === 'escaner') {
+      document.getElementById('vistaEscaner').classList.remove('oculto');
+      iniciarEscaner();
+    }
+  }
+
+  function toggleSubPestana(programa, sub) {
+    if (programa === 'hombria') {
+      const tabAsis = document.getElementById('tabHombriaAsis');
+      const tabProg = document.getElementById('tabHombriaProg');
+      const secAsis = document.getElementById('secHombriaAsis');
+      const secProg = document.getElementById('secHombriaProg');
+      if (sub === 'asis') {
+        tabAsis.classList.add('active');
+        tabProg.classList.remove('active');
+        secAsis.classList.remove('oculto');
+        secProg.classList.add('oculto');
+      } else {
+        tabProg.classList.add('active');
+        tabAsis.classList.remove('active');
+        secProg.classList.remove('oculto');
+        secAsis.classList.add('oculto');
+      }
+    } else if (programa === 'fundamentos') {
+      const tabAsis = document.getElementById('tabFundAsis');
+      const tabProg = document.getElementById('tabFundProg');
+      const secAsis = document.getElementById('secFundAsis');
+      const secProg = document.getElementById('secFundProg');
+      if (sub === 'asis') {
+        tabAsis.classList.add('active');
+        tabProg.classList.remove('active');
+        secAsis.classList.remove('oculto');
+        secProg.classList.add('oculto');
+      } else {
+        tabProg.classList.add('active');
+        tabAsis.classList.remove('active');
+        secProg.classList.remove('oculto');
+        secAsis.classList.add('oculto');
+      }
+    }
+  }
+
+  function abrirDrawer() {
+    document.getElementById('drawerOverlay').classList.add('activo');
+    document.getElementById('drawerMenu').classList.add('activo');
+  }
+
+  function cerrarDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('activo');
+    document.getElementById('drawerMenu').classList.remove('activo');
+  }
+
+  function cerrarSesion() {
+    localStorage.removeItem('naciones_sesion');
+    usuarioSesion = null;
+    datosOfertaCargada = null;
+    idOfertaSeleccionada = null;
+    ultimoRegistroCreado = null;
+
+    detenerEscaner();
+
+    document.getElementById('panelPrincipal').classList.add('oculto');
+    document.getElementById('headerNacionesDesktop').classList.add('oculto');
+    document.getElementById('headerNacionesMobile').classList.add('oculto');
+    document.getElementById('bottomNav').classList.add('oculto');
+    document.getElementById('heroCarousel').classList.add('oculto');
+
+    document.getElementById('inputRegistro').value = '';
+    document.getElementById('inputNacimiento').value = '';
+    document.getElementById('msgLogin').textContent = '';
+
+    mostrarFormularioAuth('login');
+  }
+
+  function construirCarruselAnuncios(anuncios) {
+    const slidesContainer = document.getElementById('slidesContainer');
+    const dotsContainer = document.getElementById('dotsContainer');
+    slidesContainer.innerHTML = '';
+    dotsContainer.innerHTML = '';
+
+    if (carruselInterval) clearInterval(carruselInterval);
+    if (!anuncios || anuncios.length === 0) return;
+
+    const esMovil = window.innerWidth <= 767;
+
+    anuncios.forEach((anuncio, idx) => {
+      const img = document.createElement('img');
+      img.src = esMovil ? anuncio.imagenMovil : anuncio.imagenEscritorio;
+      img.className = 'carousel-slide' + (idx === 0 ? ' active' : '');
+      img.alt = anuncio.nombre || 'Anuncio';
+      if (anuncio.link) {
+        img.onclick = () => window.open(anuncio.link, '_blank');
+      }
+      slidesContainer.appendChild(img);
+
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (idx === 0 ? ' active' : '');
+      dot.onclick = () => setSlideActivo(idx);
+      dotsContainer.appendChild(dot);
+    });
+
+    let currentSlide = 0;
+    function setSlideActivo(index) {
+      const slides = slidesContainer.querySelectorAll('.carousel-slide');
+      const dots = dotsContainer.querySelectorAll('.dot');
+      if (slides.length === 0) return;
+
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+
+      currentSlide = (index + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+
+    if (anuncios.length > 1) {
+      carruselInterval = setInterval(() => {
+        setSlideActivo(currentSlide + 1);
+      }, 5000);
+    }
+  }
+
+  function iniciarEscaner() {
+    const msgBox = document.getElementById('resEscaneoMsg');
+    msgBox.textContent = 'Inicializando cámara...';
+    msgBox.style.color = '#005b92';
+
+    if (html5QrcodeScanner) {
+      html5QrcodeScanner.clear();
+    }
+
+    html5QrcodeScanner = new Html5Qrcode("reader");
+    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+    html5QrcodeScanner.start(
+      { facingMode: "environment" },
+      config,
+      (decodedText) => {
+        detenerEscaner();
+        procesarEscaneoQR(decodedText);
+      },
+      () => {}
+    ).catch(err => {
+      msgBox.textContent = 'No se pudo acceder a la cámara: ' + err;
+      msgBox.style.color = '#a52828';
+    });
+  }
+
+  function detenerEscaner() {
+    if (html5QrcodeScanner) {
+      html5QrcodeScanner.stop().then(() => {
+        html5QrcodeScanner.clear();
+        html5QrcodeScanner = null;
+      }).catch(() => {});
+    }
+  }
+
+  function procesarEscaneoQR(codigoQR) {
+    if (!usuarioSesion) return;
+    const prog = document.getElementById('selectProgEscaner').value;
+    const msgBox = document.getElementById('resEscaneoMsg');
+
+    msgBox.textContent = 'Procesando código QR (' + codigoQR + ')...';
+    msgBox.style.color = '#005b92';
+
+    const params = new URLSearchParams({
+      action: 'registrarAsistencia',
+      registro: codigoQR,
+      programa: prog,
+      campus: usuarioSesion.campus || '11 SUR',
+      voluntarioRegistro: usuarioSesion.registro
+    });
+
+    fetch(`${WEB_APP_URL}?${params.toString()}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.exito) {
+          msgBox.textContent = '✅ ' + data.mensaje;
+          msgBox.style.color = '#176b3a';
+        } else {
+          msgBox.textContent = '❌ ' + (data.mensaje || 'Error al registrar.');
+          msgBox.style.color = '#a52828';
+        }
+        setTimeout(() => iniciarEscaner(), 3000);
+      })
+      .catch(() => {
+        msgBox.textContent = '❌ Error de conexión al registrar asistencia.';
+        msgBox.style.color = '#a52828';
+        setTimeout(() => iniciarEscaner(), 3000);
+      });
+  }
+</script>
+</body>
+</html>
