@@ -27,6 +27,7 @@
       color: #18232d; min-height: 100vh;
     }
 
+    /* CARRUSEL DE IMÁGENES SUPERIOR (CAMBIO CADA 6 SEGUNDOS, SIN TEXTO) */
     .hero-carousel {
       width: 100%;
       aspect-ratio: 3840 / 774;
@@ -165,6 +166,7 @@
     .bottom-nav-item span { font-size: 10px; font-weight: 700; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: center; display: block; }
     .bottom-nav-item.active { color: #005b92 !important; }
 
+    /* ESTILOS EXACTOS DE TU CARD LOGIN ORIGINAL */
     .login-card {
       max-width: 460px; margin: 24px auto; background: #ffffff; border-radius: 24px; padding: 32px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
@@ -274,12 +276,11 @@
 </head>
 <body>
 
-<!-- MODAL DE INSCRIPCIÓN DISEÑO LIMPIO SIN SOMBRA -->
+<!-- MODAL DE INSCRIPCIÓN -->
 <div id="modalInscripcion" class="modal-overlay">
   <div class="modal-card-split">
     <div class="modal-close-btn" onclick="cerrarModalInscripcion()">✕</div>
 
-    <!-- PANEL IZQUIERDO -->
     <div class="modal-split-left">
       <div>
         <img id="modalLogoPrograma" src="" alt="Programa" class="modal-logo-prog">
@@ -301,7 +302,6 @@
       <button class="btn-inscribirme-modal" id="btnConfirmarInscripcionModal">Inscribirme</button>
     </div>
 
-    <!-- PANEL DERECHO (IMAGEN SIN SOMBRA) -->
     <div class="modal-split-right">
       <img id="modalImgPortada" src="" alt="Portada del libro" style="max-width: 240px; width: 100%; height: auto; object-fit: contain; filter: none; border: none; box-shadow: none;" class="oculto">
       
@@ -336,9 +336,18 @@
   </div>
 </div>
 
-<div class="hero-carousel oculto" id="heroCarousel">
-  <div id="slidesContainer"></div>
-  <div class="carousel-indicators" id="dotsContainer"></div>
+<!-- CARRUSEL DE IMÁGENES SUPERIOR (CAMBIA CADA 6 SEGUNDOS, LIMPIO Y SIN TEXTO SOBREPUESTO) -->
+<div class="hero-carousel" id="heroCarousel">
+  <div id="slidesContainer">
+    <img src="https://lh3.googleusercontent.com/d/1uXChojINi15fQnIobWfqhmxiU0PMVNox" class="carousel-slide active" alt="Slide 1">
+    <img src="https://lh3.googleusercontent.com/d/1O-X44ZrTz_nBWgBd1_nmVJq_AmHQHv4Z" class="carousel-slide" alt="Slide 2">
+    <img src="https://lh3.googleusercontent.com/d/1ootXuLdSCG3m39NBzortUmxcbqrc_rbM" class="carousel-slide" alt="Slide 3">
+  </div>
+  <div class="carousel-indicators" id="dotsContainer">
+    <div class="dot active" onclick="setSlideActivo(0)"></div>
+    <div class="dot" onclick="setSlideActivo(1)"></div>
+    <div class="dot" onclick="setSlideActivo(2)"></div>
+  </div>
 </div>
 
 <header class="header-naciones desktop-only oculto" id="headerNacionesDesktop">
@@ -378,7 +387,7 @@
 
 <main class="contenedor">
 
-  <!-- INICIO DE SESIÓN -->
+  <!-- INICIO DE SESIÓN ORIGINAL Y EXACTO -->
   <section class="login-card" id="seccionLogin">
     <div style="text-align: center; margin-bottom: 16px;">
       <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones" style="height: 52px; width: auto; object-fit: contain;">
@@ -782,7 +791,30 @@
   let idOfertaSeleccionada = null;
   let ultimoRegistroCreado = null;
   let html5QrcodeScanner = null;
+
+  // LÓGICA DEL CARRUSEL DE 3 IMÁGENES AUTOMÁTICO CADA 6 SEGUNDOS
+  let currentSlide = 0;
   let carruselInterval = null;
+
+  function setSlideActivo(index) {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    if (!slides.length) return;
+
+    slides.forEach(s => s.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+
+    currentSlide = (index + slides.length) % slides.length;
+    slides[currentSlide].classList.add('active');
+    if (dots[currentSlide]) dots[currentSlide].classList.add('active');
+  }
+
+  function iniciarCarrusel() {
+    if (carruselInterval) clearInterval(carruselInterval);
+    carruselInterval = setInterval(() => {
+      setSlideActivo(currentSlide + 1);
+    }, 6000); // 6 SEGUNDOS EXACTOS
+  }
 
   // TUTORIAL STEPS DATA
   let pasoTutorialActual = 0;
@@ -904,6 +936,8 @@
   }
 
   window.addEventListener('DOMContentLoaded', () => {
+    iniciarCarrusel(); // INICIA CARRUSEL DE 6 SEGUNDOS
+
     const sesionGuardada = localStorage.getItem('naciones_sesion');
     if (sesionGuardada) {
       try {
@@ -1050,13 +1084,6 @@
     document.getElementById('headerNacionesMobile').classList.remove('oculto');
     document.getElementById('bottomNav').classList.remove('oculto');
 
-    if (res.anuncios && res.anuncios.length > 0) {
-      document.getElementById('heroCarousel').classList.remove('oculto');
-      construirCarruselAnuncios(res.anuncios);
-    } else {
-      document.getElementById('heroCarousel').classList.add('oculto');
-    }
-
     cargarDatosEnPantalla(res);
     cargarOfertaInscripciones();
     navegarA('inicio');
@@ -1075,7 +1102,6 @@
 
         const insci = usuarioSesion.inscripcionesActivas || { HOMBRIA: false, FUNDAMENTOS: false };
 
-        // FILTRAR OFERTAS SI EL ALUMNO YA ESTÁ INSCRITO
         let ofertaHombriaFiltrada = res.ofertaHombria || [];
         let ofertaFundamentosFiltrada = res.ofertaFundamentos || [];
 
@@ -1227,7 +1253,6 @@
     document.getElementById('secFundAsis').classList.toggle('oculto', !insci.FUNDAMENTOS);
     document.getElementById('secFundProg').classList.toggle('oculto', insci.FUNDAMENTOS);
 
-    // INFORMACIÓN DE HOMBRÍA
     if (insci.HOMBRIA) {
       const h = res.proximaLeccion ? res.proximaLeccion.HOMBRIA : null;
       const campusHombriaImparticion = insci.campusImparticionHombria || 'NACIONAL';
@@ -1244,7 +1269,6 @@
       document.getElementById('sumHombriaTextoMobile').textContent = textoConfirmacionH;
     }
 
-    // INFORMACIÓN DE FUNDAMENTOS
     if (insci.FUNDAMENTOS) {
       const f = res.proximaLeccion ? res.proximaLeccion.FUNDAMENTOS : null;
       const campusFundImparticion = res.campus || 'General';
@@ -1482,61 +1506,12 @@
     document.getElementById('headerNacionesDesktop').classList.add('oculto');
     document.getElementById('headerNacionesMobile').classList.add('oculto');
     document.getElementById('bottomNav').classList.add('oculto');
-    document.getElementById('heroCarousel').classList.add('oculto');
 
     document.getElementById('inputRegistro').value = '';
     document.getElementById('inputNacimiento').value = '';
     document.getElementById('msgLogin').textContent = '';
 
     mostrarFormularioAuth('login');
-  }
-
-  function construirCarruselAnuncios(anuncios) {
-    const slidesContainer = document.getElementById('slidesContainer');
-    const dotsContainer = document.getElementById('dotsContainer');
-    slidesContainer.innerHTML = '';
-    dotsContainer.innerHTML = '';
-
-    if (carruselInterval) clearInterval(carruselInterval);
-    if (!anuncios || anuncios.length === 0) return;
-
-    const esMovil = window.innerWidth <= 767;
-
-    anuncios.forEach((anuncio, idx) => {
-      const img = document.createElement('img');
-      img.src = esMovil ? anuncio.imagenMovil : anuncio.imagenEscritorio;
-      img.className = 'carousel-slide' + (idx === 0 ? ' active' : '');
-      img.alt = anuncio.nombre || 'Anuncio';
-      if (anuncio.link) {
-        img.onclick = () => window.open(anuncio.link, '_blank');
-      }
-      slidesContainer.appendChild(img);
-
-      const dot = document.createElement('div');
-      dot.className = 'dot' + (idx === 0 ? ' active' : '');
-      dot.onclick = () => setSlideActivo(idx);
-      dotsContainer.appendChild(dot);
-    });
-
-    let currentSlide = 0;
-    function setSlideActivo(index) {
-      const slides = slidesContainer.querySelectorAll('.carousel-slide');
-      const dots = dotsContainer.querySelectorAll('.dot');
-      if (slides.length === 0) return;
-
-      slides.forEach(s => s.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
-
-      currentSlide = (index + slides.length) % slides.length;
-      slides[currentSlide].classList.add('active');
-      dots[currentSlide].classList.add('active');
-    }
-
-    if (anuncios.length > 1) {
-      carruselInterval = setInterval(() => {
-        setSlideActivo(currentSlide + 1);
-      }, 5000);
-    }
   }
 
   function iniciarEscaner() {
