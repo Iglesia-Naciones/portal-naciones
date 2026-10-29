@@ -18,31 +18,31 @@
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
   <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    
-    body {
+    html, body {
       margin: 0; padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: #ffffff; 
-      color: #18232d; min-height: 100vh;
+      color: #18232d;
+      width: 100%; height: 100%;
     }
 
-    /* =========================================================
-       1. DISEÑO SPLIT LAYOUT PARA LOGIN / REGISTRO
-       ========================================================= */
+    /* PÁGINA LOGIN / REGISTRO SIN SCROLL */
     .auth-page {
       display: flex;
-      min-height: 100vh;
-      width: 100%;
+      height: 100vh;
+      width: 100vw;
       background: #f4f7fb;
+      overflow: hidden; /* Evita que baje la página y aparezca la línea blanca */
+      position: fixed;
+      top: 0; left: 0;
     }
 
-    /* COLUMNA IZQUIERDA: CARRUSEL LIMPIO (SOLO IMAGEN POR SÍ SOLA) */
     .auth-hero {
       flex: 1.1;
       position: relative;
       background-color: #0d1b2a;
       overflow: hidden;
+      height: 100vh;
     }
 
     .carousel-bg {
@@ -64,36 +64,32 @@
       opacity: 1;
     }
 
-    /* COLUMNA DERECHA: FORMULARIO CON LOGO OFICIAL A COLOR */
     .auth-form-container {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 32px 20px;
+      padding: 20px;
       background: #f8fafc;
+      height: 100vh;
+      box-sizing: border-box;
     }
 
     .auth-card {
       background: #ffffff;
       border-radius: 24px;
-      padding: 36px 32px;
+      padding: 32px 28px;
       width: 100%;
-      max-width: 450px;
+      max-width: 440px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
       text-align: center;
       border: 1px solid #e2e8f0;
-      max-height: 92vh;
+      max-height: 95vh;
       overflow-y: auto;
     }
 
-    .auth-card::-webkit-scrollbar {
-      width: 6px;
-    }
-    .auth-card::-webkit-scrollbar-thumb {
-      background-color: #cbd5e1;
-      border-radius: 10px;
-    }
+    .auth-card::-webkit-scrollbar { width: 4px; }
+    .auth-card::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
 
     .auth-card-logo {
       display: flex;
@@ -104,7 +100,7 @@
     }
 
     .img-logo-naciones-color {
-      height: 52px;
+      height: 48px;
       width: auto;
       object-fit: contain;
       display: block;
@@ -119,23 +115,23 @@
     }
 
     .auth-card h2 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
       color: #1e293b;
-      margin: 0 0 20px 0;
+      margin: 0 0 18px 0;
     }
 
     .form-group-custom {
       text-align: left;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .form-group-custom label {
       display: block;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       color: #334155;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
 
     .input-icon-box {
@@ -155,7 +151,7 @@
 
     .input-icon-box input, .input-icon-box select {
       width: 100%;
-      padding: 11px 14px 11px 42px;
+      padding: 10px 14px 10px 42px;
       border: 1px solid #cbd5e1;
       border-radius: 12px;
       font-size: 13.5px;
@@ -171,83 +167,35 @@
       box-shadow: 0 0 0 3px rgba(0, 91, 146, 0.12);
     }
 
-    .phone-flex-box {
-      display: flex;
-      gap: 8px;
-    }
-
-    .phone-flex-box select {
-      width: 105px !important;
-      padding-left: 10px !important;
-      font-weight: 700;
-      color: #005b92;
-      background: #f1f5f9;
-      flex-shrink: 0;
-    }
-
-    .phone-flex-box input {
-      flex: 1;
-    }
+    .phone-flex-box { display: flex; gap: 8px; }
+    .phone-flex-box select { width: 105px !important; padding-left: 10px !important; font-weight: 700; color: #005b92; background: #f1f5f9; flex-shrink: 0; }
+    .phone-flex-box input { flex: 1; }
 
     .btn-auth-primary {
       width: 100%;
-      padding: 13px 20px;
+      padding: 12px 20px;
       border: none;
       border-radius: 12px;
       font-weight: 800;
-      font-size: 15px;
+      font-size: 14.5px;
       cursor: pointer;
       background: #005b92;
       color: #ffffff;
       transition: background 0.2s, transform 0.1s;
-      margin-top: 8px;
+      margin-top: 6px;
       box-shadow: 0 4px 12px rgba(0, 91, 146, 0.2);
     }
 
-    .btn-auth-primary:hover {
-      background: #004570;
-    }
+    .btn-auth-primary:hover { background: #004570; }
+    .btn-auth-primary:active { transform: scale(0.99); }
 
-    .btn-auth-primary:active {
-      transform: scale(0.99);
-    }
+    .auth-divider { position: relative; text-align: center; margin: 18px 0 12px; }
+    .auth-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e2e8f0; z-index: 1; }
+    .auth-divider span { position: relative; z-index: 2; background: #ffffff; padding: 0 12px; font-size: 12px; color: #94a3b8; font-weight: 600; }
 
-    .auth-divider {
-      position: relative;
-      text-align: center;
-      margin: 20px 0 14px;
-    }
+    .toggle-auth-text a { color: #005b92; font-weight: 700; font-size: 13px; text-decoration: underline; cursor: pointer; }
 
-    .auth-divider::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 0; right: 0;
-      height: 1px;
-      background: #e2e8f0;
-      z-index: 1;
-    }
-
-    .auth-divider span {
-      position: relative;
-      z-index: 2;
-      background: #ffffff;
-      padding: 0 12px;
-      font-size: 12px;
-      color: #94a3b8;
-      font-weight: 600;
-    }
-
-    .toggle-auth-text a {
-      color: #005b92;
-      font-weight: 700;
-      font-size: 13.5px;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    /* =========================================================
-       2. ESTILOS PLATAFORMA INTERNA
-       ========================================================= */
+    /* PLATAFORMA INTERNA */
     .hero-carousel {
       width: 100%;
       aspect-ratio: 3840 / 774;
@@ -260,10 +208,7 @@
     }
     .carousel-slide { width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; border: none; }
     .carousel-slide.active { display: block; width: 100%; height: 100%; }
-    .carousel-indicators {
-      position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 8px; z-index: 10;
-    }
+    .carousel-indicators { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
     .dot { width: 32px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; cursor: pointer; }
     .dot.active { background: #ffffff; }
 
@@ -337,7 +282,9 @@
     .summary-sub-text { font-size: 13.5px; color: #4a5764; margin-bottom: 4px; }
 
     .course-header-title { text-align: center; margin: 16px 0 28px; }
-    .img-logo-hombria { height: 64px; width: auto; object-fit: contain; }
+
+    /* AQUÍ PUEDES MODIFICAR EL TAMAÑO DE LOS LOGOS DE PROGRAMAS */
+    .img-logo-fundamentos-negro { height: 42px; width: auto; object-fit: contain; }
 
     .card-rounded-gray {
       background: #dfe4e8; border-radius: 24px; padding: 20px 28px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
@@ -440,24 +387,41 @@
       align-items: center; justify-content: center; padding: 20px; text-align: center;
     }
 
-    /* MODAL TUTORIAL */
-    .tutorial-card {
-      background: #ffffff; border-radius: 28px; padding: 32px 28px; width: 92%; max-width: 480px;
-      text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    /* ESTILOS TUTORIAL TIPO SPOTLIGHT */
+    .tutorial-overlay-spotlight {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 10000; pointer-events: auto; display: none;
+      background: rgba(0, 0, 0, 0.7);
     }
-    .tutorial-step-icon { font-size: 48px; margin-bottom: 12px; }
-    .tutorial-step-title { font-size: 20px; font-weight: 800; color: #005b92; margin-bottom: 10px; }
-    .tutorial-step-text { font-size: 14px; color: #52606d; line-height: 1.5; margin-bottom: 24px; }
-    .tutorial-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
-    .tutorial-dot { width: 10px; height: 10px; border-radius: 50%; background: #cbd3d9; }
-    .tutorial-dot.active { background: #005b92; width: 24px; border-radius: 5px; }
+    .tutorial-overlay-spotlight.active { display: block; }
+
+    .tutorial-highlight {
+      position: relative !important;
+      z-index: 10001 !important;
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75), 0 0 20px rgba(0, 91, 146, 0.8) !important;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      background: #ffffff !important;
+    }
+
+    .tutorial-tooltip-card {
+      position: absolute;
+      z-index: 10002;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 24px 20px;
+      width: 320px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
 
     .desktop-only { display: block; }
     .mobile-only { display: none; }
 
     @media (max-width: 850px) {
       .auth-hero { display: none; }
-      .auth-form-container { padding: 20px; }
+      .auth-form-container { padding: 16px; }
     }
 
     @media (max-width: 767px) {
@@ -487,10 +451,31 @@
 </head>
 <body>
 
+<!-- OVERLAY Y TOOLTIP SPOTLIGHT PARA TUTORIAL -->
+<div id="tutorialSpotlightOverlay" class="tutorial-overlay-spotlight"></div>
+<div id="tutorialTooltip" class="tutorial-tooltip-card oculto">
+  <div class="tutorial-step-icon" id="tutIcon" style="font-size: 36px; margin-bottom: 8px;">📱</div>
+  <div class="tutorial-step-title" id="tutTitle" style="font-size: 17px; font-weight: 800; color: #005b92; margin-bottom: 8px;">Título</div>
+  <div class="tutorial-step-text" id="tutText" style="font-size: 13px; color: #52606d; line-height: 1.4; margin-bottom: 16px;">
+    Explicación del paso...
+  </div>
+  
+  <div class="tutorial-dots" style="display:flex; justify-content:center; gap:6px; margin-bottom:14px;">
+    <div class="tutorial-dot active" id="tutDot0" style="width:10px; height:10px; border-radius:50%; background:#cbd3d9;"></div>
+    <div class="tutorial-dot" id="tutDot1" style="width:10px; height:10px; border-radius:50%; background:#cbd3d9;"></div>
+    <div class="tutorial-dot" id="tutDot2" style="width:10px; height:10px; border-radius:50%; background:#cbd3d9;"></div>
+  </div>
+
+  <div style="display: flex; gap: 8px;">
+    <button class="btn-secondary" id="tutBtnPrev" style="margin: 0; flex: 1; padding: 8px; font-size: 12px; display: none;" onclick="cambiarPasoTutorial(-1)">Anterior</button>
+    <button class="btn-submit" id="tutBtnNext" style="margin: 0; flex: 1; padding: 8px; font-size: 12px;" onclick="cambiarPasoTutorial(1)">Siguiente</button>
+  </div>
+</div>
+
 <!-- PÁGINA SPLIT LAYOUT PARA AUTENTICACIÓN (LOGIN Y REGISTRO) -->
 <div id="secAuthSplitPage" class="auth-page">
   
-  <!-- COLUMNA IZQUIERDA: CARRUSEL LIMPIO (SOLO IMAGEN POR SÍ SOLA) -->
+  <!-- COLUMNA IZQUIERDA: CARRUSEL LIMPIO -->
   <div class="auth-hero">
     <div class="carousel-bg">
       <div class="auth-slide active" style="background-image: url('https://lh3.googleusercontent.com/d/1uXChojINi15fQnIobWfqhmxiU0PMVNox');"></div>
@@ -499,7 +484,7 @@
     </div>
   </div>
 
-  <!-- COLUMNA DERECHA: FORMULARIO CON LOGO OFICIAL A COLOR -->
+  <!-- COLUMNA DERECHA: FORMULARIO -->
   <div class="auth-form-container">
     
     <!-- CARD LOGIN -->
@@ -715,29 +700,7 @@
   </div>
 </div>
 
-<!-- MODAL TUTORIAL / GUÍA DE BIENVENIDA -->
-<div id="modalTutorial" class="modal-overlay">
-  <div class="tutorial-card">
-    <div class="tutorial-step-icon" id="tutIcon">📱</div>
-    <div class="tutorial-step-title" id="tutTitle">Tu Código QR Personal</div>
-    <div class="tutorial-step-text" id="tutText">
-      Este es tu pase de entrada digital. Muéstralo en la entrada de cada sesión para que los servidores escaneen y registren tu asistencia en tiempo real.
-    </div>
-    
-    <div class="tutorial-dots">
-      <div class="tutorial-dot active" id="tutDot0"></div>
-      <div class="tutorial-dot" id="tutDot1"></div>
-      <div class="tutorial-dot" id="tutDot2"></div>
-    </div>
-
-    <div style="display: flex; gap: 10px;">
-      <button class="btn-secondary" id="tutBtnPrev" style="margin: 0; flex: 1; display: none;" onclick="cambiarPasoTutorial(-1)">Anterior</button>
-      <button class="btn-submit" id="tutBtnNext" style="margin: 0; flex: 1;" onclick="cambiarPasoTutorial(1)">Siguiente</button>
-    </div>
-  </div>
-</div>
-
-<!-- CARRUSEL DE ANUNCIOS DENTRO DE LA PLATAFORMA (APARECE AL INICIAR SESIÓN) -->
+<!-- CARRUSEL DE ANUNCIOS DENTRO DE LA PLATAFORMA -->
 <div class="hero-carousel oculto" id="heroCarousel">
   <div id="slidesContainer"></div>
   <div class="carousel-indicators" id="dotsContainer"></div>
@@ -915,7 +878,7 @@
 
     <section id="vistaFundamentos" class="oculto">
       <div class="course-header-title">
-        <img src="https://lh3.googleusercontent.com/d/1ihlxSR7LNWOzcT8breTYLqqWZ7eaCz-v" alt="Fundamentos" class="img-logo-hombria">
+        <img src="https://lh3.googleusercontent.com/d/1ihlxSR7LNWOzcT8breTYLqqWZ7eaCz-v" alt="Fundamentos" class="img-logo-fundamentos-negro">
       </div>
 
       <div class="card-rounded-gray" id="boxProxFundamentos">
@@ -1008,7 +971,7 @@
           <strong id="accTelefono">-</strong>
         </div>
 
-        <button class="btn-secondary" style="margin-top: 20px;" onclick="abrirTutorialManual()">❓ Ver Guía del Portal (Tutorial)</button>
+        <button class="btn-secondary" style="margin-top: 20px;" onclick="iniciarTutorialSpotlight(true)">❓ Ver Guía del Portal (Tutorial)</button>
         <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
       </div>
     </section>
@@ -1062,7 +1025,6 @@
   let ultimoRegistroCreado = null;
   let html5QrcodeScanner = null;
 
-  // LÓGICA DE CARRUSELES
   let currentAuthSlide = 0;
   let authCarruselInterval = null;
 
@@ -1079,48 +1041,63 @@
 
   let carruselAnunciosInterval = null;
 
-  // TUTORIAL STEPS DATA
+  // LÓGICA TUTORIAL SPOTLIGHT
   let pasoTutorialActual = 0;
   const pasosTutorial = [
     {
+      targetId: window.innerWidth <= 767 ? 'targetQrMobile' : 'targetQrDesktop',
       icon: '📱',
       title: 'Tu Código QR Personal',
-      text: 'Este es tu pase digital. Muéstralo desde tu teléfono en la entrada para que los servidores registren tu asistencia al momento.'
+      text: 'Este es tu pase digital. Muéstralo en tu teléfono al ingresar a la iglesia para registrar tu asistencia.'
     },
     {
-      icon: '📚',
-      title: 'Seguimiento de Clases y Avance',
-      text: 'En las pestañas de Hombría al Máximo y Fundamentos podrás consultar tus asistencias por fecha, el tema de la lección y tus bloques o niveles aprobados.'
-    },
-    {
+      targetId: 'seccionOfertaInscripciones',
       icon: '✍️',
       title: 'Inscripciones Abiertas',
-      text: 'En la pantalla de Inicio encontrarás los cursos disponibles para tu nivel. Al inscribirte, tu acceso quedará listo y podrás ver el campus donde tomarás tu clase.'
+      text: 'Aquí podrás ver y registrarte en las clases habilitadas según tu nivel actual y campus.'
+    },
+    {
+      targetId: window.innerWidth <= 767 ? 'targetSummaryMobile' : 'boxSummaryHombriaDesktop',
+      icon: '📚',
+      title: 'Tu Avance y Próxima Clase',
+      text: 'En las pestañas de Hombría y Fundamentos podrás ver el desglose de tus asistencias y materias aprobadas.'
     }
   ];
 
   function abrirTutorialSiEsNuevo() {
-    if (!localStorage.getItem('naciones_tutorial_visto')) {
-      pasoTutorialActual = 0;
-      renderizarPasoTutorial();
-      document.getElementById('modalTutorial').classList.add('active');
+    if (!usuarioSesion) return;
+    const key = 'naciones_tutorial_visto_' + usuarioSesion.registro;
+    if (!localStorage.getItem(key)) {
+      iniciarTutorialSpotlight(false);
     }
   }
 
-  function abrirTutorialManual() {
+  function iniciarTutorialSpotlight(esManual) {
     pasoTutorialActual = 0;
+    document.getElementById('tutorialSpotlightOverlay').classList.add('active');
+    document.getElementById('tutorialTooltip').classList.remove('oculto');
     renderizarPasoTutorial();
-    document.getElementById('modalTutorial').classList.add('active');
   }
 
   function cambiarPasoTutorial(delta) {
+    // Limpiar elemento resaltado previo
+    const prevTarget = pasosTutorial[pasoTutorialActual]?.targetId;
+    if (prevTarget) {
+      const el = document.getElementById(prevTarget);
+      if (el) el.classList.remove('tutorial-highlight');
+    }
+
     pasoTutorialActual += delta;
+
     if (pasoTutorialActual >= pasosTutorial.length) {
-      localStorage.setItem('naciones_tutorial_visto', 'true');
-      document.getElementById('modalTutorial').classList.remove('active');
+      if (usuarioSesion) {
+        localStorage.setItem('naciones_tutorial_visto_' + usuarioSesion.registro, 'true');
+      }
+      cerrarTutorialSpotlight();
       return;
     }
     if (pasoTutorialActual < 0) pasoTutorialActual = 0;
+
     renderizarPasoTutorial();
   }
 
@@ -1137,9 +1114,37 @@
       const dot = document.getElementById('tutDot' + i);
       if (dot) dot.classList.toggle('active', i === pasoTutorialActual);
     }
+
+    // Iluminar elemento con Spotlight
+    const targetEl = document.getElementById(data.targetId);
+    if (targetEl) {
+      targetEl.classList.add('tutorial-highlight');
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // Posicionar Tooltip Flotante cerca del elemento
+      const rect = targetEl.getBoundingClientRect();
+      const tooltip = document.getElementById('tutorialTooltip');
+      
+      let topPos = rect.bottom + window.scrollY + 12;
+      if (topPos + 220 > window.innerHeight + window.scrollY) {
+        topPos = rect.top + window.scrollY - 220;
+      }
+
+      tooltip.style.top = Math.max(topPos, 20) + 'px';
+      tooltip.style.left = '50%';
+      tooltip.style.transform = 'translateX(-50%)';
+    }
   }
 
-  // NORMALIZADOR FLEXIBLE DE FECHAS CLIENTE
+  function cerrarTutorialSpotlight() {
+    pasosTutorial.forEach(p => {
+      const el = document.getElementById(p.targetId);
+      if (el) el.classList.remove('tutorial-highlight');
+    });
+    document.getElementById('tutorialSpotlightOverlay').classList.remove('active');
+    document.getElementById('tutorialTooltip').classList.add('oculto');
+  }
+
   function normalizarFechaInputCliente(nacTxt) {
     if (!nacTxt) return null;
     let str = nacTxt.trim();
@@ -1164,7 +1169,6 @@
     return null;
   }
 
-  // AUTO-FORMATO DINÁMICO PARA FECHAS (DD/MM/AAAA)
   document.querySelectorAll('.input-fecha-mask').forEach(input => {
     input.addEventListener('input', (e) => {
       let val = e.target.value.replace(/\D/g, '');
@@ -1212,7 +1216,6 @@
     }
   });
 
-  // INICIO DE SESIÓN
   document.getElementById('formLogin').addEventListener('submit', (e) => {
     e.preventDefault();
     const reg = document.getElementById('inputRegistro').value.trim();
@@ -1244,7 +1247,6 @@
       });
   }
 
-  // CREACIÓN DE NUEVA CUENTA
   document.getElementById('formRegistroNuevo').addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -1355,7 +1357,8 @@
     cargarDatosEnPantalla(res);
     cargarOfertaInscripciones();
     navegarA('inicio');
-    abrirTutorialSiEsNuevo();
+
+    setTimeout(() => abrirTutorialSiEsNuevo(), 600);
   }
 
   function cargarOfertaInscripciones() {
@@ -1427,7 +1430,7 @@
     
     let htmlDescripcion = curso.descripcion || 'Sin descripción disponible.';
     if (curso.minAsistencias || curso.minExamen) {
-      htmlDescripcion += `<br><br><small style="color:#005b92; font-weight:bold;">Requisitos para aprobar:</small><br>`;
+      htmlDescripcion += `<br><br><small style="color:#005b92; font-weight:bold;">Requisitos de aprobación:</small><br>`;
       if (curso.minAsistencias) htmlDescripcion += `• Mínimo de Asistencias: ${curso.minAsistencias}<br>`;
       if (curso.minExamen) htmlDescripcion += `• Calificación Mínima Examen: ${curso.minExamen}`;
     }
