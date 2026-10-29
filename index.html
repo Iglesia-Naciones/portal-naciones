@@ -37,7 +37,7 @@
       background: #f4f7fb;
     }
 
-    /* COLUMNA IZQUIERDA: CARRUSEL LIMPIO (SIN TEXTO NI LOGOS encima) */
+    /* COLUMNA IZQUIERDA: CARRUSEL LIMPIO (SOLO IMAGEN POR SÍ SOLA) */
     .auth-hero {
       flex: 1.1;
       position: relative;
@@ -64,7 +64,7 @@
       opacity: 1;
     }
 
-    /* COLUMNA DERECHA: FORMULARIOS ESTILIZADOS */
+    /* COLUMNA DERECHA: FORMULARIO CON LOGO OFICIAL A COLOR */
     .auth-form-container {
       flex: 1;
       display: flex;
@@ -246,7 +246,7 @@
     }
 
     /* =========================================================
-       2. ESTILOS PLATAFORMA INTERNA (A COLOR)
+       2. ESTILOS PLATAFORMA INTERNA
        ========================================================= */
     .hero-carousel {
       width: 100%;
@@ -490,7 +490,7 @@
 <!-- PÁGINA SPLIT LAYOUT PARA AUTENTICACIÓN (LOGIN Y REGISTRO) -->
 <div id="secAuthSplitPage" class="auth-page">
   
-  <!-- COLUMNA IZQUIERDA: CARRUSEL LIMPIO (SOLO IMAGEN, SIN TEXTO NI OVERLAY) -->
+  <!-- COLUMNA IZQUIERDA: CARRUSEL LIMPIO (SOLO IMAGEN POR SÍ SOLA) -->
   <div class="auth-hero">
     <div class="carousel-bg">
       <div class="auth-slide active" style="background-image: url('https://lh3.googleusercontent.com/d/1uXChojINi15fQnIobWfqhmxiU0PMVNox');"></div>
@@ -499,7 +499,7 @@
     </div>
   </div>
 
-  <!-- COLUMNA DERECHA: FORMULARIO CON LOGO A COLOR Y CAMPOS ESTILIZADOS -->
+  <!-- COLUMNA DERECHA: FORMULARIO CON LOGO OFICIAL A COLOR -->
   <div class="auth-form-container">
     
     <!-- CARD LOGIN -->
@@ -1074,7 +1074,7 @@
       slides[currentAuthSlide].classList.remove('active');
       currentAuthSlide = (currentAuthSlide + 1) % slides.length;
       slides[currentAuthSlide].classList.add('active');
-    }, 6000); // CAMBIA CADA 6 SEGUNDOS
+    }, 6000);
   }
 
   let carruselAnunciosInterval = null;
@@ -1199,7 +1199,7 @@
   }
 
   window.addEventListener('DOMContentLoaded', () => {
-    iniciarCarruselAuth(); // INICIA EL CARRUSEL DEL LOGIN
+    iniciarCarruselAuth();
 
     const sesionGuardada = localStorage.getItem('naciones_sesion');
     if (sesionGuardada) {
@@ -1338,7 +1338,6 @@
   function iniciarSesionEnApp(res) {
     usuarioSesion = res;
 
-    // OCULTA PÁGINA DE AUTH Y MUESTRA LA PLATAFORMA
     document.getElementById('secAuthSplitPage').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.remove('oculto');
     
@@ -1346,7 +1345,6 @@
     document.getElementById('headerNacionesMobile').classList.remove('oculto');
     document.getElementById('bottomNav').classList.remove('oculto');
 
-    // CONSTRUYE Y MUESTRA EL CARRUSEL DE ANUNCIOS INTERNO
     if (res.anuncios && res.anuncios.length > 0) {
       document.getElementById('heroCarousel').classList.remove('oculto');
       construirCarruselAnuncios(res.anuncios);
@@ -1778,7 +1776,6 @@
     document.getElementById('bottomNav').classList.add('oculto');
     document.getElementById('heroCarousel').classList.add('oculto');
 
-    // MUESTRA DE NUEVO LA PÁGINA SPLIT DE LOGIN
     document.getElementById('secAuthSplitPage').classList.remove('oculto');
 
     document.getElementById('inputRegistro').value = '';
