@@ -1427,7 +1427,7 @@
     
     let htmlDescripcion = curso.descripcion || 'Sin descripción disponible.';
     if (curso.minAsistencias || curso.minExamen) {
-      htmlDescripcion += `<br><br><small style="color:#005b92; font-weight:bold;">Requisitos de aprobación:</small><br>`;
+      htmlDescripcion += `<br><br><small style="color:#005b92; font-weight:bold;">Requisitos para aprobar:</small><br>`;
       if (curso.minAsistencias) htmlDescripcion += `• Mínimo de Asistencias: ${curso.minAsistencias}<br>`;
       if (curso.minExamen) htmlDescripcion += `• Calificación Mínima Examen: ${curso.minExamen}`;
     }
