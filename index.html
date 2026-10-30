@@ -35,6 +35,7 @@
       overflow: hidden;
       position: fixed;
       top: 0; left: 0;
+      z-index: 2000;
     }
 
     .auth-hero {
@@ -184,7 +185,19 @@
 
     .toggle-auth-text a { color: #0b4d82; font-weight: 700; font-size: 13px; text-decoration: underline; cursor: pointer; }
 
-    /* NAVEGACIÓN SUPERIOR BLANCA (PROPUESTA DE INTERFAZ) */
+    /* SECCIÓN CARRUSEL BANNERS (ARRIBA DE LA NAVEGACIÓN) */
+    .hero-carousel {
+      width: 100%; aspect-ratio: 3840 / 774; max-height: 480px;
+      background: transparent; position: relative; overflow: hidden;
+      margin: 0; padding: 0; border: none; outline: none; line-height: 0;
+    }
+    .carousel-slide { width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; border: none; }
+    .carousel-slide.active { display: block; width: 100%; height: 100%; }
+    .carousel-indicators { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
+    .dot { width: 32px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; cursor: pointer; }
+    .dot.active { background: #ffffff; }
+
+    /* NAVEGACIÓN SUPERIOR BLANCA DEBAJO DE LOS ANUNCIOS */
     .header-naciones {
       background-color: #ffffff;
       position: sticky; top: 0; z-index: 100; margin: 0;
@@ -192,23 +205,23 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
     .header-inner {
-      max-width: 1080px; margin: 0 auto; padding: 0 20px;
+      max-width: 1200px; margin: 0 auto; padding: 0 20px;
       display: flex; justify-content: space-between; align-items: center; height: 56px;
     }
     .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .img-logo-naciones-header { height: 28px; width: auto; display: block; object-fit: contain; }
 
-    .nav-desktop { display: flex; align-items: center; gap: 12px; height: 100%; }
+    .nav-desktop { display: flex; align-items: center; gap: 8px; height: 100%; }
     .nav-btn {
-      padding: 16px 14px; border: 0; background: transparent; font-size: 13.5px; font-weight: 600;
-      color: #64748b; cursor: pointer; position: relative; transition: all 0.2s ease;
+      padding: 16px 12px; border: 0; background: transparent; font-size: 13px; font-weight: 600;
+      color: #64748b; cursor: pointer; position: relative; transition: all 0.2s ease; white-space: nowrap;
     }
     .nav-btn:hover { color: #0b4d82; }
     .nav-btn.active {
       color: #0b4d82; font-weight: 800;
     }
     .nav-btn.active::after {
-      content: ''; position: absolute; bottom: 0; left: 10px; right: 10px;
+      content: ''; position: absolute; bottom: 0; left: 8px; right: 8px;
       height: 3px; background-color: #0b4d82; border-radius: 3px 3px 0 0;
     }
 
@@ -230,21 +243,9 @@
 
     .contenedor { max-width: 1080px; margin: 24px auto; padding: 0 20px; }
 
-    /* SECCIÓN CARRUSEL BANNERS */
-    .hero-carousel {
-      width: 100%; aspect-ratio: 3840 / 774; max-height: 480px;
-      background: transparent; position: relative; overflow: hidden;
-      margin: 0; padding: 0; border: none; outline: none; line-height: 0;
-    }
-    .carousel-slide { width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; border: none; }
-    .carousel-slide.active { display: block; width: 100%; height: 100%; }
-    .carousel-indicators { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
-    .dot { width: 32px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; cursor: pointer; }
-    .dot.active { background: #ffffff; }
-
-    /* TITULOS PRINCIPALES DE SECCIÓN DE LA INTERFAZ (FOTOS) */
+    /* TITULOS PRINCIPALES DE SECCIÓN */
     .view-title-main {
-      font-size: 26px; font-weight: 900; text-align: center; color: #1e293b;
+      font-size: 24px; font-weight: 900; text-align: center; color: #1e293b;
       margin: 10px 0 24px; text-transform: uppercase; letter-spacing: 0.5px;
     }
 
@@ -295,7 +296,6 @@
     /* VISTAS DE CURSOS */
     .course-header-title { text-align: center; margin: 10px 0 20px; }
     .img-logo-hombria-negro { height: 44px; width: auto; object-fit: contain; }
-    .img-logo-fundamentos-negro { height: 44px; width: auto; object-fit: contain; }
 
     /* TARJETA PRÓXIMA LECCIÓN */
     .box-next-lesson-hombria {
@@ -359,12 +359,18 @@
     }
     .resource-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
     .resource-card-left { display: flex; align-items: center; gap: 18px; flex: 1; }
-    .resource-logo { height: 38px; width: auto; object-fit: contain; }
+    
+    .resource-logo { 
+      height: 22px; 
+      max-width: 110px; 
+      object-fit: contain; 
+    }
+
     .resource-title { font-size: 15px; font-weight: 800; color: #18232d; margin-bottom: 4px; }
     .resource-desc { font-size: 13px; color: #64748b; line-height: 1.4; }
     .resource-download-arrow { font-size: 20px; font-weight: bold; color: #94a3b8; padding-left: 10px; }
 
-    /* ESTILOS MI CUENTA (FOTO 1 Y FOTO 2) */
+    /* ESTILOS MI CUENTA */
     .menu-card-item {
       background: #ffffff; border-radius: 20px; padding: 18px 24px; margin-bottom: 14px;
       box-shadow: 0 4px 14px rgba(0,0,0,0.04); border: 1px solid #e2e8f0;
@@ -385,6 +391,14 @@
       font-size: 15px; font-weight: 800; color: #a52828;
     }
 
+    .account-detail-item {
+      padding: 12px 0; border-bottom: 1px solid #f0f4f8;
+    }
+    .account-detail-item:last-child { border-bottom: none; }
+    .account-label {
+      font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 2px;
+    }
+
     .contact-footer-box {
       text-align: center; margin-top: 36px; padding-top: 20px; border-top: 1px solid #e2e8f0;
     }
@@ -396,9 +410,10 @@
       position: fixed; bottom: 0; left: 0; right: 0; width: 100%; height: 64px;
       background: #ffffff; border-top: 1px solid #e0e6ed; z-index: 1000;
       box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08); padding-bottom: env(safe-area-inset-bottom, 0px);
+      display: flex; justify-content: space-around; align-items: center;
     }
     .bottom-nav-item {
-      flex: 1 1 0px !important; width: 20% !important; max-width: 20% !important; height: 100% !important;
+      flex: 1 1 0px !important; height: 100% !important;
       display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important;
       background: transparent !important; border: none !important; outline: none !important; padding: 2px 0 !important; margin: 0 !important;
       color: #71808e; cursor: pointer; text-decoration: none;
@@ -410,7 +425,7 @@
     .btn-submit { width: 100%; margin-top: 22px; background: #0b4d82; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
     .btn-secondary { width: 100%; margin-top: 10px; background: #eef2f5; color: #0b4d82; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 800; border: 0; cursor: pointer; }
 
-    /* MODAL DE INSCRIPCIÓN Y AVISOS */
+    /* MODALES Y OVERLAYS */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.65); z-index: 3000; display: none;
@@ -451,6 +466,25 @@
     }
     .btn-inscribirme-modal:hover { transform: translateY(-2px); background: #a52828; }
 
+    /* ESTILOS ESCÁNER RÁPIDO Y FEEDBACK VISUAL */
+    .qr-scanner-overlay-toast {
+      position: absolute;
+      top: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(23, 107, 58, 0.95);
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      z-index: 100;
+      display: flex; align-items: center; gap: 10px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .qr-scanner-overlay-toast.visible {
+      opacity: 1; transform: translateX(-50%) translateY(10px);
+    }
+
     .desktop-only { display: block; }
     .mobile-only { display: none; }
 
@@ -462,24 +496,15 @@
     @media (max-width: 767px) {
       .desktop-only { display: none !important; }
       .mobile-only { display: block; }
-      #bottomNav.mobile-only:not(.oculto) {
-        display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-around !important; align-items: center !important;
-      }
       body { padding-bottom: 80px; background-color: #f4f6f8; }
       .contenedor { max-width: 500px; margin: 0 auto; padding: 16px; }
       .hero-carousel { aspect-ratio: 1080 / 573; max-height: 280px; }
       .attendance-row {
         background: #ffffff; border-radius: 18px; padding: 16px 18px; margin-bottom: 10px; border-bottom: none; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
       }
-      .attendance-title { font-size: 14.5px; font-weight: 800; }
-      .attendance-sub { font-size: 12px; color: #52606d; margin-top: 3px; }
-
-      .modal-card-split {
-        grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; width: 95%;
-      }
+      .modal-card-split { grid-template-columns: 1fr; max-height: 90vh; overflow-y: auto; width: 95%; }
       .modal-split-right { order: -1; padding: 24px 20px 10px; }
       .modal-split-left { padding: 20px 24px 28px; }
-
       .resource-card { flex-direction: column; align-items: flex-start; gap: 10px; }
       .resource-download-arrow { align-self: flex-end; margin-top: -20px; }
     }
@@ -659,10 +684,6 @@
         <span style="font-size: 12px; color: #71808e; display: block;">Guarda este número para ingresar al portal en el futuro.</span>
       </div>
 
-      <p style="font-size: 12px; color: #52606d; line-height: 1.4; margin-bottom: 20px;">
-        📧 También hemos enviado una copia de tus datos a tu correo electrónico.
-      </p>
-
       <button class="btn-secondary" onclick="copiarNumeroRegistro()">📋 Copiar mi # de Registro</button>
       <button class="btn-auth-primary" id="btnAutoLogin" onclick="autoIniciarSesionPostRegistro()">🚀 Ingresar a Mi Portal</button>
     </div>
@@ -707,40 +728,97 @@
   </div>
 </div>
 
-<!-- MODALES INFORMATIVOS (TÉRMINOS Y PRIVACIDAD) -->
-<div id="modalTerminos" class="modal-overlay">
-  <div style="background: #ffffff; border-radius: 24px; padding: 28px; width: 90%; max-width: 550px; max-height: 80vh; overflow-y: auto; position: relative;">
-    <div class="modal-close-btn" onclick="document.getElementById('modalTerminos').classList.remove('active')">✕</div>
-    <h3 style="margin-top:0; color:#0b4d82; font-size:20px;">Términos y Condiciones</h3>
-    <p style="font-size:13.5px; color:#4a5764; line-height:1.6;">
-      Al utilizar el Portal de Discipulado de Iglesia Naciones, te comprometes a hacer un uso personal y confidencial de tu cuenta. Tu código QR y tu número de registro son personales e intransferibles para llevar el control de tus asistencias a clases y actividades del programa.
-    </p>
+<!-- MODAL CREAR GRUPO (COORDINADOR_HOMBRIA) -->
+<div id="modalCrearGrupo" class="modal-overlay">
+  <div style="background: #ffffff; border-radius: 24px; padding: 28px; width: 90%; max-width: 480px; position: relative;">
+    <div class="modal-close-btn" onclick="cerrarModalCrearGrupo()">✕</div>
+    <h3 style="margin-top:0; color:#0b4d82; font-size:20px;">Crear Nuevo Grupo</h3>
+    <p style="font-size: 13px; color: #64748b;">Ingresa el número de registro del líder y el nivel correspondiente.</p>
+    
+    <div class="form-group-custom">
+      <label>Número de Registro del Líder *</label>
+      <div class="input-icon-box">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <input id="inputRegLiderCrear" type="text" placeholder="Ej. 10025" onblur="validarLiderPorRegistro()">
+      </div>
+      <div id="msgLiderVerificado" style="font-size:12px; font-weight:bold; color:#176b3a; margin-top:4px;"></div>
+    </div>
+
+    <div class="form-group-custom">
+      <label>Nivel de Hombría al Máximo *</label>
+      <div class="input-icon-box">
+        <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+        <select id="selectNivelGrupoCrear">
+          <option value="Hombría al Máximo (Nivel 1)">Hombría al Máximo (Nivel 1)</option>
+          <option value="Hombría al Máximo (Nivel 2)">Hombría al Máximo (Nivel 2)</option>
+          <option value="Hombría al Máximo (Nivel 3)">Hombría al Máximo (Nivel 3)</option>
+          <option value="Hombría al Máximo (Nivel 4)">Hombría al Máximo (Nivel 4)</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="msgCrearGrupoModal" style="margin-top: 10px; font-weight: bold; font-size: 13px;"></div>
+
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn-secondary" onclick="cerrarModalCrearGrupo()" style="margin:0;">Cancelar</button>
+      <button class="btn-auth-primary" id="btnGuardarCrearGrupo" onclick="ejecutarGuardarGrupo()" style="margin:0;">Guardar Grupo</button>
+    </div>
   </div>
 </div>
 
-<div id="modalPrivacidad" class="modal-overlay">
-  <div style="background: #ffffff; border-radius: 24px; padding: 28px; width: 90%; max-width: 550px; max-height: 80vh; overflow-y: auto; position: relative;">
-    <div class="modal-close-btn" onclick="document.getElementById('modalPrivacidad').classList.remove('active')">✕</div>
-    <h3 style="margin-top:0; color:#0b4d82; font-size:20px;">Aviso de Privacidad</h3>
-    <p style="font-size:13.5px; color:#4a5764; line-height:1.6;">
-      Iglesia Naciones recaba tus datos personales (nombre, correo, teléfono y campus) exclusivamente para fines de registro académico, acompañamiento espiritual y comunicación directa del proceso de discipulado. Tus datos están protegidos y no serán compartidos con terceros.
-    </p>
+<!-- MODAL AGREGAR INTEGRANTE A MI GRUPO (LIDER_HOMBRIA) -->
+<div id="modalAgregarIntegrante" class="modal-overlay">
+  <div style="background: #ffffff; border-radius: 24px; padding: 28px; width: 90%; max-width: 460px; position: relative;">
+    <div class="modal-close-btn" onclick="cerrarModalAgregarIntegrante()">✕</div>
+    <h3 style="margin-top:0; color:#0b4d82; font-size:20px;">Agregar Integrante al Grupo</h3>
+    <p style="font-size: 12.5px; color: #64748b;">Introduce el número de registro exacto de la persona.</p>
+
+    <div class="form-group-custom">
+      <label>Número de Registro *</label>
+      <div class="input-icon-box">
+        <input id="inputRegistroIntegrante" type="text" placeholder="Ej. 10048">
+        <button class="btn-auth-primary" style="width:auto; margin:0 0 0 8px; padding:8px 16px;" onclick="buscarIntegrantePorRegistroExacto()">Buscar</button>
+      </div>
+    </div>
+
+    <div id="boxResultadoConfirmacionPersona" class="oculto" style="background:#f0f7fc; border:1px solid #0b4d82; border-radius:12px; padding:12px; margin-top:12px;">
+      <span style="font-size:11px; color:#64748b; font-weight:800; display:block;">PERSONA ENCONTRADA:</span>
+      <strong id="lblNombrePersonaConfirmar" style="font-size:15px; color:#18232d; display:block; margin-top:2px;">-</strong>
+      <span id="lblCampusPersonaConfirmar" style="font-size:12px; color:#52606d;">-</span>
+    </div>
+
+    <div id="msgAgregarIntegranteModal" style="margin-top: 12px; font-weight: bold; font-size: 13px;"></div>
+
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn-secondary" onclick="cerrarModalAgregarIntegrante()" style="margin:0;">Cancelar</button>
+      <button class="btn-auth-primary oculto" id="btnConfirmarAgregarIntegrante" onclick="ejecutarAgregarIntegranteAGrupo()" style="margin:0;">Confirmar e Incorporar</button>
+    </div>
   </div>
 </div>
 
-<!-- HEADER NAVEGACIÓN DESKTOP (RESPECTANDO ORDEN DE MENÚ) -->
+<!-- BANNER CARRUSEL DE ANUNCIOS -->
+<div class="hero-carousel oculto" id="heroCarousel">
+  <div id="slidesContainer"></div>
+  <div class="carousel-indicators" id="dotsContainer"></div>
+</div>
+
+<!-- HEADER NAVEGACIÓN DESKTOP DEBAJO DE LOS ANUNCIOS -->
 <header class="header-naciones desktop-only oculto" id="headerNacionesDesktop">
   <div class="header-inner">
     <div class="brand-box" onclick="navegarA('inicio')">
       <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones Logo" class="img-logo-naciones-header">
     </div>
 
-    <!-- ORDEN REQUERIDO: Inicio -> Fundamentos -> Hombría al Máximo -> Recursos -> Mi cuenta -->
     <nav class="nav-desktop">
-      <button class="nav-btn active" id="navBtnInicio" onclick="navegarA('inicio')">Inicio</button>
+      <button class="nav-btn" id="navBtnInicio" onclick="navegarA('inicio')">Inicio</button>
       <button class="nav-btn" id="navBtnFundamentos" onclick="navegarA('fundamentos')">Fundamentos</button>
       <button class="nav-btn" id="navBtnHombria" onclick="navegarA('hombria')">Hombría al Máximo</button>
       <button class="nav-btn" id="navBtnRecursos" onclick="navegarA('recursos')">Recursos</button>
+      <button class="nav-btn oculto" id="navBtnGrupos" onclick="navegarA('grupos')">Grupos</button>
+      <button class="nav-btn oculto" id="navBtnMiGrupo" onclick="navegarA('migrupo')">Mi Grupo</button>
+      <button class="nav-btn oculto" id="navBtnAdmin" onclick="navegarA('admin')">Estadísticas / Personas</button>
+      <button class="nav-btn oculto" id="navBtnEscaner" onclick="navegarA('escaner')">Registro</button>
+      <button class="nav-btn oculto" id="navBtnMaster" onclick="navegarA('master')">Master Naciones</button>
       <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
     </nav>
   </div>
@@ -756,20 +834,18 @@
 <div id="drawerOverlay" class="drawer-overlay" onclick="cerrarDrawer()"></div>
 <aside id="drawerMenu" class="drawer-menu">
   <div class="drawer-header" id="drawerNombreUser">NACIONES</div>
-  <div class="drawer-item" onclick="navegarA('inicio'); cerrarDrawer();">INICIO</div>
-  <div class="drawer-item" onclick="navegarA('fundamentos'); cerrarDrawer();">FUNDAMENTOS</div>
-  <div class="drawer-item" onclick="navegarA('hombria'); cerrarDrawer();">HOMBRÍA AL MÁXIMO</div>
-  <div class="drawer-item" onclick="navegarA('recursos'); cerrarDrawer();">RECURSOS</div>
-  <div class="drawer-item" onclick="navegarA('cuenta'); cerrarDrawer();">MI CUENTA</div>
-  <div class="drawer-item oculto" id="itemRegistro" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO (ESCANEAR QR)</div>
+  <div class="drawer-item" id="ditemInicio" onclick="navegarA('inicio'); cerrarDrawer();">INICIO</div>
+  <div class="drawer-item" id="ditemFundamentos" onclick="navegarA('fundamentos'); cerrarDrawer();">FUNDAMENTOS</div>
+  <div class="drawer-item" id="ditemHombria" onclick="navegarA('hombria'); cerrarDrawer();">HOMBRÍA AL MÁXIMO</div>
+  <div class="drawer-item" id="ditemRecursos" onclick="navegarA('recursos'); cerrarDrawer();">RECURSOS</div>
+  <div class="drawer-item oculto" id="ditemGrupos" onclick="navegarA('grupos'); cerrarDrawer();">GRUPOS</div>
+  <div class="drawer-item oculto" id="ditemMiGrupo" onclick="navegarA('migrupo'); cerrarDrawer();">MI GRUPO</div>
+  <div class="drawer-item oculto" id="ditemAdmin" onclick="navegarA('admin'); cerrarDrawer();">ESTADÍSTICAS / PERSONAS</div>
+  <div class="drawer-item oculto" id="ditemEscaner" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO (ESCANEAR QR)</div>
+  <div class="drawer-item oculto" id="ditemMaster" onclick="navegarA('master'); cerrarDrawer();">MASTER NACIONES</div>
+  <div class="drawer-item" id="ditemCuenta" onclick="navegarA('cuenta'); cerrarDrawer();">MI CUENTA</div>
   <div class="drawer-item" onclick="cerrarSesion(); cerrarDrawer();" style="color: #a52828; margin-top: auto;">CERRAR SESIÓN</div>
 </aside>
-
-<!-- BANNER CARRUSEL -->
-<div class="hero-carousel oculto" id="heroCarousel">
-  <div id="slidesContainer"></div>
-  <div class="carousel-indicators" id="dotsContainer"></div>
-</div>
 
 <main class="contenedor">
   <div id="panelPrincipal" class="oculto">
@@ -983,23 +1059,156 @@
       </div>
     </section>
 
-    <!-- VISTA MI CUENTA (PANTALLA PRINCIPAL) -->
+    <!-- VISTA GRUPOS (COORDINADOR_HOMBRIA & ADMIN_GLOBAL) -->
+    <section id="vistaGrupos" class="oculto">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="view-title-main" style="margin:0;">GRUPOS DE HOMBRÍA</div>
+        <button class="btn-auth-primary" style="width: auto; margin:0;" onclick="abrirModalCrearGrupo()">+ Crear Grupo</button>
+      </div>
+
+      <div id="contenedorListaGruposCoordinador">
+        <div style="text-align:center; color:#71808e; padding:20px;">Cargando grupos asignados...</div>
+      </div>
+
+      <!-- DETALLE DE UN GRUPO SELECCIONADO -->
+      <div id="secDetalleGrupoCoordinador" class="oculto" style="margin-top: 24px;">
+        <div class="card-rounded-gray" style="border: 2px solid #0b4d82;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <h3 id="lblDetalleGrupoNombre" style="margin:0; color:#0b4d82; font-size:18px;">-</h3>
+              <span id="lblDetalleGrupoNivel" style="font-size:13px; color:#52606d; font-weight:700;">-</span>
+            </div>
+            <button class="btn-secondary" style="width:auto; margin:0; background:#fce4e4; color:#a52828;" onclick="confirmarEliminarGrupoActual()">Eliminar Grupo</button>
+          </div>
+
+          <hr style="border:0; border-top:1px solid #e2e8f0; margin:16px 0;">
+
+          <h4 style="margin:0 0 12px; font-size:14px; color:#18232d;">Integrantes del Grupo</h4>
+          <div id="contenedorIntegrantesGrupoDetalle"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA MI GRUPO (LIDER_HOMBRIA) -->
+    <section id="vistaMiGrupo" class="oculto">
+      <div class="view-title-main">MI GRUPO DE HOMBRÍA</div>
+
+      <div class="card-rounded-gray" style="background:#ffffff; border-left:6px solid #8a2a2a; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h3 id="lblMiGrupoTitulo" style="margin:0; font-size:18px; color:#18232d;">Grupo</h3>
+            <span id="lblMiGrupoNivel" style="font-size:13px; color:#52606d; font-weight:700;">-</span>
+          </div>
+          <button class="btn-auth-primary" style="width:auto; margin:0; padding:10px 18px;" onclick="abrirModalAgregarIntegrante()">+ Agregar Integrante</button>
+        </div>
+      </div>
+
+      <div class="card-rounded-gray">
+        <h4 style="margin-top:0; color:#18232d; font-size:15px;">Integrantes y Asistencias Semanales</h4>
+        <div id="contenedorIntegrantesMiGrupo">
+          <div style="text-align:center; color:#71808e; padding:20px;">Cargando integrantes de tu grupo...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA ESTADÍSTICAS Y PERSONAS (PASTOR, ADMIN_CAMPUS, ADMIN_GLOBAL) -->
+    <section id="vistaAdmin" class="oculto">
+      <div class="view-title-main">ESTADÍSTICAS Y PERSONAS</div>
+
+      <div class="pill-tabs-nav" style="margin-bottom: 20px;">
+        <button class="pill-tab active-fundamentos" id="btnAdminTabMetricas" onclick="toggleSubAdmin('metricas')">📊 Estadísticas</button>
+        <button class="pill-tab" id="btnAdminTabPersonas" onclick="toggleSubAdmin('personas')">👤 Personas</button>
+      </div>
+
+      <!-- SUB-SECCIÓN 1: MÉTRICAS -->
+      <div id="secAdminMetricas">
+        <div class="card-rounded-gray" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+          <select id="adminFiltroPrograma" onchange="cargarMetricasAdminUI()" style="padding: 10px; border-radius: 10px;">
+            <option value="FUNDAMENTOS">Fundamentos</option>
+            <option value="HOMBRIA">Hombría al Máximo</option>
+          </select>
+          <input type="text" id="adminFiltroCurso" placeholder="Filtrar por curso..." oninput="cargarMetricasAdminUI()" style="padding: 10px; border-radius: 10px; border: 1px solid #ccc;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0;">
+          <div class="card-rounded-gray" style="text-align: center;">
+            <span style="font-size: 12px; color: #64748b; font-weight: bold;">TOTAL INSCRITOS</span>
+            <div id="kpiTotalInscritos" style="font-size: 32px; font-weight: 900; color: #0b4d82;">0</div>
+          </div>
+          <div class="card-rounded-gray" style="text-align: center;">
+            <span style="font-size: 12px; color: #64748b; font-weight: bold;">% ASISTENCIA PROMEDIO</span>
+            <div id="kpiPctAsistencia" style="font-size: 32px; font-weight: 900; color: #176b3a;">0%</div>
+          </div>
+        </div>
+
+        <div class="card-rounded-gray">
+          <h3 style="margin-top: 0; font-size: 16px; color: #18232d;">Lista de Personas Inscritas</h3>
+          <div id="tablaInscritosAdmin"></div>
+        </div>
+      </div>
+
+      <!-- SUB-SECCIÓN 2: EXPEDIENTE PERSONAS -->
+      <div id="secAdminPersonas" class="oculto">
+        <div class="recursos-search-box" style="max-width: 100%; margin-bottom: 20px;">
+          <input type="text" id="inputBuscarPersonaAdmin" placeholder="Ingresa Nombre o # de Registro..." onkeypress="if(event.key==='Enter') buscarPersonaAdmin()">
+          <button class="btn-auth-primary" onclick="buscarPersonaAdmin()" style="width: auto; margin-left: 10px; padding: 10px 20px;">Buscar</button>
+        </div>
+
+        <div id="contenedorExpedientePersona"></div>
+      </div>
+    </section>
+
+    <!-- VISTA ESCÁNER RÁPIDO DE REGISTRO (REGISTRO, PASTOR, ADMIN_CAMPUS, ADMIN_GLOBAL) -->
+    <section id="vistaEscaner" class="oculto">
+      <div class="card-rounded-gray" style="background: #ffffff; text-align: center; position:relative; overflow:hidden;">
+        <div id="scannerToast" class="qr-scanner-overlay-toast">✓ Registrado</div>
+
+        <div style="margin-bottom: 12px; display:flex; justify-content:center; align-items:center; gap:10px;">
+          <label style="font-size:13px; font-weight:bold;">Programa:</label>
+          <select id="selectProgEscaner" style="padding:6px 12px; border-radius:8px;">
+            <option value="HOMBRIA">HOMBRÍA AL MÁXIMO</option>
+            <option value="FUNDAMENTOS">FUNDAMENTOS</option>
+          </select>
+        </div>
+
+        <div id="reader" style="width: 100%; max-width:400px; margin:0 auto; min-height: 280px; background: #000; border-radius: 16px;"></div>
+      </div>
+    </section>
+
+    <!-- VISTA MASTER NACIONES (EXCLUSIVO ADMIN_GLOBAL) -->
+    <section id="vistaMasterNaciones" class="oculto">
+      <div class="view-title-main" style="color:#0b4d82;">MASTER NACIONES</div>
+      <p style="text-align:center; font-size:13px; color:#52606d; margin-top:-16px; margin-bottom:24px;">Administración global de la plataforma, roles y permisos jerárquicos.</p>
+
+      <div class="card-rounded-gray">
+        <h3 style="margin-top:0; font-size:16px; color:#18232d;">Gestión de Roles y Permisos</h3>
+        <div style="display:flex; gap:10px; margin-bottom:16px;">
+          <input id="inputMasterSearchUser" type="text" placeholder="Buscar por # Registro o Nombre..." style="flex:1; padding:10px; border-radius:10px; border:1px solid #cbd5e1;">
+          <button class="btn-auth-primary" style="width:auto; margin:0;" onclick="buscarUsuarioMaster()">Buscar</button>
+        </div>
+
+        <div id="contenedorResultadoMasterUser"></div>
+      </div>
+
+      <div class="card-rounded-gray" style="margin-top:20px;">
+        <h3 style="margin-top:0; font-size:16px; color:#18232d;">Configuraciones de Funciones</h3>
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0;">
+          <div>
+            <strong>Habilitar Calificaciones para Líderes</strong>
+            <small style="display:block; color:#64748b;">Permite que los líderes de grupo capturen calificaciones.</small>
+          </div>
+          <input type="checkbox" id="chkHabilitarCalificacionesGlobal" onchange="guardarToggleCalificacionesMaster(this.checked)" style="transform:scale(1.4);">
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA MI CUENTA -->
     <section id="vistaCuentaMain" class="oculto">
       <div class="view-title-main">MI CUENTA</div>
 
       <div class="section-label-cuenta">MI CUENTA</div>
       <div class="menu-card-item" onclick="mostrarSubvistaCuenta('info')">
         <span>Información Personal</span>
-        <span style="color: #94a3b8;">›</span>
-      </div>
-
-      <div class="section-label-cuenta">ACERCA DE</div>
-      <div class="menu-card-item" onclick="document.getElementById('modalTerminos').classList.add('active')">
-        <span>Términos y condiciones</span>
-        <span style="color: #94a3b8;">›</span>
-      </div>
-      <div class="menu-card-item" onclick="document.getElementById('modalPrivacidad').classList.add('active')">
-        <span>Aviso de privacidad</span>
         <span style="color: #94a3b8;">›</span>
       </div>
 
@@ -1010,20 +1219,12 @@
 
       <div class="contact-footer-box">
         <div class="contact-footer-title">CONTÁCTANOS</div>
-        <div>
-          <a href="https://wa.me/5212228419648" target="_blank" class="contact-footer-item">
-            💬 +52 1 222 841 9648
-          </a>
-        </div>
-        <div>
-          <a href="mailto:discipulado@naciones.org.mx" class="contact-footer-item">
-            ✉️ discipulado@naciones.org.mx
-          </a>
-        </div>
+        <div><a href="https://wa.me/5212228419648" target="_blank" class="contact-footer-item">💬 +52 1 222 841 9648</a></div>
+        <div><a href="mailto:discipulado@naciones.org.mx" class="contact-footer-item">✉️ discipulado@naciones.org.mx</a></div>
       </div>
     </section>
 
-    <!-- SUBVISTA INFORMACIÓN PERSONAL DE MI CUENTA -->
+    <!-- SUBVISTA INFORMACIÓN PERSONAL -->
     <section id="vistaCuentaInfo" class="oculto">
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
         <button class="btn-secondary" style="width: auto; margin: 0; padding: 6px 14px; font-size: 13px;" onclick="mostrarSubvistaCuenta('main')">← Volver</button>
@@ -1032,46 +1233,22 @@
       <div class="card-rounded-gray" style="position: relative;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
           <h2 style="margin: 0; font-size: 20px; color: #0b4d82;">Información Personal</h2>
-          <button id="btnEditarPerfil" onclick="activarModoEdicionPerfil()" style="background: none; border: none; font-size: 20px; cursor: pointer;" title="Editar información">✏️</button>
+          <button id="btnEditarPerfil" onclick="activarModoEdicionPerfil()" style="background: none; border: none; font-size: 20px; cursor: pointer;">✏️</button>
         </div>
 
         <div id="boxPerfilLectura">
-          <div class="account-detail-item">
-            <span class="account-label">NOMBRE</span>
-            <strong id="accNombreCompleto">-</strong>
-          </div>
-
-          <div class="account-detail-item">
-            <span class="account-label">CAMPUS</span>
-            <strong id="accCampus">-</strong>
-          </div>
-
-          <div class="account-detail-item">
-            <span class="account-label"># DE REGISTRO</span>
-            <strong id="accRegistro">-</strong>
-          </div>
-
-          <div class="account-detail-item">
-            <span class="account-label">FECHA DE NACIMIENTO</span>
-            <strong id="accNacimiento">-</strong>
-          </div>
-
-          <div class="account-detail-item">
-            <span class="account-label">CORREO ELECTRÓNICO</span>
-            <strong id="accCorreo">-</strong>
-          </div>
-
-          <div class="account-detail-item">
-            <span class="account-label">TELÉFONO</span>
-            <strong id="accTelefono">-</strong>
-          </div>
+          <div class="account-detail-item"><span class="account-label">NOMBRE</span><strong id="accNombreCompleto">-</strong></div>
+          <div class="account-detail-item"><span class="account-label">CAMPUS</span><strong id="accCampus">-</strong></div>
+          <div class="account-detail-item"><span class="account-label"># DE REGISTRO</span><strong id="accRegistro">-</strong></div>
+          <div class="account-detail-item"><span class="account-label">FECHA DE NACIMIENTO</span><strong id="accNacimiento">-</strong></div>
+          <div class="account-detail-item"><span class="account-label">CORREO ELECTRÓNICO</span><strong id="accCorreo">-</strong></div>
+          <div class="account-detail-item"><span class="account-label">TELÉFONO</span><strong id="accTelefono">-</strong></div>
         </div>
 
         <div id="boxPerfilEdicion" class="oculto">
           <div class="form-group-custom">
             <label>CAMPUS *</label>
             <div class="input-icon-box">
-              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
               <select id="editCampus">
                 <option value="11 Sur">11 Sur</option>
                 <option value="Huejotzingo">Huejotzingo</option>
@@ -1083,10 +1260,7 @@
 
           <div class="form-group-custom">
             <label>CORREO ELECTRÓNICO *</label>
-            <div class="input-icon-box">
-              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-              <input id="editCorreo" type="email" placeholder="ejemplo@correo.com">
-            </div>
+            <div class="input-icon-box"><input id="editCorreo" type="email" placeholder="ejemplo@correo.com"></div>
           </div>
 
           <div class="form-group-custom">
@@ -1095,14 +1269,8 @@
               <select id="editLada">
                 <option value="+52" selected>🇲🇽 +52</option>
                 <option value="+1">🇺🇸/🇨A +1</option>
-                <option value="+54">🇦R +54</option>
-                <option value="+57">🇨O +57</option>
-                <option value="+506">🇨R +506</option>
               </select>
-              <div class="input-icon-box" style="flex: 1;">
-                <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                <input id="editTelefono" type="tel" placeholder="10 dígitos" maxlength="10">
-              </div>
+              <div class="input-icon-box" style="flex: 1;"><input id="editTelefono" type="tel" placeholder="10 dígitos" maxlength="10"></div>
             </div>
           </div>
 
@@ -1116,53 +1284,16 @@
       </div>
     </section>
 
-    <section id="vistaEscaner" class="oculto">
-      <div class="card-rounded-gray" style="background: #ffffff; text-align: center;">
-        <h2 style="margin-top: 0; color: #0b4d82;">Escáner de Asistencia QR</h2>
-        <div style="margin-bottom: 16px;">
-          <label>Programa a registrar:</label>
-          <select id="selectProgEscaner">
-            <option value="HOMBRIA">HOMBRÍA AL MÁXIMO</option>
-            <option value="FUNDAMENTOS">FUNDAMENTOS</option>
-          </select>
-        </div>
-        <div id="reader" style="width: 100%; min-height: 280px; background: #000; border-radius: 16px;"></div>
-        <div id="resEscaneoMsg" style="margin-top: 12px; font-weight: bold;"></div>
-      </div>
-    </section>
-
   </div>
 </main>
 
-<nav class="bottom-nav mobile-only oculto" id="bottomNav">
-  <button class="bottom-nav-item active" id="bnavInicio" onclick="navegarA('inicio')">
-    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-    <span>Inicio</span>
-  </button>
-  <button class="bottom-nav-item" id="bnavFundamentos" onclick="navegarA('fundamentos')">
-    <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
-    <span>Fundamentos</span>
-  </button>
-  <button class="bottom-nav-item" id="bnavHombria" onclick="navegarA('hombria')">
-    <svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 14.2c-2.5-1.12-4.83-3.83-5.7-6.2 1.34-1.2 3.12-2 5.7-2s4.36.8 5.7 2c-.87 2.37-3.2 5.08-5.7 6.2z"/></svg>
-    <span>Hombría</span>
-  </button>
-  <button class="bottom-nav-item" id="bnavRecursos" onclick="navegarA('recursos')">
-    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
-    <span>Recursos</span>
-  </button>
-  <button class="bottom-nav-item" id="bnavCuenta" onclick="navegarA('cuenta')">
-    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-    <span>Mi cuenta</span>
-  </button>
-</nav>
+<nav class="bottom-nav mobile-only oculto" id="bottomNav"></nav>
 
 <script>
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzdRmnu2IQqheZ-yJdI0Fr5GnHFc4ogE5UDyx1pik68gylS3wmzJSsIqTctCRwyRVyyeQ/exec';
   let usuarioSesion = null;
   let datosOfertaCargada = null;
   let idOfertaSeleccionada = null;
-  let ultimoRegistroCreado = null;
   let html5QrcodeScanner = null;
 
   let currentAuthSlide = 0;
@@ -1171,6 +1302,12 @@
 
   let recursosListaCompleta = [];
   let filtroProgramaRecursosActual = 'TODOS';
+
+  // Control de escaneo continuo
+  let ultimoCodigoEscaneado = null;
+  let tiempoUltimoEscaneo = 0;
+  let personaConfirmadaModal = null;
+  let grupoCoordinadorSeleccionado = null;
 
   function iniciarCarruselAuth() {
     if (authCarruselInterval) clearInterval(authCarruselInterval);
@@ -1242,7 +1379,6 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     iniciarCarruselAuth();
-
     const sesionGuardada = localStorage.getItem('naciones_sesion');
     if (sesionGuardada) {
       try {
@@ -1285,102 +1421,11 @@
       });
   }
 
-  document.getElementById('formRegistroNuevo').addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const btn = document.getElementById('btnSubmitRegistro');
-    const msg = document.getElementById('msgRegistro');
-
-    const nombre = document.getElementById('regNombre').value.trim();
-    const apPaterno = document.getElementById('regApPaterno').value.trim();
-    const apMaterno = document.getElementById('regApMaterno').value.trim();
-    const estadoCivil = document.getElementById('regEstadoCivil').value;
-    const correo = document.getElementById('regCorreo').value.trim();
-    const lada = document.getElementById('regLada').value;
-    const telefono = document.getElementById('regTelefono').value.trim();
-    const nacimientoRaw = document.getElementById('regNacimiento').value.trim();
-    const campus = document.getElementById('regCampus').value;
-
-    if (!nombre || !apPaterno || !estadoCivil || !correo || !telefono || !nacimientoRaw || !campus) {
-      msg.style.color = '#a52828';
-      msg.textContent = 'Por favor completa todos los campos requeridos.';
-      return;
-    }
-
-    const nacNorm = normalizarFechaInputCliente(nacimientoRaw);
-    if (!nacNorm) {
-      msg.style.color = '#a52828';
-      msg.textContent = 'Ingresa una fecha de nacimiento válida (DD/MM/AAAA).';
-      return;
-    }
-
-    const partesNac = nacNorm.split('-');
-    const nacimientoFormateado = `${partesNac[2]}/${partesNac[1]}/${partesNac[0]}`;
-
-    btn.disabled = true;
-    btn.textContent = 'Creando cuenta...';
-    msg.style.color = '#0b4d82';
-    msg.textContent = 'Guardando tus datos...';
-
-    const params = new URLSearchParams({
-      action: 'registrarNuevoUsuario',
-      nombre: nombre,
-      apPaterno: apPaterno,
-      apMaterno: apMaterno,
-      estadoCivil: estadoCivil,
-      correo: correo,
-      lada: lada,
-      telefono: telefono,
-      nacimiento: nacimientoFormateado,
-      campus: campus
-    });
-
-    fetch(`${WEB_APP_URL}?${params.toString()}`)
-      .then(res => res.json())
-      .then(data => {
-        btn.disabled = false;
-        btn.textContent = 'Registrarme';
-
-        if (data && data.exito) {
-          ultimoRegistroCreado = {
-            registro: data.registro,
-            nacimientoTexto: data.nacimiento
-          };
-          document.getElementById('exitoNumRegistro').textContent = data.registro;
-          document.getElementById('seccionRegistroUsuario').classList.add('oculto');
-          document.getElementById('seccionExitoRegistro').classList.remove('oculto');
-        } else {
-          msg.style.color = '#a52828';
-          msg.textContent = data.mensaje || 'Error al registrar la cuenta.';
-        }
-      })
-      .catch(err => {
-        btn.disabled = false;
-        btn.textContent = 'Registrarme';
-        msg.style.color = '#a52828';
-        msg.textContent = 'Error de conexión. Intenta nuevamente.';
-      });
-  });
-
-  function autoIniciarSesionPostRegistro() {
-    if (ultimoRegistroCreado) {
-      ejecutarLogin(ultimoRegistroCreado.registro, ultimoRegistroCreado.nacimientoTexto);
-    }
-  }
-
-  function copiarNumeroRegistro() {
-    if (ultimoRegistroCreado) {
-      navigator.clipboard.writeText(ultimoRegistroCreado.registro);
-      alert('Número de registro copiado al portapapeles: ' + ultimoRegistroCreado.registro);
-    }
-  }
-
   function iniciarSesionEnApp(res) {
     usuarioSesion = res;
 
     document.getElementById('secAuthSplitPage').classList.add('oculto');
     document.getElementById('panelPrincipal').classList.remove('oculto');
-    
     document.getElementById('headerNacionesDesktop').classList.remove('oculto');
     document.getElementById('headerNacionesMobile').classList.remove('oculto');
     document.getElementById('bottomNav').classList.remove('oculto');
@@ -1393,159 +1438,112 @@
     }
 
     cargarDatosEnPantalla(res);
-
-    if (res.recursos) {
-      recursosListaCompleta = res.recursos;
-      renderizarListaRecursosUI();
-    } else {
-      cargarRecursosDesdeServidor();
-    }
-
-    if (res.oferta) {
-      renderizarOfertaInscripciones(res.oferta);
-    } else {
-      cargarOfertaInscripciones();
-    }
-
-    navegarA('inicio');
+    aplicarPermisosPorRol(res);
   }
 
-  function cargarOfertaInscripciones() {
-    if (!usuarioSesion) return;
+  function aplicarPermisosPorRol(res) {
+    const rol = String(res.rol || 'PARTICIPANTE').toUpperCase();
 
-    fetch(`${WEB_APP_URL}?action=consultarOferta&registro=${encodeURIComponent(usuarioSesion.registro)}&nacimiento=${encodeURIComponent(usuarioSesion.nacimientoTexto)}`)
-      .then(r => r.json())
-      .then(res => {
-        renderizarOfertaInscripciones(res);
-      });
-  }
+    // Ocultar todos los botones especiales
+    const btnsDesktop = ['navBtnInicio', 'navBtnFundamentos', 'navBtnHombria', 'navBtnRecursos', 'navBtnGrupos', 'navBtnMiGrupo', 'navBtnAdmin', 'navBtnEscaner', 'navBtnMaster', 'navBtnCuenta'];
+    btnsDesktop.forEach(id => document.getElementById(id)?.classList.add('oculto'));
 
-  function renderizarOfertaInscripciones(res) {
-    datosOfertaCargada = res;
-    const cont = document.getElementById('contenedorCursosOfertados');
-    if (!cont) return;
-    cont.innerHTML = '';
+    const itemsDrawer = ['ditemInicio', 'ditemFundamentos', 'ditemHombria', 'ditemRecursos', 'ditemGrupos', 'ditemMiGrupo', 'ditemAdmin', 'ditemEscaner', 'ditemMaster', 'ditemCuenta'];
+    itemsDrawer.forEach(id => document.getElementById(id)?.classList.add('oculto'));
 
-    const insci = usuarioSesion.inscripcionesActivas || { HOMBRIA: false, FUNDAMENTOS: false };
+    const bottomNav = document.getElementById('bottomNav');
+    bottomNav.innerHTML = '';
 
-    let ofertaHombriaFiltrada = res.ofertaHombria || [];
-    let ofertaFundamentosFiltrada = res.ofertaFundamentos || [];
+    const addBnav = (id, label, iconSvg, vista) => {
+      bottomNav.innerHTML += `
+        <button class="bottom-nav-item" id="bnav_${id}" onclick="navegarA('${vista}')">
+          ${iconSvg}
+          <span>${label}</span>
+        </button>
+      `;
+    };
 
-    if (insci.HOMBRIA) ofertaHombriaFiltrada = [];
-    if (insci.FUNDAMENTOS) ofertaFundamentosFiltrada = [];
+    const svgInicio = `<svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>`;
+    const svgFund = `<svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>`;
+    const svgHomb = `<svg viewBox="0 0 24 24"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"/></svg>`;
+    const svgRec = `<svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>`;
+    const svgGrupos = `<svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>`;
+    const svgEscaner = `<svg viewBox="0 0 24 24"><path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-14h-4V3h4c1.1 0 2 .9 2 2v4h-2V5z"/></svg>`;
+    const svgCuenta = `<svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
 
-    const hayOferta = (ofertaHombriaFiltrada.length > 0) || (ofertaFundamentosFiltrada.length > 0);
+    let defaultVista = 'inicio';
 
-    if (!hayOferta) {
-      document.getElementById('seccionOfertaInscripciones').classList.add('oculto');
+    if (rol === 'REGISTRO') {
+      document.getElementById('navBtnEscaner')?.classList.remove('oculto');
+      document.getElementById('navBtnCuenta')?.classList.remove('oculto');
+      document.getElementById('ditemEscaner')?.classList.remove('oculto');
+      document.getElementById('ditemCuenta')?.classList.remove('oculto');
+      addBnav('escaner', 'Registro', svgEscaner, 'escaner');
+      addBnav('cuenta', 'Cuenta', svgCuenta, 'cuenta');
+      defaultVista = 'escaner';
+
+    } else if (rol === 'LIDER_HOMBRIA') {
+      document.getElementById('navBtnMiGrupo')?.classList.remove('oculto');
+      document.getElementById('navBtnRecursos')?.classList.remove('oculto');
+      document.getElementById('navBtnCuenta')?.classList.remove('oculto');
+      document.getElementById('ditemMiGrupo')?.classList.remove('oculto');
+      document.getElementById('ditemRecursos')?.classList.remove('oculto');
+      document.getElementById('ditemCuenta')?.classList.remove('oculto');
+      addBnav('migrupo', 'Mi Grupo', svgGrupos, 'migrupo');
+      addBnav('recursos', 'Recursos', svgRec, 'recursos');
+      addBnav('cuenta', 'Cuenta', svgCuenta, 'cuenta');
+      defaultVista = 'migrupo';
+
+    } else if (rol === 'COORDINADOR_HOMBRIA') {
+      document.getElementById('navBtnGrupos')?.classList.remove('oculto');
+      document.getElementById('navBtnRecursos')?.classList.remove('oculto');
+      document.getElementById('navBtnCuenta')?.classList.remove('oculto');
+      document.getElementById('ditemGrupos')?.classList.remove('oculto');
+      document.getElementById('ditemRecursos')?.classList.remove('oculto');
+      document.getElementById('ditemCuenta')?.classList.remove('oculto');
+      addBnav('grupos', 'Grupos', svgGrupos, 'grupos');
+      addBnav('recursos', 'Recursos', svgRec, 'recursos');
+      addBnav('cuenta', 'Cuenta', svgCuenta, 'cuenta');
+      defaultVista = 'grupos';
+
     } else {
-      document.getElementById('seccionOfertaInscripciones').classList.remove('oculto');
+      // PASTOR, ADMIN_CAMPUS, ADMIN_GLOBAL, PARTICIPANTE
+      document.getElementById('navBtnInicio')?.classList.remove('oculto');
+      document.getElementById('navBtnFundamentos')?.classList.remove('oculto');
+      document.getElementById('navBtnHombria')?.classList.remove('oculto');
+      document.getElementById('navBtnRecursos')?.classList.remove('oculto');
+      document.getElementById('navBtnCuenta')?.classList.remove('oculto');
+
+      document.getElementById('ditemInicio')?.classList.remove('oculto');
+      document.getElementById('ditemFundamentos')?.classList.remove('oculto');
+      document.getElementById('ditemHombria')?.classList.remove('oculto');
+      document.getElementById('ditemRecursos')?.classList.remove('oculto');
+      document.getElementById('ditemCuenta')?.classList.remove('oculto');
+
+      addBnav('inicio', 'Inicio', svgInicio, 'inicio');
+      addBnav('fundamentos', 'Fundamentos', svgFund, 'fundamentos');
+      addBnav('hombria', 'Hombría', svgHomb, 'hombria');
+      addBnav('recursos', 'Recursos', svgRec, 'recursos');
+
+      if (rol === 'PASTOR' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL') {
+        document.getElementById('navBtnAdmin')?.classList.remove('oculto');
+        document.getElementById('navBtnEscaner')?.classList.remove('oculto');
+        document.getElementById('ditemAdmin')?.classList.remove('oculto');
+        document.getElementById('ditemEscaner')?.classList.remove('oculto');
+        addBnav('admin', 'Personas', svgGrupos, 'admin');
+      }
+
+      if (rol === 'ADMIN_GLOBAL') {
+        document.getElementById('navBtnGrupos')?.classList.remove('oculto');
+        document.getElementById('navBtnMaster')?.classList.remove('oculto');
+        document.getElementById('ditemGrupos')?.classList.remove('oculto');
+        document.getElementById('ditemMaster')?.classList.remove('oculto');
+      }
+
+      addBnav('cuenta', 'Cuenta', svgCuenta, 'cuenta');
     }
 
-    const renderCursoCard = (item, progTipo) => `
-      <div style="background: #f0f7fc; border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <strong style="color: #0b4d82; font-size: 14px; display: block;">${item.cursoNivel}</strong>
-          <span style="font-size: 12px; color: #52606d;">📅 ${item.horario} | Campus: <strong>${item.campus}</strong></span>
-          ${item.cupoMax ? `<br><span style="font-size: 11px; color: #0b4d82; font-weight: bold;">Cupo Máx: ${item.cupoMax}</span>` : ''}
-        </div>
-        <button class="btn-submit" style="width: auto; margin: 0; padding: 8px 16px; font-size: 12px;" onclick="abrirModalInscripcion('${item.idOferta}', '${progTipo}')">Más Información</button>
-      </div>
-    `;
-
-    ofertaHombriaFiltrada.forEach(c => cont.innerHTML += renderCursoCard(c, 'HOMBRIA'));
-    ofertaFundamentosFiltrada.forEach(c => cont.innerHTML += renderCursoCard(c, 'FUNDAMENTOS'));
-  }
-
-  function abrirModalInscripcion(idOferta, progTipo) {
-    if (!datosOfertaCargada) return;
-
-    let curso = null;
-    if (progTipo === 'HOMBRIA') {
-      curso = (datosOfertaCargada.ofertaHombria || []).find(c => c.idOferta === idOferta);
-    } else {
-      curso = (datosOfertaCargada.ofertaFundamentos || []).find(c => c.idOferta === idOferta);
-    }
-
-    if (!curso) return;
-
-    idOfertaSeleccionada = idOferta;
-
-    const logoImg = document.getElementById('modalLogoPrograma');
-    if (progTipo === 'HOMBRIA') {
-      logoImg.src = 'https://lh3.googleusercontent.com/d/1ueR5IQ38o-7XbWV7K6_21WpReyjaAY3H';
-      logoImg.alt = 'Hombría al Máximo';
-    } else {
-      logoImg.src = 'https://lh3.googleusercontent.com/d/1ihlxSR7LNWOzcT8breTYLqqWZ7eaCz-v';
-      logoImg.alt = 'Fundamentos';
-    }
-
-    document.getElementById('modalTituloCurso').textContent = curso.cursoNivel;
-    
-    let htmlDescripcion = curso.descripcion || 'Sin descripción disponible.';
-    if (curso.minAsistencias || curso.minExamen) {
-      htmlDescripcion += `<br><br><small style="color:#0b4d82; font-weight:bold;">Requisitos de aprobación:</small><br>`;
-      if (curso.minAsistencias) htmlDescripcion += `• Mínimo de Asistencias: ${curso.minAsistencias}<br>`;
-      if (curso.minExamen) htmlDescripcion += `• Calificación Mínima Examen: ${curso.minExamen}`;
-    }
-
-    document.getElementById('modalDescripcionCurso').innerHTML = htmlDescripcion;
-
-    const boxLibro = document.getElementById('modalBoxLibro');
-    if (curso.libroInfo) {
-      document.getElementById('modalTextoLibro').textContent = curso.libroInfo;
-      boxLibro.classList.remove('oculto');
-    } else {
-      boxLibro.classList.add('oculto');
-    }
-
-    const imgPortada = document.getElementById('modalImgPortada');
-    const placeholderPortada = document.getElementById('modalPlaceholderPortada');
-
-    if (curso.imagenUrl) {
-      imgPortada.src = curso.imagenUrl;
-      imgPortada.classList.remove('oculto');
-      placeholderPortada.classList.add('oculto');
-    } else {
-      imgPortada.classList.add('oculto');
-      placeholderPortada.classList.remove('oculto');
-      document.getElementById('modalPlaceholderTitulo').textContent = curso.cursoNivel;
-    }
-
-    document.getElementById('btnConfirmarInscripcionModal').onclick = () => procesarInscripcion();
-
-    document.getElementById('modalInscripcion').classList.add('active');
-  }
-
-  function cerrarModalInscripcion() {
-    document.getElementById('modalInscripcion').classList.remove('active');
-    idOfertaSeleccionada = null;
-  }
-
-  function procesarInscripcion() {
-    if (!idOfertaSeleccionada || !usuarioSesion) return;
-
-    const btn = document.getElementById('btnConfirmarInscripcionModal');
-    btn.disabled = true;
-    btn.textContent = 'Procesando...';
-
-    fetch(`${WEB_APP_URL}?action=procesarInscripcion&registro=${encodeURIComponent(usuarioSesion.registro)}&idOferta=${encodeURIComponent(idOfertaSeleccionada)}`)
-      .then(r => r.json())
-      .then(res => {
-        alert(res.mensaje);
-        if (res.exito) {
-          cerrarModalInscripcion();
-          ejecutarLogin(usuarioSesion.registro, usuarioSesion.nacimientoTexto);
-        } else {
-          btn.disabled = false;
-          btn.textContent = 'Inscribirme';
-        }
-      })
-      .catch(() => {
-        alert('Error al procesar inscripción. Intenta de nuevo.');
-        btn.disabled = false;
-        btn.textContent = 'Inscribirme';
-      });
+    navegarA(defaultVista);
   }
 
   function cargarDatosEnPantalla(res) {
@@ -1567,415 +1565,17 @@
     document.getElementById('qrNumDesktop').textContent = res.registro;
     document.getElementById('qrImgMobile').src = qrUrl;
     document.getElementById('qrNumMobile').textContent = res.registro;
-
-    const insci = res.inscripcionesActivas || { HOMBRIA: false, FUNDAMENTOS: false };
-    const estaEnAlgunCurso = insci.HOMBRIA || insci.FUNDAMENTOS;
-
-    document.getElementById('boxSummaryHombriaDesktop').classList.toggle('oculto', !insci.HOMBRIA);
-    document.getElementById('boxSummaryFundamentosDesktop').classList.toggle('oculto', !insci.FUNDAMENTOS);
-    document.getElementById('msgSinCursosInicioDesktop').classList.toggle('oculto', estaEnAlgunCurso);
-
-    document.getElementById('boxSummaryHombriaMobile').classList.toggle('oculto', !insci.HOMBRIA);
-    document.getElementById('boxSummaryFundamentosMobile').classList.toggle('oculto', !insci.FUNDAMENTOS);
-    document.getElementById('msgSinCursosInicioMobile').classList.toggle('oculto', estaEnAlgunCurso);
-
-    document.getElementById('navTabsHombria').classList.toggle('oculto', !insci.HOMBRIA);
-    document.getElementById('secHombriaAsis').classList.toggle('oculto', !insci.HOMBRIA);
-    document.getElementById('secHombriaProg').classList.toggle('oculto', insci.HOMBRIA);
-
-    document.getElementById('navTabsFundamentos').classList.toggle('oculto', !insci.FUNDAMENTOS);
-    document.getElementById('secFundAsis').classList.toggle('oculto', !insci.FUNDAMENTOS);
-    document.getElementById('secFundProg').classList.toggle('oculto', insci.FUNDAMENTOS);
-
-    if (insci.HOMBRIA) {
-      const h = res.proximaLeccion ? res.proximaLeccion.HOMBRIA : null;
-      const cursoHombriaNom = insci.cursoHombria || (h ? h.nivelCurso : 'Hombría al Máximo');
-
-      document.getElementById('lblHombriaNivelAct').textContent = cursoHombriaNom;
-      document.getElementById('sumHombriaNivelDesktop').textContent = 'Hombría al Máximo - ' + cursoHombriaNom;
-      document.getElementById('sumHombriaNivelMobile').textContent = 'Hombría al Máximo - ' + cursoHombriaNom;
-
-      document.getElementById('titleProxHombria').textContent = 'Tu próxima lección:';
-
-      if (h && (h.tema || h.semana)) {
-        const textoProxH = `${h.semana ? h.semana + ': ' : ''}${h.tema || 'Por definir'}`;
-        document.getElementById('txtProxHombria').innerHTML = `<strong>${textoProxH}</strong>`;
-        document.getElementById('sumHombriaTextoDesktop').textContent = `Próxima sesión: ${h.tema || h.semana}`;
-        document.getElementById('sumHombriaTextoMobile').textContent = `Próxima sesión: ${h.tema || h.semana}`;
-      } else {
-        const fechaArranqueH = (h && h.fecha) ? h.fecha : 'próxima sesión';
-        const textoConfirmacionH = `¡Registro Exitoso! Nos vemos el ${fechaArranqueH} en Campus ${insci.campusImparticionHombria || 'NACIONAL'}.`;
-        document.getElementById('txtProxHombria').innerHTML = `<strong>${textoConfirmacionH}</strong>`;
-        document.getElementById('sumHombriaTextoDesktop').textContent = textoConfirmacionH;
-        document.getElementById('sumHombriaTextoMobile').textContent = textoConfirmacionH;
-      }
-    }
-
-    if (insci.FUNDAMENTOS) {
-      const f = res.proximaLeccion ? res.proximaLeccion.FUNDAMENTOS : null;
-      const cursoFundNom = insci.cursoFundamentos || (f ? f.nivelCurso : 'Fundamentos');
-
-      document.getElementById('lblFundNivelAct').textContent = cursoFundNom;
-      document.getElementById('sumFundamentosNivelDesktop').textContent = 'Fundamentos - ' + cursoFundNom;
-      document.getElementById('sumFundamentosNivelMobile').textContent = 'Fundamentos - ' + cursoFundNom;
-
-      document.getElementById('titleProxFundamentos').textContent = 'Tu próxima lección:';
-
-      if (f && (f.tema || f.semana)) {
-        const textoProxF = `${f.semana ? f.semana + ': ' : ''}${f.tema || 'Por definir'}`;
-        document.getElementById('txtProxFundamentos').innerHTML = `<strong>${textoProxF}</strong>`;
-        document.getElementById('sumFundamentosTextoDesktop').textContent = `Próxima sesión: ${f.tema || f.semana}`;
-        document.getElementById('sumFundamentosTextoMobile').textContent = `Próxima sesión: ${f.tema || f.semana}`;
-      } else {
-        const fechaArranqueF = (f && f.fecha) ? f.fecha : 'próxima sesión';
-        const textoConfirmacionF = `¡Registro Exitoso! Nos vemos el ${fechaArranqueF} en Campus ${res.campus || 'General'}.`;
-        document.getElementById('txtProxFundamentos').innerHTML = `<strong>${textoConfirmacionF}</strong>`;
-        document.getElementById('sumFundamentosTextoDesktop').textContent = textoConfirmacionF;
-        document.getElementById('sumFundamentosTextoMobile').textContent = textoConfirmacionF;
-      }
-    }
-
-    if (res.asistencias) {
-      renderizarListaAsistencias('HOMBRIA', res.asistencias.HOMBRIA || []);
-      renderizarListaAsistencias('FUNDAMENTOS', res.asistencias.FUNDAMENTOS || []);
-    }
-
-    renderizarListaProgreso('HOMBRIA', res.progresoHombria || []);
-    renderizarListaProgreso('FUNDAMENTOS', res.progresoFundamentos || []);
-
-    const rol = String(res.rol || '').toUpperCase();
-    const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
-    document.getElementById('itemRegistro').classList.toggle('oculto', !esVoluntario);
-  }
-
-  /* LÓGICA DE RECURSOS */
-  function cargarRecursosDesdeServidor() {
-    fetch(`${WEB_APP_URL}?action=consultarRecursos`)
-      .then(r => r.json())
-      .then(res => {
-        if (res && res.exito) {
-          recursosListaCompleta = res.recursos || [];
-          renderizarListaRecursosUI();
-        }
-      });
-  }
-
-  function filtrarPestaniaRecursos(tipo) {
-    filtroProgramaRecursosActual = tipo;
-
-    const bTodos = document.getElementById('btnFiltroRecursosTodos');
-    const bFund = document.getElementById('btnFiltroRecursosFund');
-    const bHomb = document.getElementById('btnFiltroRecursosHomb');
-
-    bTodos.className = 'pill-tab' + (tipo === 'TODOS' ? ' active-fundamentos' : '');
-    bFund.className = 'pill-tab' + (tipo === 'FUNDAMENTOS' ? ' active-fundamentos' : '');
-    bHomb.className = 'pill-tab' + (tipo === 'HOMBRIA' ? ' active-hombria' : '');
-
-    renderizarListaRecursosUI();
-  }
-
-  function filtrarListaRecursosUI() {
-    renderizarListaRecursosUI();
-  }
-
-  function renderizarListaRecursosUI() {
-    const cont = document.getElementById('contenedorListaRecursos');
-    if (!cont) return;
-
-    const textoBusqueda = (document.getElementById('inputBuscarRecursos')?.value || '').toLowerCase().trim();
-
-    let filtrados = recursosListaCompleta.filter(r => {
-      const pNorm = (r.programa || '').toUpperCase();
-      if (filtroProgramaRecursosActual === 'FUNDAMENTOS' && !pNorm.includes('FUND')) return false;
-      if (filtroProgramaRecursosActual === 'HOMBRIA' && !pNorm.includes('HOMB')) return false;
-
-      if (textoBusqueda !== '') {
-        const matchTitulo = (r.titulo || '').toLowerCase().includes(textoBusqueda);
-        const matchDesc = (r.descripcion || '').toLowerCase().includes(textoBusqueda);
-        const matchCurso = (r.curso || '').toLowerCase().includes(textoBusqueda);
-        const matchProg = (r.programa || '').toLowerCase().includes(textoBusqueda);
-        if (!matchTitulo && !matchDesc && !matchCurso && !matchProg) return false;
-      }
-
-      return true;
-    });
-
-    /* ORDEN DE IMPORTANCIA: Priorizar recursos del programa/curso actual del alumno */
-    const insci = (usuarioSesion && usuarioSesion.inscripcionesActivas) ? usuarioSesion.inscripcionesActivas : {};
-
-    filtrados.sort((a, b) => {
-      let pesoA = 0;
-      let pesoB = 0;
-
-      const pNormA = (a.programa || '').toUpperCase();
-      const pNormB = (b.programa || '').toUpperCase();
-
-      if (insci.HOMBRIA && pNormA.includes('HOMB')) pesoA += 10;
-      if (insci.HOMBRIA && pNormB.includes('HOMB')) pesoB += 10;
-
-      if (insci.FUNDAMENTOS && pNormA.includes('FUND')) pesoA += 10;
-      if (insci.FUNDAMENTOS && pNormB.includes('FUND')) pesoB += 10;
-
-      if (insci.cursoHombria && (a.curso || '').toLowerCase().includes((insci.cursoHombria || '').toLowerCase())) pesoA += 20;
-      if (insci.cursoHombria && (b.curso || '').toLowerCase().includes((insci.cursoHombria || '').toLowerCase())) pesoB += 20;
-
-      return pesoB - pesoA;
-    });
-
-    cont.innerHTML = '';
-
-    if (filtrados.length === 0) {
-      cont.innerHTML = '<div style="text-align:center; color:#71808e; padding:30px;">No se encontraron recursos que coincidan con tu búsqueda.</div>';
-      return;
-    }
-
-    filtrados.forEach(item => {
-      const esHombria = (item.programa || '').toUpperCase().includes('HOMB');
-      const logoSrc = esHombria ? 
-        'https://lh3.googleusercontent.com/d/1ueR5IQ38o-7XbWV7K6_21WpReyjaAY3H' : 
-        'https://lh3.googleusercontent.com/d/1ihlxSR7LNWOzcT8breTYLqqWZ7eaCz-v';
-
-      const cardHtml = `
-        <div class="resource-card" onclick="descargarRecursalPDF('${item.link}')">
-          <div class="resource-card-left">
-            <img src="${logoSrc}" alt="${item.programa}" class="resource-logo">
-            <div>
-              <div class="resource-title">${item.titulo}</div>
-              <div class="resource-desc">${item.descripcion || item.curso || 'Material de estudio oficial.'}</div>
-            </div>
-          </div>
-          <div class="resource-download-arrow">›</div>
-        </div>
-      `;
-      cont.innerHTML += cardHtml;
-    });
-  }
-
-  function descargarRecursalPDF(url) {
-    if (!url || url === '#') {
-      alert('Enlace de descarga no disponible.');
-      return;
-    }
-    window.open(url, '_blank');
-  }
-
-  /* SUBVISTAS DE MI CUENTA E INFORMACIÓN PERSONAL */
-  function mostrarSubvistaCuenta(sub) {
-    if (sub === 'info') {
-      document.getElementById('vistaCuentaMain').classList.add('oculto');
-      document.getElementById('vistaCuentaInfo').classList.remove('oculto');
-      cancelarEdicionPerfil();
-    } else {
-      document.getElementById('vistaCuentaInfo').classList.add('oculto');
-      document.getElementById('vistaCuentaMain').classList.remove('oculto');
-    }
-  }
-
-  function activarModoEdicionPerfil() {
-    if (!usuarioSesion) return;
-
-    document.getElementById('boxPerfilLectura').classList.add('oculto');
-    document.getElementById('boxPerfilEdicion').classList.remove('oculto');
-    document.getElementById('btnEditarPerfil').style.display = 'none';
-    document.getElementById('msgEdicionPerfil').textContent = '';
-
-    // Precargar datos actuales
-    document.getElementById('editCampus').value = usuarioSesion.campus || '11 Sur';
-    document.getElementById('editCorreo').value = usuarioSesion.correo || '';
-
-    let telRaw = (usuarioSesion.telefono || '').replace(/\D/g, '');
-    if (telRaw.length > 10) telRaw = telRaw.substring(telRaw.length - 10);
-    document.getElementById('editTelefono').value = telRaw;
-  }
-
-  function cancelarEdicionPerfil() {
-    document.getElementById('boxPerfilEdicion').classList.add('oculto');
-    document.getElementById('boxPerfilLectura').classList.remove('oculto');
-    document.getElementById('btnEditarPerfil').style.display = 'block';
-    document.getElementById('msgEdicionPerfil').textContent = '';
-  }
-
-  function guardarEdicionPerfil() {
-    if (!usuarioSesion) return;
-
-    const campus = document.getElementById('editCampus').value;
-    const correo = document.getElementById('editCorreo').value.trim();
-    const lada = document.getElementById('editLada').value;
-    const telefono = document.getElementById('editTelefono').value.trim();
-
-    const msg = document.getElementById('msgEdicionPerfil');
-    const btn = document.getElementById('btnGuardarPerfil');
-
-    if (!correo || !/\S+@\S+\.\S+/.test(correo)) {
-      msg.style.color = '#a52828';
-      msg.textContent = 'Por favor ingresa un correo electrónico válido.';
-      return;
-    }
-
-    if (!telefono || telefono.length !== 10) {
-      msg.style.color = '#a52828';
-      msg.textContent = 'Ingresa un número telefónico de 10 dígitos.';
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Guardando...';
-    msg.style.color = '#0b4d82';
-    msg.textContent = 'Actualizando tu información...';
-
-    const params = new URLSearchParams({
-      action: 'actualizarDatosUsuario',
-      registro: usuarioSesion.registro,
-      nacimiento: usuarioSesion.nacimientoTexto,
-      campus: campus,
-      correo: correo,
-      lada: lada,
-      telefono: telefono
-    });
-
-    fetch(`${WEB_APP_URL}?${params.toString()}`)
-      .then(r => r.json())
-      .then(res => {
-        btn.disabled = false;
-        btn.textContent = 'Guardar';
-
-        if (res && res.exito) {
-          usuarioSesion.campus = res.campus;
-          usuarioSesion.correo = res.correo;
-          usuarioSesion.telefono = res.telefono;
-
-          localStorage.setItem('naciones_sesion', JSON.stringify(usuarioSesion));
-          cargarDatosEnPantalla(usuarioSesion);
-
-          cancelarEdicionPerfil();
-          alert('¡Información personal actualizada correctamente!');
-        } else {
-          msg.style.color = '#a52828';
-          msg.textContent = res.mensaje || 'Error al actualizar.';
-        }
-      })
-      .catch(() => {
-        btn.disabled = false;
-        btn.textContent = 'Guardar';
-        msg.style.color = '#a52828';
-        msg.textContent = 'Error de conexión. Intenta nuevamente.';
-      });
-  }
-
-  function renderizarListaAsistencias(programa, lista) {
-    const suffix = programa === 'HOMBRIA' ? 'Hombria' : 'Fund';
-    const contDesk = document.getElementById(`list${suffix}AsistenciasDesktop`);
-    const contMob = document.getElementById(`list${suffix}AsistenciasMobile`);
-    
-    if (!contDesk || !contMob) return;
-    contDesk.innerHTML = '';
-    contMob.innerHTML = '';
-
-    if (!lista || lista.length === 0) {
-      const msgEmpty = '<div style="color:#71808e; font-size:13px; text-align:center; padding:12px;">No hay asistencias registradas aún.</div>';
-      contDesk.innerHTML = msgEmpty;
-      contMob.innerHTML = msgEmpty;
-      return;
-    }
-
-    let presentesCount = 0;
-
-    lista.forEach(item => {
-      const isPresente = item.estado === 'PRESENTE';
-      if (isPresente || item.estado === 'RETARDO') presentesCount++;
-
-      let badgeClass = 'badge-pendiente';
-      if (item.estado === 'PRESENTE') badgeClass = 'badge-presente';
-      else if (item.estado === 'RETARDO') badgeClass = 'badge-retardo';
-      else if (item.estado === 'FALTA') badgeClass = 'badge-falta';
-
-      const htmlRow = `
-        <div class="attendance-row">
-          <div>
-            <span class="attendance-title">${item.sesion} - ${item.leccion}</span>
-            <span class="attendance-sub">${item.fecha} (${item.campus || 'General'})</span>
-          </div>
-          <span class="badge-status ${badgeClass}">${item.estado}</span>
-        </div>
-      `;
-
-      contDesk.innerHTML += htmlRow;
-      contMob.innerHTML += htmlRow;
-    });
-
-    const pct = Math.min(Math.round((presentesCount / Math.max(lista.length, 1)) * 100), 100);
-    
-    if (programa === 'HOMBRIA') {
-      document.getElementById('lblHombriaConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias completadas`;
-      document.getElementById('fillHombriaProgBar').style.width = pct + '%';
-      document.getElementById('sumHombriaFillDesktop').style.width = pct + '%';
-      document.getElementById('sumHombriaFillMobile').style.width = pct + '%';
-      document.getElementById('sumHombriaPorcentajeDesktop').textContent = `Asistencia ${pct}%`;
-      document.getElementById('sumHombriaPorcentajeMobile').textContent = `Asistencia ${pct}%`;
-    } else {
-      document.getElementById('lblFundConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias completadas`;
-      document.getElementById('fillFundProgBar').style.width = pct + '%';
-      document.getElementById('sumFundamentosFillDesktop').style.width = pct + '%';
-      document.getElementById('sumFundamentosFillMobile').style.width = pct + '%';
-      document.getElementById('sumFundamentosPorcentajeDesktop').textContent = `Asistencia ${pct}%`;
-      document.getElementById('sumFundamentosPorcentajeMobile').textContent = `Asistencia ${pct}%`;
-    }
-  }
-
-  function renderizarListaProgreso(programa, bloques) {
-    const suffix = programa === 'HOMBRIA' ? 'Hombria' : 'Fund';
-    const contDesk = document.getElementById(`list${suffix}ProgresoDesktop`);
-    const contMob = document.getElementById(`list${suffix}ProgresoMobile`);
-
-    if (!contDesk || !contMob) return;
-    contDesk.innerHTML = '';
-    contMob.innerHTML = '';
-
-    if (!bloques || bloques.length === 0) {
-      const msgEmpty = '<div style="color:#71808e; font-size:13px; text-align:center; padding:12px;">Sin información de progreso.</div>';
-      contDesk.innerHTML = msgEmpty;
-      contMob.innerHTML = msgEmpty;
-      return;
-    }
-
-    bloques.forEach(blq => {
-      let itemsHtml = '';
-      blq.items.forEach(it => {
-        const badgeClass = it.completado ? 'badge-aprobado' : 'badge-pendiente';
-        const stTxt = it.completado ? 'APROBADO' : 'PENDIENTE';
-
-        itemsHtml += `
-          <div class="attendance-row">
-            <div>
-              <span class="attendance-title">${it.nombre}</span>
-            </div>
-            <span class="badge-status ${badgeClass}">${stTxt}</span>
-          </div>
-        `;
-      });
-
-      const colorHeader = programa === 'HOMBRIA' ? '#8a2a2a' : '#1970b8';
-
-      const blockBox = `
-        <div style="margin-bottom: 20px;">
-          <div style="font-weight: 800; font-size: 14px; color: ${colorHeader}; margin-bottom: 8px;">${blq.bloque}</div>
-          ${itemsHtml}
-        </div>
-      `;
-
-      contDesk.innerHTML += blockBox;
-      contMob.innerHTML += blockBox;
-    });
   }
 
   function navegarA(vista) {
-    document.getElementById('vistaInicio').classList.add('oculto');
-    document.getElementById('vistaFundamentos').classList.add('oculto');
-    document.getElementById('vistaHombria').classList.add('oculto');
-    document.getElementById('vistaRecursos').classList.add('oculto');
-    document.getElementById('vistaCuentaMain').classList.add('oculto');
-    document.getElementById('vistaCuentaInfo').classList.add('oculto');
-    document.getElementById('vistaEscaner').classList.add('oculto');
+    // Restricción crítica
+    if (vista === 'master' && (!usuarioSesion || String(usuarioSesion.rol).toUpperCase() !== 'ADMIN_GLOBAL')) {
+      alert('Acceso restringido únicamente a ADMIN_GLOBAL.');
+      return;
+    }
+
+    const vistas = ['vistaInicio', 'vistaFundamentos', 'vistaHombria', 'vistaRecursos', 'vistaGrupos', 'vistaMiGrupo', 'vistaAdmin', 'vistaEscaner', 'vistaMasterNaciones', 'vistaCuentaMain', 'vistaCuentaInfo'];
+    vistas.forEach(v => document.getElementById(v)?.classList.add('oculto'));
 
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
@@ -1983,190 +1583,338 @@
     if (vista === 'inicio') {
       document.getElementById('vistaInicio').classList.remove('oculto');
       document.getElementById('navBtnInicio')?.classList.add('active');
-      document.getElementById('bnavInicio')?.classList.add('active');
     } else if (vista === 'fundamentos') {
       document.getElementById('vistaFundamentos').classList.remove('oculto');
       document.getElementById('navBtnFundamentos')?.classList.add('active');
-      document.getElementById('bnavFundamentos')?.classList.add('active');
     } else if (vista === 'hombria') {
       document.getElementById('vistaHombria').classList.remove('oculto');
       document.getElementById('navBtnHombria')?.classList.add('active');
-      document.getElementById('bnavHombria')?.classList.add('active');
     } else if (vista === 'recursos') {
       document.getElementById('vistaRecursos').classList.remove('oculto');
       document.getElementById('navBtnRecursos')?.classList.add('active');
-      document.getElementById('bnavRecursos')?.classList.add('active');
       renderizarListaRecursosUI();
+    } else if (vista === 'grupos') {
+      document.getElementById('vistaGrupos').classList.remove('oculto');
+      document.getElementById('navBtnGrupos')?.classList.add('active');
+      cargarGruposCoordinadorUI();
+    } else if (vista === 'migrupo') {
+      document.getElementById('vistaMiGrupo').classList.remove('oculto');
+      document.getElementById('navBtnMiGrupo')?.classList.add('active');
+      cargarMiGrupoLiderUI();
+    } else if (vista === 'admin') {
+      document.getElementById('vistaAdmin').classList.remove('oculto');
+      document.getElementById('navBtnAdmin')?.classList.add('active');
+      cargarMetricasAdminUI();
+    } else if (vista === 'escaner') {
+      document.getElementById('vistaEscaner').classList.remove('oculto');
+      document.getElementById('navBtnEscaner')?.classList.add('active');
+      iniciarEscanerContinuo();
+    } else if (vista === 'master') {
+      document.getElementById('vistaMasterNaciones').classList.remove('oculto');
+      document.getElementById('navBtnMaster')?.classList.add('active');
     } else if (vista === 'cuenta') {
       document.getElementById('vistaCuentaMain').classList.remove('oculto');
       document.getElementById('navBtnCuenta')?.classList.add('active');
-      document.getElementById('bnavCuenta')?.classList.add('active');
-    } else if (vista === 'escaner') {
-      document.getElementById('vistaEscaner').classList.remove('oculto');
-      iniciarEscaner();
     }
+
+    const activeBnav = document.getElementById(`bnav_${vista}`);
+    if (activeBnav) activeBnav.classList.add('active');
   }
 
-  function toggleSubPestana(programa, sub) {
-    if (programa === 'hombria') {
-      const tabAsis = document.getElementById('tabHombriaAsis');
-      const tabProg = document.getElementById('tabHombriaProg');
-      const secAsis = document.getElementById('secHombriaAsis');
-      const secProg = document.getElementById('secHombriaProg');
-      if (sub === 'asis') {
-        tabAsis.classList.add('active-hombria');
-        tabProg.classList.remove('active-hombria');
-        secAsis.classList.remove('oculto');
-        secProg.classList.add('oculto');
-      } else {
-        tabProg.classList.add('active-hombria');
-        tabAsis.classList.remove('active-hombria');
-        secProg.classList.remove('oculto');
-        secAsis.classList.add('oculto');
-      }
-    } else if (programa === 'fundamentos') {
-      const tabAsis = document.getElementById('tabFundAsis');
-      const tabProg = document.getElementById('tabFundProg');
-      const secAsis = document.getElementById('secFundAsis');
-      const secProg = document.getElementById('secFundProg');
-      if (sub === 'asis') {
-        tabAsis.classList.add('active-fundamentos');
-        tabProg.classList.remove('active-fundamentos');
-        secAsis.classList.remove('oculto');
-        secProg.classList.add('oculto');
-      } else {
-        tabProg.classList.add('active-fundamentos');
-        tabAsis.classList.remove('active-fundamentos');
-        secProg.classList.remove('oculto');
-        secAsis.classList.add('oculto');
-      }
+  /* LÓGICA DE GRUPOS (COORDINADOR_HOMBRIA) */
+  function cargarGruposCoordinadorUI() {
+    if (!usuarioSesion) return;
+    const cont = document.getElementById('contenedorListaGruposCoordinador');
+    cont.innerHTML = '<p style="text-align:center; color:#0b4d82;">Cargando grupos...</p>';
+
+    fetch(`${WEB_APP_URL}?action=consultarGruposCoordinador&registro=${encodeURIComponent(usuarioSesion.registro)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito && res.grupos && res.grupos.length > 0) {
+          cont.innerHTML = '';
+          res.grupos.forEach(g => {
+            cont.innerHTML += `
+              <div class="menu-card-item" onclick="verDetalleGrupoCoordinador('${g.idGrupo}')">
+                <div>
+                  <strong style="color:#0b4d82; font-size:15px; display:block;">${g.nombreLider}</strong>
+                  <span style="font-size:12px; color:#52606d;">${g.nivel} | ${g.totalIntegrantes} Integrantes</span>
+                </div>
+                <span style="color:#94a3b8;">›</span>
+              </div>
+            `;
+          });
+        } else {
+          cont.innerHTML = '<p style="text-align:center; color:#71808e;">No tienes grupos coordinados registrados actualmente.</p>';
+        }
+      });
+  }
+
+  function abrirModalCrearGrupo() {
+    document.getElementById('inputRegLiderCrear').value = '';
+    document.getElementById('msgLiderVerificado').textContent = '';
+    document.getElementById('msgCrearGrupoModal').textContent = '';
+    document.getElementById('modalCrearGrupo').classList.add('active');
+  }
+
+  function cerrarModalCrearGrupo() {
+    document.getElementById('modalCrearGrupo').classList.remove('active');
+  }
+
+  function validarLiderPorRegistro() {
+    const reg = document.getElementById('inputRegLiderCrear').value.trim();
+    const lbl = document.getElementById('msgLiderVerificado');
+    if (!reg) return;
+
+    lbl.style.color = '#0b4d82';
+    lbl.textContent = 'Verificando registro...';
+
+    fetch(`${WEB_APP_URL}?action=buscarPersonaPorRegistroExacto&registro=${encodeURIComponent(reg)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito) {
+          lbl.style.color = '#176b3a';
+          lbl.textContent = '✓ Líder: ' + res.persona.nombreCompleto;
+        } else {
+          lbl.style.color = '#a52828';
+          lbl.textContent = '✕ ' + (res.mensaje || 'Registro no encontrado.');
+        }
+      });
+  }
+
+  function ejecutarGuardarGrupo() {
+    const regLider = document.getElementById('inputRegLiderCrear').value.trim();
+    const nivel = document.getElementById('selectNivelGrupoCrear').value;
+    const msg = document.getElementById('msgCrearGrupoModal');
+
+    if (!regLider) {
+      msg.style.color = '#a52828';
+      msg.textContent = 'Introduce el número de registro del líder.';
+      return;
     }
-  }
 
-  function abrirDrawer() {
-    document.getElementById('drawerOverlay').classList.add('activo');
-    document.getElementById('drawerMenu').classList.add('activo');
-  }
+    msg.style.color = '#0b4d82';
+    msg.textContent = 'Guardando grupo...';
 
-  function cerrarDrawer() {
-    document.getElementById('drawerOverlay').classList.remove('activo');
-    document.getElementById('drawerMenu').classList.remove('activo');
-  }
-
-  function cerrarSesion() {
-    localStorage.removeItem('naciones_sesion');
-    usuarioSesion = null;
-    datosOfertaCargada = null;
-    idOfertaSeleccionada = null;
-    ultimoRegistroCreado = null;
-
-    detenerEscaner();
-
-    document.getElementById('panelPrincipal').classList.add('oculto');
-    document.getElementById('headerNacionesDesktop').classList.add('oculto');
-    document.getElementById('headerNacionesMobile').classList.add('oculto');
-    document.getElementById('bottomNav').classList.add('oculto');
-    document.getElementById('heroCarousel').classList.add('oculto');
-
-    document.getElementById('secAuthSplitPage').classList.remove('oculto');
-
-    document.getElementById('inputRegistro').value = '';
-    document.getElementById('inputNacimiento').value = '';
-    document.getElementById('msgLogin').textContent = '';
-
-    mostrarFormularioAuth('login');
-  }
-
-  function construirCarruselAnuncios(anuncios) {
-    const slidesContainer = document.getElementById('slidesContainer');
-    const dotsContainer = document.getElementById('dotsContainer');
-    slidesContainer.innerHTML = '';
-    dotsContainer.innerHTML = '';
-
-    if (carruselAnunciosInterval) clearInterval(carruselAnunciosInterval);
-    if (!anuncios || anuncios.length === 0) return;
-
-    const esMovil = window.innerWidth <= 767;
-
-    anuncios.forEach((anuncio, idx) => {
-      const img = document.createElement('img');
-      img.src = esMovil ? anuncio.imagenMovil : anuncio.imagenEscritorio;
-      img.className = 'carousel-slide' + (idx === 0 ? ' active' : '');
-      img.alt = anuncio.nombre || 'Anuncio';
-      if (anuncio.link) {
-        img.onclick = () => window.open(anuncio.link, '_blank');
-      }
-      slidesContainer.appendChild(img);
-
-      const dot = document.createElement('div');
-      dot.className = 'dot' + (idx === 0 ? ' active' : '');
-      dot.onclick = () => setSlideAnuncioActivo(idx);
-      dotsContainer.appendChild(dot);
+    const params = new URLSearchParams({
+      action: 'crearGrupo',
+      coordinadorRegistro: usuarioSesion.registro,
+      liderRegistro: regLider,
+      nivel: nivel
     });
 
-    let activeAnuncio = 0;
-    function setSlideAnuncioActivo(index) {
-      const slides = slidesContainer.querySelectorAll('.carousel-slide');
-      const dots = dotsContainer.querySelectorAll('.dot');
-      if (slides.length === 0) return;
+    fetch(`${WEB_APP_URL}?${params.toString()}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito) {
+          cerrarModalCrearGrupo();
+          cargarGruposCoordinadorUI();
+          alert('¡Grupo creado exitosamente!');
+        } else {
+          msg.style.color = '#a52828';
+          msg.textContent = res.mensaje || 'Error al crear grupo.';
+        }
+      });
+  }
 
-      slides.forEach(s => s.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
+  function verDetalleGrupoCoordinador(idGrupo) {
+    grupoCoordinadorSeleccionado = idGrupo;
+    const sec = document.getElementById('secDetalleGrupoCoordinador');
+    const contInt = document.getElementById('contenedorIntegrantesGrupoDetalle');
+    sec.classList.remove('oculto');
+    contInt.innerHTML = '<p style="text-align:center; color:#0b4d82;">Cargando detalles...</p>';
 
-      activeAnuncio = (index + slides.length) % slides.length;
-      slides[activeAnuncio].classList.add('active');
-      dots[activeAnuncio].classList.add('active');
-    }
+    fetch(`${WEB_APP_URL}?action=consultarDetalleGrupoCoordinador&idGrupo=${encodeURIComponent(idGrupo)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito) {
+          document.getElementById('lblDetalleGrupoNombre').textContent = 'Líder: ' + res.grupo.nombreLider;
+          document.getElementById('lblDetalleGrupoNivel').textContent = res.grupo.nivel;
 
-    if (anuncios.length > 1) {
-      carruselAnunciosInterval = setInterval(() => {
-        setSlideAnuncioActivo(activeAnuncio + 1);
-      }, 5000);
+          contInt.innerHTML = '';
+          if (res.integrantes.length === 0) {
+            contInt.innerHTML = '<p style="color:#71808e; font-size:13px;">Sin integrantes aún.</p>';
+          } else {
+            res.integrantes.forEach(it => {
+              contInt.innerHTML += `
+                <div class="attendance-row">
+                  <div>
+                    <strong style="font-size:14px; display:block;">${it.nombreCompleto} (#${it.registro})</strong>
+                    <small style="color:#64748b;">Asistencias: ${it.totalAsistencias} | Promedio: ${it.porcentajeAsistencia}%</small>
+                  </div>
+                </div>
+              `;
+            });
+          }
+        }
+      });
+  }
+
+  function confirmarEliminarGrupoActual() {
+    if (!grupoCoordinadorSeleccionado) return;
+    if (confirm('¿Estás seguro de eliminar este grupo? Los integrantes conservarán sus asistencias e historial en el portal.')) {
+      fetch(`${WEB_APP_URL}?action=eliminarGrupo&idGrupo=${encodeURIComponent(grupoCoordinadorSeleccionado)}`)
+        .then(r => r.json())
+        .then(res => {
+          alert(res.mensaje || 'Grupo eliminado.');
+          document.getElementById('secDetalleGrupoCoordinador').classList.add('oculto');
+          cargarGruposCoordinadorUI();
+        });
     }
   }
 
-  function iniciarEscaner() {
-    const msgBox = document.getElementById('resEscaneoMsg');
-    msgBox.textContent = 'Inicializando cámara...';
-    msgBox.style.color = '#0b4d82';
+  /* LÓGICA DE MI GRUPO (LIDER_HOMBRIA) */
+  function cargarMiGrupoLiderUI() {
+    if (!usuarioSesion) return;
+    const cont = document.getElementById('contenedorIntegrantesMiGrupo');
+    cont.innerHTML = '<p style="text-align:center; color:#0b4d82;">Cargando integrantes de tu grupo...</p>';
 
+    fetch(`${WEB_APP_URL}?action=consultarMiGrupo&liderRegistro=${encodeURIComponent(usuarioSesion.registro)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito) {
+          document.getElementById('lblMiGrupoTitulo').textContent = 'Grupo de ' + (res.grupo.nombreLider || usuarioSesion.nombre);
+          document.getElementById('lblMiGrupoNivel').textContent = res.grupo.nivel;
+
+          cont.innerHTML = '';
+          if (!res.integrantes || res.integrantes.length === 0) {
+            cont.innerHTML = '<p style="text-align:center; color:#71808e;">Aún no tienes integrantes agregados a tu grupo.</p>';
+            return;
+          }
+
+          const permitirCal = res.permitirCalificaciones === true;
+
+          res.integrantes.forEach(it => {
+            cont.innerHTML += `
+              <div class="attendance-row" style="flex-direction:column; align-items:flex-start; gap:8px;">
+                <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                  <div>
+                    <strong style="font-size:14px; color:#18232d;">${it.nombreCompleto} (#${it.registro})</strong>
+                    <span style="font-size:12px; color:#52606d; display:block;">Asistencias: ${it.asistenciasCompletadas} de ${it.totalSesiones}</span>
+                  </div>
+                  <span class="badge-status badge-presente">${it.porcentajeAsistencia}%</span>
+                </div>
+
+                ${permitirCal ? `
+                  <div style="display:flex; align-items:center; gap:8px; width:100%; margin-top:4px;">
+                    <span style="font-size:12px; font-weight:bold;">Calificación:</span>
+                    <input type="number" min="0" max="100" value="${it.calificacion || ''}" placeholder="0-100" style="width:70px; padding:4px 8px; border-radius:6px; border:1px solid #ccc;" onchange="guardarCalificacionIntegrante('${it.registro}', this.value)">
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          });
+        } else {
+          cont.innerHTML = `<p style="text-align:center; color:#a52828;">${res.mensaje || 'Sin grupo asignado.'}</p>`;
+        }
+      });
+  }
+
+  function abrirModalAgregarIntegrante() {
+    document.getElementById('inputRegistroIntegrante').value = '';
+    document.getElementById('boxResultadoConfirmacionPersona').classList.add('oculto');
+    document.getElementById('btnConfirmarAgregarIntegrante').classList.add('oculto');
+    document.getElementById('msgAgregarIntegranteModal').textContent = '';
+    personaConfirmadaModal = null;
+    document.getElementById('modalAgregarIntegrante').classList.add('active');
+  }
+
+  function cerrarModalAgregarIntegrante() {
+    document.getElementById('modalAgregarIntegrante').classList.remove('active');
+  }
+
+  function buscarIntegrantePorRegistroExacto() {
+    const reg = document.getElementById('inputRegistroIntegrante').value.trim();
+    const msg = document.getElementById('msgAgregarIntegranteModal');
+    if (!reg) return;
+
+    msg.style.color = '#0b4d82';
+    msg.textContent = 'Buscando por número de registro exacto...';
+
+    fetch(`${WEB_APP_URL}?action=buscarPersonaPorRegistroExacto&registro=${encodeURIComponent(reg)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito) {
+          personaConfirmadaModal = res.persona;
+          document.getElementById('lblNombrePersonaConfirmar').textContent = res.persona.nombreCompleto;
+          document.getElementById('lblCampusPersonaConfirmar').textContent = 'Campus: ' + res.persona.campus;
+          document.getElementById('boxResultadoConfirmacionPersona').classList.remove('oculto');
+          document.getElementById('btnConfirmarAgregarIntegrante').classList.remove('oculto');
+          msg.textContent = '';
+        } else {
+          document.getElementById('boxResultadoConfirmacionPersona').classList.add('oculto');
+          document.getElementById('btnConfirmarAgregarIntegrante').classList.add('oculto');
+          msg.style.color = '#a52828';
+          msg.textContent = res.mensaje || 'Persona no encontrada.';
+        }
+      });
+  }
+
+  function ejecutarAgregarIntegranteAGrupo() {
+    if (!personaConfirmadaModal || !usuarioSesion) return;
+    const msg = document.getElementById('msgAgregarIntegranteModal');
+
+    msg.style.color = '#0b4d82';
+    msg.textContent = 'Incorporando integrante...';
+
+    const params = new URLSearchParams({
+      action: 'agregarPersonaAGrupo',
+      liderRegistro: usuarioSesion.registro,
+      registroPersona: personaConfirmadaModal.registro
+    });
+
+    fetch(`${WEB_APP_URL}?${params.toString()}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito) {
+          cerrarModalAgregarIntegrante();
+          cargarMiGrupoLiderUI();
+          alert('¡Persona incorporada al grupo con éxito!');
+        } else {
+          msg.style.color = '#a52828';
+          msg.textContent = res.mensaje || 'No se pudo agregar a la persona.';
+        }
+      });
+  }
+
+  function guardarCalificacionIntegrante(regPersona, val) {
+    if (!usuarioSesion) return;
+    fetch(`${WEB_APP_URL}?action=guardarCalificacion&liderRegistro=${encodeURIComponent(usuarioSesion.registro)}&registroPersona=${encodeURIComponent(regPersona)}&calificacion=${encodeURIComponent(val)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (!res.exito) alert('Error al guardar calificación: ' + res.mensaje);
+      });
+  }
+
+  /* ESCÁNER CONTINUO RÁPIDO DE REGISTRO */
+  function iniciarEscanerContinuo() {
     if (html5QrcodeScanner) {
       html5QrcodeScanner.clear();
     }
 
     html5QrcodeScanner = new Html5Qrcode("reader");
-    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+    const config = { fps: 15, qrbox: { width: 250, height: 250 } };
 
     html5QrcodeScanner.start(
       { facingMode: "environment" },
       config,
-      (decodedText) => {
-        detenerEscaner();
-        procesarEscaneoQR(decodedText);
+      (codigoQR) => {
+        const ahora = Date.now();
+        // Prevención de duplicados si permanece frente a la cámara (3 segundos)
+        if (codigoQR === ultimoCodigoEscaneado && (ahora - tiempoUltimoEscaneo) < 3000) {
+          return;
+        }
+
+        ultimoCodigoEscaneado = codigoQR;
+        tiempoUltimoEscaneo = ahora;
+        procesarEscaneoQRRapido(codigoQR);
       },
       () => {}
-    ).catch(err => {
-      msgBox.textContent = 'No se pudo acceder a la cámara: ' + err;
-      msgBox.style.color = '#a52828';
-    });
+    ).catch(() => {});
   }
 
-  function detenerEscaner() {
-    if (html5QrcodeScanner) {
-      html5QrcodeScanner.stop().then(() => {
-        html5QrcodeScanner.clear();
-        html5QrcodeScanner = null;
-      }).catch(() => {});
-    }
-  }
-
-  function procesarEscaneoQR(codigoQR) {
+  function procesarEscaneoQRRapido(codigoQR) {
     if (!usuarioSesion) return;
     const prog = document.getElementById('selectProgEscaner').value;
-    const msgBox = document.getElementById('resEscaneoMsg');
-
-    msgBox.textContent = 'Procesando código QR (' + codigoQR + ')...';
-    msgBox.style.color = '#0b4d82';
 
     const params = new URLSearchParams({
       action: 'registrarAsistencia',
@@ -2179,20 +1927,158 @@
     fetch(`${WEB_APP_URL}?${params.toString()}`)
       .then(res => res.json())
       .then(data => {
+        const toast = document.getElementById('scannerToast');
         if (data && data.exito) {
-          msgBox.textContent = '✅ ' + data.mensaje;
-          msgBox.style.color = '#176b3a';
+          toast.style.background = 'rgba(23, 107, 58, 0.95)';
+          toast.textContent = `✓ ${data.nombrePersona || 'Asistencia Registrada'}`;
         } else {
-          msgBox.textContent = '❌ ' + (data.mensaje || 'Error al registrar.');
-          msgBox.style.color = '#a52828';
+          toast.style.background = 'rgba(165, 40, 40, 0.95)';
+          toast.textContent = `✕ ${data.mensaje || 'Ya registrada'}`;
         }
-        setTimeout(() => iniciarEscaner(), 3000);
-      })
-      .catch(() => {
-        msgBox.textContent = '❌ Error de conexión al registrar asistencia.';
-        msgBox.style.color = '#a52828';
-        setTimeout(() => iniciarEscaner(), 3000);
+
+        toast.classList.add('visible');
+        setTimeout(() => toast.classList.remove('visible'), 1600);
       });
+  }
+
+  /* MASTER NACIONES (ADMIN_GLOBAL) */
+  function buscarUsuarioMaster() {
+    const q = document.getElementById('inputMasterSearchUser').value.trim();
+    const cont = document.getElementById('contenedorResultadoMasterUser');
+    if (!q) return;
+
+    cont.innerHTML = '<p style="color:#0b4d82;">Buscando usuario...</p>';
+
+    fetch(`${WEB_APP_URL}?action=buscarPersonaPorRegistroExacto&registro=${encodeURIComponent(q)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito) {
+          const u = res.persona;
+          cont.innerHTML = `
+            <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:14px; margin-top:10px;">
+              <strong>${u.nombreCompleto} (#${u.registro})</strong>
+              <span style="display:block; font-size:12px; color:#64748b;">Rol actual: <strong>${u.rol || 'PARTICIPANTE'}</strong></span>
+              
+              <div style="display:flex; gap:10px; margin-top:12px; align-items:center;">
+                <select id="selectNuevoRolMaster" style="padding:8px; border-radius:8px;">
+                  <option value="PARTICIPANTE">PARTICIPANTE</option>
+                  <option value="REGISTRO">REGISTRO</option>
+                  <option value="LIDER_HOMBRIA">LIDER_HOMBRIA</option>
+                  <option value="COORDINADOR_HOMBRIA">COORDINADOR_HOMBRIA</option>
+                  <option value="ADMIN_CAMPUS">ADMIN_CAMPUS</option>
+                  <option value="PASTOR">PASTOR</option>
+                  <option value="ADMIN_GLOBAL">ADMIN_GLOBAL</option>
+                </select>
+                <button class="btn-auth-primary" style="width:auto; margin:0;" onclick="actualizarRolMaster('${u.registro}')">Actualizar Rol</button>
+              </div>
+            </div>
+          `;
+        } else {
+          cont.innerHTML = `<p style="color:#a52828;">${res.mensaje || 'Usuario no encontrado.'}</p>`;
+        }
+      });
+  }
+
+  function actualizarRolMaster(targetReg) {
+    const nuevoRol = document.getElementById('selectNuevoRolMaster').value;
+    fetch(`${WEB_APP_URL}?action=asignarRolUsuario&adminRegistro=${encodeURIComponent(usuarioSesion.registro)}&targetRegistro=${encodeURIComponent(targetReg)}&nuevoRol=${encodeURIComponent(nuevoRol)}`)
+      .then(r => r.json())
+      .then(res => {
+        alert(res.mensaje || 'Rol actualizado correctamente.');
+      });
+  }
+
+  function guardarToggleCalificacionesMaster(estado) {
+    fetch(`${WEB_APP_URL}?action=toggleCalificacionesGlobal&adminRegistro=${encodeURIComponent(usuarioSesion.registro)}&estado=${encodeURIComponent(estado)}`)
+      .then(r => r.json())
+      .then(res => alert(res.mensaje || 'Configuración guardada.'));
+  }
+
+  /* AUXILIARES DE NAVEGACIÓN Y PERFIL */
+  function abrirDrawer() { document.getElementById('drawerOverlay').classList.add('activo'); document.getElementById('drawerMenu').classList.add('activo'); }
+  function cerrarDrawer() { document.getElementById('drawerOverlay').classList.remove('activo'); document.getElementById('drawerMenu').classList.remove('activo'); }
+
+  function cerrarSesion() {
+    localStorage.removeItem('naciones_sesion');
+    usuarioSesion = null;
+    if (html5QrcodeScanner) { html5QrcodeScanner.stop().catch(()=>{}); }
+    document.getElementById('panelPrincipal').classList.add('oculto');
+    document.getElementById('headerNacionesDesktop').classList.add('oculto');
+    document.getElementById('headerNacionesMobile').classList.add('oculto');
+    document.getElementById('bottomNav').classList.add('oculto');
+    document.getElementById('secAuthSplitPage').classList.remove('oculto');
+    mostrarFormularioAuth('login');
+  }
+
+  function toggleSubAdmin(sub) {
+    document.getElementById('secAdminMetricas').classList.toggle('oculto', sub !== 'metricas');
+    document.getElementById('secAdminPersonas').classList.toggle('oculto', sub !== 'personas');
+  }
+
+  function cargarMetricasAdminUI() {
+    if (!usuarioSesion) return;
+    const prog = document.getElementById('adminFiltroPrograma').value;
+    const curso = document.getElementById('adminFiltroCurso').value;
+    fetch(`${WEB_APP_URL}?action=obtenerMetricasAdmin&campus=${encodeURIComponent(usuarioSesion.campus)}&programa=${encodeURIComponent(prog)}&curso=${encodeURIComponent(curso)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito) {
+          document.getElementById('kpiTotalInscritos').textContent = res.totalInscritos;
+          document.getElementById('kpiPctAsistencia').textContent = res.porcentajeAsistenciaPromedio + '%';
+          let html = '';
+          res.alumnos.forEach(a => {
+            html += `<div class="attendance-row"><div><strong>${a.nombreCompleto} (#${a.registro})</strong><br><small>${a.curso}</small></div><span class="badge-status badge-presente">${a.asistencias} (${a.porcentajeAsistencia}%)</span></div>`;
+          });
+          document.getElementById('tablaInscritosAdmin').innerHTML = html || '<p style="text-align:center;">Sin registros.</p>';
+        }
+      });
+  }
+
+  function buscarPersonaAdmin() {
+    const query = document.getElementById('inputBuscarPersonaAdmin').value.trim();
+    if (!query) return;
+    const cont = document.getElementById('contenedorExpedientePersona');
+    cont.innerHTML = '<p style="text-align:center;">Buscando...</p>';
+    fetch(`${WEB_APP_URL}?action=consultarExpedientePersona&query=${encodeURIComponent(query)}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.exito) {
+          const exp = res.expediente;
+          cont.innerHTML = `<div class="card-rounded-gray"><h3>${exp.nombreCompleto}</h3><p>Reg: ${exp.registro} | Campus: ${exp.campus}</p><p>Tel: ${exp.telefono} | Mail: ${exp.correo}</p></div>`;
+        } else {
+          cont.innerHTML = `<p style="color:#a52828;">${res.mensaje || 'No encontrado'}</p>`;
+        }
+      });
+  }
+
+  function renderizarListaRecursosUI() {
+    const cont = document.getElementById('contenedorListaRecursos');
+    if (!cont) return;
+    cont.innerHTML = '<p style="text-align:center; color:#71808e;">Cargando recursos...</p>';
+  }
+
+  function mostrarSubvistaCuenta(sub) {
+    if (sub === 'info') {
+      document.getElementById('vistaCuentaMain').classList.add('oculto');
+      document.getElementById('vistaCuentaInfo').classList.remove('oculto');
+    } else {
+      document.getElementById('vistaCuentaInfo').classList.add('oculto');
+      document.getElementById('vistaCuentaMain').classList.remove('oculto');
+    }
+  }
+
+  function activarModoEdicionPerfil() {
+    document.getElementById('boxPerfilLectura').classList.add('oculto');
+    document.getElementById('boxPerfilEdicion').classList.remove('oculto');
+  }
+
+  function cancelarEdicionPerfil() {
+    document.getElementById('boxPerfilEdicion').classList.add('oculto');
+    document.getElementById('boxPerfilLectura').classList.remove('oculto');
+  }
+
+  function guardarEdicionPerfil() {
+    cancelarEdicionPerfil();
   }
 </script>
 </body>
