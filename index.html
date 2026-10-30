@@ -763,7 +763,6 @@
       <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
       <button class="nav-btn oculto" id="navBtnGrupos" onclick="navegarA('grupos')">Grupos</button>
       <button class="nav-btn oculto" id="navBtnMiGrupo" onclick="navegarA('miGrupo')">Mi grupo</button>
-      <button class="nav-btn oculto" id="navBtnAdminRoles" onclick="navegarA('roles')">Permisos</button>
     </nav>
   </div>
 </header>
@@ -785,7 +784,6 @@
   <div class="drawer-item" onclick="navegarA('cuenta'); cerrarDrawer();">MI CUENTA</div>
   <div class="drawer-item oculto" id="drawerGrupos" onclick="navegarA('grupos'); cerrarDrawer();">GRUPOS DE HOMBRÍA</div>
   <div class="drawer-item oculto" id="drawerMiGrupo" onclick="navegarA('miGrupo'); cerrarDrawer();">MI GRUPO</div>
-  <div class="drawer-item oculto" id="drawerRoles" onclick="navegarA('roles'); cerrarDrawer();">ADMINISTRAR PERMISOS</div>
   <div class="drawer-item oculto" id="itemRegistro" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO (ESCANEAR QR)</div>
   <div class="drawer-item" onclick="cerrarSesion(); cerrarDrawer();" style="color: #a52828; margin-top: auto;">CERRAR SESIÓN</div>
 </aside>
@@ -1162,10 +1160,8 @@
         <h2 style="margin-top:0;color:#005b92">Grupos de Hombría</h2>
         <p class="portal-muted">Consulta y administra los grupos según los permisos de tu rol y campus.</p>
         <div id="formCrearGrupo" class="portal-grid oculto">
-          <div class="portal-field"><label for="grupoNombre">Nombre del grupo</label><input id="grupoNombre" maxlength="90" placeholder="Ej. Grupo de Hombría 01"></div>
-          <div class="portal-field"><label for="grupoCampus">Campus</label><select id="grupoCampus"><option value="11 SUR">11 Sur / Nacional</option><option value="HUEJOTZINGO">Huejo</option><option value="JUAN BAUTISTA">Juan Bautista</option><option value="SAN MARTIN ESPERILLAS">San Martín Esperillas</option></select></div>
+          <div class="portal-field"><label for="grupoLiderRegistro"># de Registro del líder</label><input id="grupoLiderRegistro" inputmode="numeric" placeholder="Número de registro" autocomplete="off"></div>
           <div class="portal-field"><label for="grupoNivel">Nivel</label><select id="grupoNivel"><option>Nivel 1: Hombría al Máximo</option><option>Nivel 2: Valor</option><option>Nivel 3: Integridad Sexual</option><option>Nivel 4: El Principio del Potencial</option><option>Nivel 5: Nunca Te Rindas</option><option>Nivel 6: Comunicación, Sexo y Dinero</option><option>Nivel 7: Un Hombre de Verdad I</option><option>Nivel 8: Un Hombre de Verdad II</option><option>Nivel 9</option><option>Nivel 10</option></select></div>
-          <div class="portal-field"><label for="grupoLiderRegistro">Registro del líder</label><input id="grupoLiderRegistro" inputmode="numeric" placeholder="Número de registro"><small class="portal-muted">Debe tener previamente el rol LIDER_HOMBRIA.</small></div>
           <div><button class="portal-primary" onclick="crearGrupoDesdeUI()">Crear grupo</button><div id="msgCrearGrupo" class="portal-status"></div></div>
         </div>
         <div id="listaGrupos" class="portal-group-list"><p class="portal-muted">Cargando grupos…</p></div>
@@ -1187,18 +1183,7 @@
       <div class="portal-admin-card"><h2 style="margin-top:0;color:#005b92">Mi grupo</h2><p class="portal-muted">Acceso al grupo asignado a tu registro de líder.</p><div id="miGrupoContenido" class="portal-group-list"></div></div>
     </section>
 
-    <section id="vistaRoles" class="oculto">
-      <div class="portal-admin-card">
-        <h2 style="margin-top:0;color:#005b92">Administración de permisos</h2>
-        <p class="portal-muted">Solo ADMIN_GLOBAL puede asignar o modificar roles. Los permisos también se validan en el servidor.</p>
-        <div class="portal-grid">
-          <div class="portal-field"><label for="rolRegistro">Número de registro</label><input id="rolRegistro" inputmode="numeric" placeholder="Registro exacto"></div>
-          <div class="portal-field"><label for="rolCampus">Campus (opcional)</label><select id="rolCampus"><option value="">Usar campus registrado</option><option value="11 SUR">11 Sur / Nacional</option><option value="HUEJOTZINGO">Huejo</option><option value="JUAN BAUTISTA">Juan Bautista</option><option value="SAN MARTIN ESPERILLAS">San Martín Esperillas</option></select></div>
-          <div class="portal-field"><label for="rolSeleccionado">Rol</label><select id="rolSeleccionado"><option>ADMIN_GLOBAL</option><option>PASTOR</option><option>ADMIN_CAMPUS</option><option>COORDINADOR_HOMBRIA</option><option>LIDER_HOMBRIA</option><option>REGISTRO</option></select></div>
-        </div>
-        <button class="portal-primary" onclick="asignarRolDesdeUI()">Guardar rol</button><div id="msgAsignarRol" class="portal-status"></div>
-      </div>
-    </section>
+
   </div>
 </main>
 
@@ -1684,6 +1669,11 @@
         document.getElementById('sumHombriaTextoDesktop').textContent = textoConfirmacionH;
         document.getElementById('sumHombriaTextoMobile').textContent = textoConfirmacionH;
       }
+    } else {
+      document.getElementById('titleProxHombria').textContent = 'Hombría al Máximo';
+      document.getElementById('txtProxHombria').textContent = 'Actualmente no estás inscrito en ningún nivel.';
+      document.getElementById('sumHombriaTextoDesktop').textContent = 'Actualmente no estás inscrito en ningún nivel.';
+      document.getElementById('sumHombriaTextoMobile').textContent = 'Actualmente no estás inscrito en ningún nivel.';
     }
 
     if (insci.FUNDAMENTOS) {
@@ -1708,6 +1698,11 @@
         document.getElementById('sumFundamentosTextoDesktop').textContent = textoConfirmacionF;
         document.getElementById('sumFundamentosTextoMobile').textContent = textoConfirmacionF;
       }
+    } else {
+      document.getElementById('titleProxFundamentos').textContent = 'Fundamentos';
+      document.getElementById('txtProxFundamentos').textContent = 'Actualmente no estás inscrito en ningún curso.';
+      document.getElementById('sumFundamentosTextoDesktop').textContent = 'Actualmente no estás inscrito en ningún curso.';
+      document.getElementById('sumFundamentosTextoMobile').textContent = 'Actualmente no estás inscrito en ningún curso.';
     }
 
     if (res.asistencias) {
@@ -2045,7 +2040,7 @@
 
   function navegarA(vista) {
     if (vista !== 'escaner') detenerEscaner();
-    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaEscaner','vistaGrupos','vistaMiGrupo','vistaRoles'].forEach(id => {
+    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaEscaner','vistaGrupos','vistaMiGrupo'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.add('oculto');
     });
@@ -2071,9 +2066,6 @@
     } else if (vista === 'miGrupo') {
       if (String(usuarioSesion?.rol || '').toUpperCase() !== 'LIDER_HOMBRIA') return navegarA('inicio');
       mostrar('vistaMiGrupo'); activar('navBtnMiGrupo'); cargarGruposUI(true);
-    } else if (vista === 'roles') {
-      if (String(usuarioSesion?.rol || '').toUpperCase() !== 'ADMIN_GLOBAL') return navegarA('inicio');
-      mostrar('vistaRoles'); activar('navBtnAdminRoles');
     }
   }
 
@@ -2285,13 +2277,8 @@
     const puedeCrear = ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol);
     mostrar('navBtnGrupos', grupos); mostrar('drawerGrupos', grupos);
     mostrar('navBtnMiGrupo', rol === 'LIDER_HOMBRIA'); mostrar('drawerMiGrupo', rol === 'LIDER_HOMBRIA');
-    mostrar('navBtnAdminRoles', rol === 'ADMIN_GLOBAL'); mostrar('drawerRoles', rol === 'ADMIN_GLOBAL');
     mostrar('itemRegistro', ['REGISTRO','ADMIN_CAMPUS','ADMIN_GLOBAL','PASTOR'].includes(rol));
     mostrar('formCrearGrupo', puedeCrear);
-    if (rol === 'ADMIN_CAMPUS') {
-      const sel = document.getElementById('grupoCampus');
-      if (sel) { sel.value = usuarioSesion.campus || '11 SUR'; sel.disabled = true; }
-    }
   }
 
   function cargarGruposUI(paraMiGrupo = false) {
@@ -2311,17 +2298,22 @@
 
   function crearGrupoDesdeUI() {
     const msg = document.getElementById('msgCrearGrupo');
-    msg.textContent = 'Creando grupo…'; msg.style.color = '#005b92';
-    apiPortal('crearGrupoHombria', {
-      nombre: document.getElementById('grupoNombre').value.trim(),
-      campus: document.getElementById('grupoCampus').value,
-      nivel: document.getElementById('grupoNivel').value,
-      liderRegistro: document.getElementById('grupoLiderRegistro').value.trim()
-    }).then(data => {
-      msg.textContent = data.mensaje || (data.exito ? 'Grupo creado.' : 'No se pudo crear.');
-      msg.style.color = data.exito ? '#176b3a' : '#a52828';
-      if (data.exito) { document.getElementById('grupoNombre').value=''; document.getElementById('grupoLiderRegistro').value=''; cargarGruposUI(); }
-    }).catch(err => { msg.textContent = err.message; msg.style.color='#a52828'; });
+    const liderRegistro = document.getElementById('grupoLiderRegistro').value.trim();
+    const nivel = document.getElementById('grupoNivel').value;
+    if (!liderRegistro) { msg.textContent = 'Ingresa el número de registro del líder.'; msg.style.color = '#a52828'; return; }
+    msg.textContent = 'Verificando líder…'; msg.style.color = '#005b92';
+    apiPortal('buscarIntegranteHombria', { registro: liderRegistro }).then(data => {
+      if (!data.exito || !data.persona) throw new Error(data.mensaje || 'No se encontró al líder.');
+      const p = data.persona;
+      const confirmacion = `Confirma los datos del grupo:\n\nLíder: ${p.nombre}\nRegistro: ${p.registro}\nCampus registrado: ${p.campus}\nNivel: ${nivel}\n\nEl sistema registrará automáticamente el rol LIDER_HOMBRIA como ACTIVO y creará el grupo. ¿Deseas continuar?`;
+      if (!window.confirm(confirmacion)) { msg.textContent = 'Operación cancelada.'; msg.style.color = '#71808e'; return; }
+      msg.textContent = 'Creando grupo y registrando al líder…';
+      return apiPortal('crearGrupoHombria', { nivel, liderRegistro }).then(resultado => {
+        msg.textContent = resultado.mensaje || (resultado.exito ? 'Grupo creado.' : 'No se pudo crear.');
+        msg.style.color = resultado.exito ? '#176b3a' : '#a52828';
+        if (resultado.exito) { document.getElementById('grupoLiderRegistro').value = ''; cargarGruposUI(); }
+      });
+    }).catch(err => { msg.textContent = err.message || 'No se pudo verificar al líder.'; msg.style.color = '#a52828'; });
   }
 
   function abrirGestionGrupo(id, nombre) {
