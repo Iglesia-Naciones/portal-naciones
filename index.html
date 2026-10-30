@@ -485,7 +485,26 @@
     }
 
     .oculto { display: none !important; }
-  </style>
+  
+
+  /* Componentes de administración de Hombría, integrados al diseño actual */
+  .portal-admin-card{background:#fff;border:1px solid #e2e8ee;border-radius:18px;padding:22px;margin:14px 0;box-shadow:0 8px 24px rgba(24,35,45,.05)}
+  .portal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .portal-field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;text-align:left}
+  .portal-field label{font-size:12px;font-weight:800;color:#52606d}
+  .portal-field input,.portal-field select{width:100%;box-sizing:border-box;border:1px solid #d5dde4;border-radius:10px;padding:11px 12px;font:inherit;background:#fff;color:#18232d}
+  .portal-primary{border:0;border-radius:10px;background:#005b92;color:white;padding:11px 16px;font-weight:800;cursor:pointer}
+  .portal-secondary{border:1px solid #cbd5df;border-radius:10px;background:#fff;color:#005b92;padding:9px 12px;font-weight:800;cursor:pointer}
+  .portal-muted{color:#71808e;font-size:13px}
+  .portal-group-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-top:14px}
+  .portal-group{border:1px solid #e1e7ed;border-radius:14px;padding:16px;background:#fff;text-align:left}
+  .portal-group h3{margin:0 0 7px;color:#18232d;font-size:16px}
+  .portal-badge{display:inline-block;border-radius:999px;background:#eaf4fa;color:#005b92;padding:4px 8px;font-size:11px;font-weight:800;margin:3px 4px 3px 0}
+  .portal-member-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #edf0f3}
+  .portal-member-row:last-child{border-bottom:0}
+  .portal-status{font-size:13px;font-weight:700;margin-top:10px;min-height:18px}
+  @media(max-width:700px){.portal-grid{grid-template-columns:1fr}.portal-admin-card{padding:16px}.portal-member-row{align-items:flex-start;flex-direction:column}}
+</style>
 </head>
 <body>
 
@@ -742,6 +761,9 @@
       <button class="nav-btn" id="navBtnHombria" onclick="navegarA('hombria')">Hombría al Máximo</button>
       <button class="nav-btn" id="navBtnRecursos" onclick="navegarA('recursos')">Recursos</button>
       <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
+      <button class="nav-btn oculto" id="navBtnGrupos" onclick="navegarA('grupos')">Grupos</button>
+      <button class="nav-btn oculto" id="navBtnMiGrupo" onclick="navegarA('miGrupo')">Mi grupo</button>
+      <button class="nav-btn oculto" id="navBtnAdminRoles" onclick="navegarA('roles')">Permisos</button>
     </nav>
   </div>
 </header>
@@ -761,6 +783,9 @@
   <div class="drawer-item" onclick="navegarA('hombria'); cerrarDrawer();">HOMBRÍA AL MÁXIMO</div>
   <div class="drawer-item" onclick="navegarA('recursos'); cerrarDrawer();">RECURSOS</div>
   <div class="drawer-item" onclick="navegarA('cuenta'); cerrarDrawer();">MI CUENTA</div>
+  <div class="drawer-item oculto" id="drawerGrupos" onclick="navegarA('grupos'); cerrarDrawer();">GRUPOS DE HOMBRÍA</div>
+  <div class="drawer-item oculto" id="drawerMiGrupo" onclick="navegarA('miGrupo'); cerrarDrawer();">MI GRUPO</div>
+  <div class="drawer-item oculto" id="drawerRoles" onclick="navegarA('roles'); cerrarDrawer();">ADMINISTRAR PERMISOS</div>
   <div class="drawer-item oculto" id="itemRegistro" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO (ESCANEAR QR)</div>
   <div class="drawer-item" onclick="cerrarSesion(); cerrarDrawer();" style="color: #a52828; margin-top: auto;">CERRAR SESIÓN</div>
 </aside>
@@ -1131,6 +1156,49 @@
       </div>
     </section>
 
+
+    <section id="vistaGrupos" class="oculto">
+      <div class="portal-admin-card">
+        <h2 style="margin-top:0;color:#005b92">Grupos de Hombría</h2>
+        <p class="portal-muted">Consulta y administra los grupos según los permisos de tu rol y campus.</p>
+        <div id="formCrearGrupo" class="portal-grid oculto">
+          <div class="portal-field"><label for="grupoNombre">Nombre del grupo</label><input id="grupoNombre" maxlength="90" placeholder="Ej. Grupo de Hombría 01"></div>
+          <div class="portal-field"><label for="grupoCampus">Campus</label><select id="grupoCampus"><option value="11 SUR">11 Sur / Nacional</option><option value="HUEJOTZINGO">Huejo</option><option value="JUAN BAUTISTA">Juan Bautista</option><option value="SAN MARTIN ESPERILLAS">San Martín Esperillas</option></select></div>
+          <div class="portal-field"><label for="grupoNivel">Nivel</label><select id="grupoNivel"><option>Nivel 1: Hombría al Máximo</option><option>Nivel 2: Valor</option><option>Nivel 3: Integridad Sexual</option><option>Nivel 4: El Principio del Potencial</option><option>Nivel 5: Nunca Te Rindas</option><option>Nivel 6: Comunicación, Sexo y Dinero</option><option>Nivel 7: Un Hombre de Verdad I</option><option>Nivel 8: Un Hombre de Verdad II</option><option>Nivel 9</option><option>Nivel 10</option></select></div>
+          <div class="portal-field"><label for="grupoLiderRegistro">Registro del líder</label><input id="grupoLiderRegistro" inputmode="numeric" placeholder="Número de registro"><small class="portal-muted">Debe tener previamente el rol LIDER_HOMBRIA.</small></div>
+          <div><button class="portal-primary" onclick="crearGrupoDesdeUI()">Crear grupo</button><div id="msgCrearGrupo" class="portal-status"></div></div>
+        </div>
+        <div id="listaGrupos" class="portal-group-list"><p class="portal-muted">Cargando grupos…</p></div>
+        <div id="msgGrupos" class="portal-status"></div>
+      </div>
+      <div class="portal-admin-card oculto" id="panelGestionGrupo">
+        <h2 id="tituloGestionGrupo" style="margin-top:0;color:#005b92">Integrantes del grupo</h2>
+        <div class="portal-grid">
+          <div class="portal-field"><label for="integranteRegistro">Buscar por número de registro</label><input id="integranteRegistro" inputmode="numeric" placeholder="Escribe el número exacto"></div>
+          <div style="align-self:end"><button class="portal-primary" onclick="buscarIntegranteDesdeUI()">Buscar integrante</button></div>
+        </div>
+        <div id="resultadoBusquedaIntegrante" class="portal-muted"></div>
+        <div id="listaIntegrantesGrupo"></div>
+        <div id="msgGestionGrupo" class="portal-status"></div>
+      </div>
+    </section>
+
+    <section id="vistaMiGrupo" class="oculto">
+      <div class="portal-admin-card"><h2 style="margin-top:0;color:#005b92">Mi grupo</h2><p class="portal-muted">Acceso al grupo asignado a tu registro de líder.</p><div id="miGrupoContenido" class="portal-group-list"></div></div>
+    </section>
+
+    <section id="vistaRoles" class="oculto">
+      <div class="portal-admin-card">
+        <h2 style="margin-top:0;color:#005b92">Administración de permisos</h2>
+        <p class="portal-muted">Solo ADMIN_GLOBAL puede asignar o modificar roles. Los permisos también se validan en el servidor.</p>
+        <div class="portal-grid">
+          <div class="portal-field"><label for="rolRegistro">Número de registro</label><input id="rolRegistro" inputmode="numeric" placeholder="Registro exacto"></div>
+          <div class="portal-field"><label for="rolCampus">Campus (opcional)</label><select id="rolCampus"><option value="">Usar campus registrado</option><option value="11 SUR">11 Sur / Nacional</option><option value="HUEJOTZINGO">Huejo</option><option value="JUAN BAUTISTA">Juan Bautista</option><option value="SAN MARTIN ESPERILLAS">San Martín Esperillas</option></select></div>
+          <div class="portal-field"><label for="rolSeleccionado">Rol</label><select id="rolSeleccionado"><option>ADMIN_GLOBAL</option><option>PASTOR</option><option>ADMIN_CAMPUS</option><option>COORDINADOR_HOMBRIA</option><option>LIDER_HOMBRIA</option><option>REGISTRO</option></select></div>
+        </div>
+        <button class="portal-primary" onclick="asignarRolDesdeUI()">Guardar rol</button><div id="msgAsignarRol" class="portal-status"></div>
+      </div>
+    </section>
   </div>
 </main>
 
@@ -1164,6 +1232,11 @@
   let idOfertaSeleccionada = null;
   let ultimoRegistroCreado = null;
   let html5QrcodeScanner = null;
+  let grupoSeleccionado = null;
+  let personaPendienteAgregar = null;
+  let escaneoEnProceso = false;
+  let ultimoCodigoEscaneado = '';
+  let ultimoTiempoEscaneo = 0;
 
   let currentAuthSlide = 0;
   let authCarruselInterval = null;
@@ -1393,6 +1466,8 @@
     }
 
     cargarDatosEnPantalla(res);
+    configurarPermisosUI();
+    if (res.sessionToken && tienePermisoGruposUI()) cargarGruposUI();
 
     if (res.recursos) {
       recursosListaCompleta = res.recursos;
@@ -1969,41 +2044,36 @@
   }
 
   function navegarA(vista) {
-    document.getElementById('vistaInicio').classList.add('oculto');
-    document.getElementById('vistaFundamentos').classList.add('oculto');
-    document.getElementById('vistaHombria').classList.add('oculto');
-    document.getElementById('vistaRecursos').classList.add('oculto');
-    document.getElementById('vistaCuentaMain').classList.add('oculto');
-    document.getElementById('vistaCuentaInfo').classList.add('oculto');
-    document.getElementById('vistaEscaner').classList.add('oculto');
-
+    if (vista !== 'escaner') detenerEscaner();
+    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaEscaner','vistaGrupos','vistaMiGrupo','vistaRoles'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('oculto');
+    });
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
-
+    const mostrar = id => document.getElementById(id)?.classList.remove('oculto');
+    const activar = id => document.getElementById(id)?.classList.add('active');
     if (vista === 'inicio') {
-      document.getElementById('vistaInicio').classList.remove('oculto');
-      document.getElementById('navBtnInicio')?.classList.add('active');
-      document.getElementById('bnavInicio')?.classList.add('active');
+      mostrar('vistaInicio'); activar('navBtnInicio'); activar('bnavInicio');
     } else if (vista === 'fundamentos') {
-      document.getElementById('vistaFundamentos').classList.remove('oculto');
-      document.getElementById('navBtnFundamentos')?.classList.add('active');
-      document.getElementById('bnavFundamentos')?.classList.add('active');
+      mostrar('vistaFundamentos'); activar('navBtnFundamentos'); activar('bnavFundamentos');
     } else if (vista === 'hombria') {
-      document.getElementById('vistaHombria').classList.remove('oculto');
-      document.getElementById('navBtnHombria')?.classList.add('active');
-      document.getElementById('bnavHombria')?.classList.add('active');
+      mostrar('vistaHombria'); activar('navBtnHombria'); activar('bnavHombria');
     } else if (vista === 'recursos') {
-      document.getElementById('vistaRecursos').classList.remove('oculto');
-      document.getElementById('navBtnRecursos')?.classList.add('active');
-      document.getElementById('bnavRecursos')?.classList.add('active');
-      renderizarListaRecursosUI();
+      mostrar('vistaRecursos'); activar('navBtnRecursos'); activar('bnavRecursos'); renderizarListaRecursosUI();
     } else if (vista === 'cuenta') {
-      document.getElementById('vistaCuentaMain').classList.remove('oculto');
-      document.getElementById('navBtnCuenta')?.classList.add('active');
-      document.getElementById('bnavCuenta')?.classList.add('active');
+      mostrar('vistaCuentaMain'); activar('navBtnCuenta'); activar('bnavCuenta');
     } else if (vista === 'escaner') {
-      document.getElementById('vistaEscaner').classList.remove('oculto');
-      iniciarEscaner();
+      mostrar('vistaEscaner'); iniciarEscaner();
+    } else if (vista === 'grupos') {
+      if (!tienePermisoGruposUI()) return navegarA('inicio');
+      mostrar('vistaGrupos'); activar('navBtnGrupos'); cargarGruposUI();
+    } else if (vista === 'miGrupo') {
+      if (String(usuarioSesion?.rol || '').toUpperCase() !== 'LIDER_HOMBRIA') return navegarA('inicio');
+      mostrar('vistaMiGrupo'); activar('navBtnMiGrupo'); cargarGruposUI(true);
+    } else if (vista === 'roles') {
+      if (String(usuarioSesion?.rol || '').toUpperCase() !== 'ADMIN_GLOBAL') return navegarA('inicio');
+      mostrar('vistaRoles'); activar('navBtnAdminRoles');
     }
   }
 
@@ -2056,6 +2126,8 @@
   function cerrarSesion() {
     localStorage.removeItem('naciones_sesion');
     usuarioSesion = null;
+    grupoSeleccionado = null;
+    personaPendienteAgregar = null;
     datosOfertaCargada = null;
     idOfertaSeleccionada = null;
     ultimoRegistroCreado = null;
@@ -2194,6 +2266,139 @@
         setTimeout(() => iniciarEscaner(), 3000);
       });
   }
+
+  function tienePermisoGruposUI() {
+    const rol = String(usuarioSesion && usuarioSesion.rol || '').toUpperCase();
+    return ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rol);
+  }
+
+  function apiPortal(action, params = {}) {
+    if (!usuarioSesion || !usuarioSesion.sessionToken) return Promise.reject(new Error('Tu sesión expiró. Cierra sesión e inicia nuevamente.'));
+    const q = new URLSearchParams({ action, token: usuarioSesion.sessionToken, ...params });
+    return fetch(`${WEB_APP_URL}?${q.toString()}`).then(r => r.json());
+  }
+
+  function configurarPermisosUI() {
+    const rol = String(usuarioSesion && usuarioSesion.rol || '').toUpperCase();
+    const mostrar = (id, visible) => { const el = document.getElementById(id); if (el) el.classList.toggle('oculto', !visible); };
+    const grupos = ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rol);
+    const puedeCrear = ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol);
+    mostrar('navBtnGrupos', grupos); mostrar('drawerGrupos', grupos);
+    mostrar('navBtnMiGrupo', rol === 'LIDER_HOMBRIA'); mostrar('drawerMiGrupo', rol === 'LIDER_HOMBRIA');
+    mostrar('navBtnAdminRoles', rol === 'ADMIN_GLOBAL'); mostrar('drawerRoles', rol === 'ADMIN_GLOBAL');
+    mostrar('itemRegistro', ['REGISTRO','ADMIN_CAMPUS','ADMIN_GLOBAL','PASTOR'].includes(rol));
+    mostrar('formCrearGrupo', puedeCrear);
+    if (rol === 'ADMIN_CAMPUS') {
+      const sel = document.getElementById('grupoCampus');
+      if (sel) { sel.value = usuarioSesion.campus || '11 SUR'; sel.disabled = true; }
+    }
+  }
+
+  function cargarGruposUI(paraMiGrupo = false) {
+    const cont = paraMiGrupo ? document.getElementById('miGrupoContenido') : document.getElementById('listaGrupos');
+    if (!cont || !usuarioSesion || !tienePermisoGruposUI()) return;
+    cont.innerHTML = '<p class="portal-muted">Cargando grupos…</p>';
+    apiPortal('listarGruposHombria')
+      .then(data => {
+        if (!data.exito) { cont.innerHTML = `<p class="portal-muted">${escaparHTML(data.mensaje || 'No fue posible cargar los grupos.')}</p>`; return; }
+        let grupos = data.grupos || [];
+        if (paraMiGrupo) grupos = grupos.filter(g => String(g.liderRegistro) === String(usuarioSesion.registro));
+        if (!grupos.length) { cont.innerHTML = '<p class="portal-muted">No hay grupos asignados para mostrar.</p>'; return; }
+        cont.innerHTML = grupos.map(g => `<article class="portal-group"><h3>${escaparHTML(g.nombre)}</h3><span class="portal-badge">${escaparHTML(g.campus)}</span><span class="portal-badge">${escaparHTML(g.nivel)}</span><p class="portal-muted">Líder: ${escaparHTML(g.liderNombre || g.liderRegistro)} · ${Number(g.totalIntegrantes)||0} integrantes</p><button class="portal-primary" onclick="abrirGestionGrupo('${escaparHTML(g.id)}','${escaparHTML(g.nombre)}')">Ver grupo</button></article>`).join('');
+      })
+      .catch(err => { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; });
+  }
+
+  function crearGrupoDesdeUI() {
+    const msg = document.getElementById('msgCrearGrupo');
+    msg.textContent = 'Creando grupo…'; msg.style.color = '#005b92';
+    apiPortal('crearGrupoHombria', {
+      nombre: document.getElementById('grupoNombre').value.trim(),
+      campus: document.getElementById('grupoCampus').value,
+      nivel: document.getElementById('grupoNivel').value,
+      liderRegistro: document.getElementById('grupoLiderRegistro').value.trim()
+    }).then(data => {
+      msg.textContent = data.mensaje || (data.exito ? 'Grupo creado.' : 'No se pudo crear.');
+      msg.style.color = data.exito ? '#176b3a' : '#a52828';
+      if (data.exito) { document.getElementById('grupoNombre').value=''; document.getElementById('grupoLiderRegistro').value=''; cargarGruposUI(); }
+    }).catch(err => { msg.textContent = err.message; msg.style.color='#a52828'; });
+  }
+
+  function abrirGestionGrupo(id, nombre) {
+    grupoSeleccionado = { id, nombre };
+    document.getElementById('panelGestionGrupo').classList.remove('oculto');
+    document.getElementById('tituloGestionGrupo').textContent = nombre;
+    document.getElementById('resultadoBusquedaIntegrante').textContent = '';
+    document.getElementById('integranteRegistro').value = '';
+    cargarIntegrantesGrupoUI();
+    document.getElementById('panelGestionGrupo').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  function cargarIntegrantesGrupoUI() {
+    const cont = document.getElementById('listaIntegrantesGrupo');
+    if (!grupoSeleccionado) { cont.innerHTML = ''; return; }
+    cont.innerHTML = '<p class="portal-muted">Cargando integrantes…</p>';
+    apiPortal('listarIntegrantesGrupoHombria', { grupoId: grupoSeleccionado.id }).then(data => {
+      if (!data.exito) { cont.innerHTML = `<p class="portal-muted">${escaparHTML(data.mensaje || 'No se pudo cargar la lista.')}</p>`; return; }
+      const items = data.integrantes || [];
+      if (!items.length) { cont.innerHTML = '<p class="portal-muted">Este grupo todavía no tiene integrantes activos.</p>'; return; }
+      cont.innerHTML = '<h3 style="color:#18232d;font-size:15px;margin:18px 0 8px">Integrantes y asistencia de hoy</h3>' + items.map(p => `<div class="portal-member-row"><div><strong>${escaparHTML(p.nombre)}</strong><br><span class="portal-muted">Registro ${escaparHTML(p.registro)} · Hoy: ${escaparHTML(p.asistenciaHoy || 'Sin registrar')}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','PRESENTE')">Presente</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','FALTA')">Falta</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','JUSTIFICADA')">Justificada</button><button class="portal-secondary" onclick="quitarIntegranteGrupo('${escaparHTML(p.registro)}')">Retirar</button></div></div>`).join('');
+    }).catch(err => { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; });
+  }
+
+  function marcarAsistenciaGrupo(registro, estado) {
+    if (!grupoSeleccionado) return;
+    apiPortal('registrarAsistenciaGrupo', { grupoId: grupoSeleccionado.id, registro, estado }).then(data => {
+      const msg = document.getElementById('msgGestionGrupo'); msg.textContent = data.mensaje || ''; msg.style.color = data.exito ? '#176b3a' : '#a52828';
+      if (data.exito) cargarIntegrantesGrupoUI();
+    }).catch(err => { document.getElementById('msgGestionGrupo').textContent = err.message; });
+  }
+
+  function quitarIntegranteGrupo(registro) {
+    if (!grupoSeleccionado || !confirm('¿Retirar a esta persona del grupo? El historial de asistencia se conservará.')) return;
+    apiPortal('quitarIntegranteHombria', { grupoId: grupoSeleccionado.id, registro }).then(data => {
+      const msg = document.getElementById('msgGestionGrupo'); msg.textContent = data.mensaje || ''; msg.style.color = data.exito ? '#176b3a' : '#a52828';
+      if (data.exito) { cargarIntegrantesGrupoUI(); cargarGruposUI(); }
+    }).catch(err => { document.getElementById('msgGestionGrupo').textContent = err.message; });
+  }
+
+  function buscarIntegranteDesdeUI() {
+    const registro = document.getElementById('integranteRegistro').value.trim();
+    const box = document.getElementById('resultadoBusquedaIntegrante');
+    if (!grupoSeleccionado) { box.textContent = 'Selecciona primero un grupo.'; return; }
+    box.textContent = 'Buscando por número de registro…';
+    apiPortal('buscarIntegranteHombria', { registro }).then(data => {
+      if (!data.exito) { box.textContent = data.mensaje || 'No se encontró la persona.'; box.style.color='#a52828'; return; }
+      const p = data.persona;
+      personaPendienteAgregar = p;
+      box.style.color='#18232d';
+      box.innerHTML = `<div class="portal-member-row"><div><strong>${escaparHTML(p.nombre)}</strong><br><span class="portal-muted">Registro ${escaparHTML(p.registro)} · ${escaparHTML(p.campus)}</span></div><button class="portal-primary" onclick="agregarIntegrantePendiente()">Agregar al grupo</button></div>`;
+    }).catch(err => { box.textContent = err.message; box.style.color='#a52828'; });
+  }
+
+  function agregarIntegrantePendiente() {
+    if (!grupoSeleccionado || !personaPendienteAgregar) return;
+    apiPortal('agregarIntegranteHombria', { grupoId: grupoSeleccionado.id, registro: personaPendienteAgregar.registro }).then(data => {
+      const box = document.getElementById('msgGestionGrupo');
+      box.textContent = data.mensaje || ''; box.style.color = data.exito ? '#176b3a' : '#a52828';
+      if (data.exito) { personaPendienteAgregar = null; document.getElementById('resultadoBusquedaIntegrante').textContent = ''; document.getElementById('integranteRegistro').value=''; cargarGruposUI(); }
+    }).catch(err => { document.getElementById('msgGestionGrupo').textContent = err.message; });
+  }
+
+  function asignarRolDesdeUI() {
+    const msg = document.getElementById('msgAsignarRol'); msg.textContent = 'Guardando…'; msg.style.color='#005b92';
+    apiPortal('asignarRolPortal', {
+      registro: document.getElementById('rolRegistro').value.trim(),
+      rol: document.getElementById('rolSeleccionado').value,
+      campus: document.getElementById('rolCampus').value
+    }).then(data => { msg.textContent = data.mensaje || ''; msg.style.color = data.exito ? '#176b3a' : '#a52828'; })
+      .catch(err => { msg.textContent = err.message; msg.style.color='#a52828'; });
+  }
+
+  function escaparHTML(valor) {
+    return String(valor == null ? '' : valor).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
 </script>
 </body>
 </html>
