@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" href="./icon.png">
 
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#005b92">
+  <meta name="theme-color" content="#082e4e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -21,18 +21,18 @@
     html, body {
       margin: 0; padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #ffffff; 
+      background-color: #f4f6f8; 
       color: #18232d;
       width: 100%; height: 100%;
     }
 
-    /* PÁGINA LOGIN / REGISTRO SIN SCROLL */
+    /* PÁGINA LOGIN / REGISTRO */
     .auth-page {
       display: flex;
       height: 100vh;
       width: 100vw;
       background: #f4f7fb;
-      overflow: hidden; /* Evita que baje la página y aparezca la línea blanca */
+      overflow: hidden;
       position: fixed;
       top: 0; left: 0;
     }
@@ -60,9 +60,7 @@
       transition: opacity 1.2s ease-in-out;
     }
 
-    .auth-slide.active {
-      opacity: 1;
-    }
+    .auth-slide.active { opacity: 1; }
 
     .auth-form-container {
       flex: 1;
@@ -91,27 +89,19 @@
     .auth-card::-webkit-scrollbar { width: 4px; }
     .auth-card::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
 
+    /* SECCIÓN LOGO LOGIN: SOLO LOGO SIN TEXTO ABAJO */
     .auth-card-logo {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 6px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .img-logo-naciones-color {
-      height: 48px;
+      height: 52px;
       width: auto;
       object-fit: contain;
       display: block;
-    }
-
-    .auth-card-logo span {
-      font-size: 10.5px;
-      font-weight: 700;
-      color: #94a3b8;
-      letter-spacing: 2px;
-      text-transform: uppercase;
     }
 
     .auth-card h2 {
@@ -163,12 +153,12 @@
 
     .input-icon-box input:focus, .input-icon-box select:focus {
       background: #ffffff;
-      border-color: #005b92;
-      box-shadow: 0 0 0 3px rgba(0, 91, 146, 0.12);
+      border-color: #082e4e;
+      box-shadow: 0 0 0 3px rgba(8, 46, 78, 0.12);
     }
 
     .phone-flex-box { display: flex; gap: 8px; }
-    .phone-flex-box select { width: 105px !important; padding-left: 10px !important; font-weight: 700; color: #005b92; background: #f1f5f9; flex-shrink: 0; }
+    .phone-flex-box select { width: 105px !important; padding-left: 10px !important; font-weight: 700; color: #082e4e; background: #f1f5f9; flex-shrink: 0; }
     .phone-flex-box input { flex: 1; }
 
     .btn-auth-primary {
@@ -179,54 +169,49 @@
       font-weight: 800;
       font-size: 14.5px;
       cursor: pointer;
-      background: #005b92;
+      background: #082e4e;
       color: #ffffff;
       transition: background 0.2s, transform 0.1s;
       margin-top: 6px;
-      box-shadow: 0 4px 12px rgba(0, 91, 146, 0.2);
+      box-shadow: 0 4px 12px rgba(8, 46, 78, 0.2);
     }
 
-    .btn-auth-primary:hover { background: #004570; }
+    .btn-auth-primary:hover { background: #062138; }
     .btn-auth-primary:active { transform: scale(0.99); }
 
     .auth-divider { position: relative; text-align: center; margin: 18px 0 12px; }
     .auth-divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: #e2e8f0; z-index: 1; }
     .auth-divider span { position: relative; z-index: 2; background: #ffffff; padding: 0 12px; font-size: 12px; color: #94a3b8; font-weight: 600; }
 
-    .toggle-auth-text a { color: #005b92; font-weight: 700; font-size: 13px; text-decoration: underline; cursor: pointer; }
+    .toggle-auth-text a { color: #082e4e; font-weight: 700; font-size: 13px; text-decoration: underline; cursor: pointer; }
 
-    /* PLATAFORMA INTERNA */
-    .hero-carousel {
-      width: 100%;
-      aspect-ratio: 3840 / 774;
-      max-height: 480px;
-      background: transparent;
-      position: relative;
-      overflow: hidden;
-      margin: 0; padding: 0; border: none; outline: none;
-      line-height: 0;
+    /* NUEVA NAVEGACIÓN SUPERIOR (PROPUESTA 14 Y 15) */
+    .header-naciones {
+      background-color: #082e4e;
+      position: sticky; top: 0; z-index: 100; margin: 0; border: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
-    .carousel-slide { width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; border: none; }
-    .carousel-slide.active { display: block; width: 100%; height: 100%; }
-    .carousel-indicators { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
-    .dot { width: 32px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; cursor: pointer; }
-    .dot.active { background: #ffffff; }
+    .header-inner {
+      max-width: 1080px; margin: 0 auto; padding: 0 20px;
+      display: flex; justify-content: space-between; align-items: center; height: 60px;
+    }
+    .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .img-logo-naciones-header { height: 28px; width: auto; filter: brightness(0) invert(1); }
 
-    .header-naciones { background-color: #dbe0e4; position: sticky; top: 0; z-index: 100; margin: 0; border: none; }
-    .header-inner { max-width: 1080px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: flex-end; height: 52px; }
-    .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 10px; }
-    .img-logo-naciones { height: 32px; width: auto; display: block; object-fit: contain; }
-
-    .nav-desktop { display: flex; align-items: flex-end; gap: 2px; height: 100%; }
+    .nav-desktop { display: flex; align-items: center; gap: 6px; height: 100%; }
     .nav-btn {
-      padding: 10px 22px; border: 0; background: transparent; font-size: 13.5px; font-weight: 700;
-      color: #18232d; cursor: pointer; border-radius: 24px 24px 0 0; transition: all 0.2s ease; margin-bottom: 0;
+      padding: 8px 20px; border: 0; background: transparent; font-size: 13.5px; font-weight: 700;
+      color: #ffffff; cursor: pointer; border-radius: 20px; transition: all 0.2s ease; opacity: 0.85;
     }
-    .nav-btn.active { background-color: #ffffff; color: #000000; padding-top: 12px; box-shadow: 0 -4px 10px rgba(0,0,0,0.03); }
+    .nav-btn:hover { opacity: 1; background: rgba(255,255,255,0.08); }
+    .nav-btn.active {
+      background-color: #1970b8; color: #ffffff; opacity: 1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
 
     .header-naciones-mobile {
-      background-color: #dbe0e4; position: sticky; top: 0; z-index: 90; padding: 10px 16px;
-      display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      background-color: #082e4e; position: sticky; top: 0; z-index: 90; padding: 12px 16px;
+      display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       position: relative;
     }
 
@@ -237,75 +222,87 @@
       transition: left 0.3s ease; display: flex; flex-direction: column; box-shadow: 4px 0 16px rgba(0,0,0,0.15);
     }
     .drawer-menu.activo { left: 0; }
-    .drawer-header { background: #005b92; color: white; padding: 24px 16px; font-weight: bold; }
+    .drawer-header { background: #082e4e; color: white; padding: 24px 16px; font-weight: bold; }
     .drawer-item { padding: 16px 20px; font-size: 13.5px; font-weight: 700; color: #2b363f; border-bottom: 1px solid #f0f3f5; cursor: pointer; }
 
-    .contenedor { max-width: 1080px; margin: 32px auto; padding: 0 20px; }
+    .contenedor { max-width: 1080px; margin: 28px auto; padding: 0 20px; }
 
+    /* TARJETA DE PERFIL Y PROGRESO DE INICIO (PROPUESTA 14) */
     .profile-card-desktop {
-      background: #ffffff; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #f0f3f5;
+      background: #ffffff; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eef2f5;
       overflow: hidden; display: flex; flex-direction: column; position: relative; margin-bottom: 32px;
     }
-    .profile-card-header { background: #005b92; color: #ffffff; padding: 20px 32px; font-size: 24px; font-weight: 800; }
-    .profile-card-body { display: grid; grid-template-columns: 1fr 300px; padding: 28px 32px; gap: 24px; align-items: center; }
+    .profile-card-header {
+      background: #0b4d82; color: #ffffff; padding: 22px 32px; font-size: 22px; font-weight: 800;
+      letter-spacing: 0.3px;
+    }
+    .profile-card-body {
+      display: grid; grid-template-columns: 1fr 280px; padding: 28px 32px; gap: 28px; align-items: center;
+    }
 
-    .program-summary-item { margin-bottom: 20px; }
-    .program-summary-title { font-size: 15px; font-weight: 800; color: #18232d; margin-bottom: 6px; }
-    .program-progress-track { width: 100%; height: 10px; background: #e8ecef; border-radius: 5px; overflow: hidden; margin-bottom: 6px; }
-    .program-progress-fill { height: 100%; background: #a17852; border-radius: 5px; width: 0%; }
-    .program-summary-sub { font-size: 12.5px; color: #71808e; }
+    .program-summary-item { margin-bottom: 22px; }
+    .program-summary-item:last-child { margin-bottom: 0; }
+    .program-summary-title { font-size: 15.5px; font-weight: 800; color: #18232d; margin-bottom: 8px; }
+    .program-progress-track { width: 100%; height: 10px; background: #e0e0e0; border-radius: 5px; overflow: hidden; margin-bottom: 8px; }
+    .program-progress-fill { height: 100%; background: #b09371; border-radius: 5px; width: 0%; transition: width 0.4s ease; }
+    .program-summary-sub { font-size: 13px; color: #52606d; margin-bottom: 2px; }
 
     .qr-card-float {
-      background: #ffffff; border-radius: 20px; padding: 16px; text-align: center;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1); border: 1px solid #eef2f5; position: relative; z-index: 5;
+      background: #ffffff; border-radius: 20px; padding: 20px 16px 16px; text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12); border: 1px solid #eef2f5; position: relative; z-index: 5;
     }
     .qr-card-float img { width: 180px; height: 180px; display: block; margin: 0 auto; }
-    .qr-card-float .qr-num { font-size: 14px; font-style: italic; font-weight: 600; margin-top: 8px; }
+    .qr-card-float .qr-num { font-size: 15px; font-style: italic; font-weight: 700; margin-top: 10px; color: #18232d; }
 
     .user-name-pill {
-      background: #005b92; color: #ffffff; border-radius: 30px; font-weight: 800; font-size: 18px;
-      text-align: center; padding: 14px 20px; margin: 8px 0 20px; box-shadow: 0 4px 14px rgba(0,91,146,0.25);
+      background: #0b4d82; color: #ffffff; border-radius: 20px; font-weight: 800; font-size: 18px;
+      text-align: center; padding: 14px 20px; margin: 8px 0 20px; box-shadow: 0 4px 14px rgba(11,77,130,0.25);
     }
 
     .qr-card-mobile {
-      background: #ffffff; border-radius: 28px; padding: 28px 20px 20px; text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eef2f5; margin-bottom: 24px; position: relative; z-index: 5;
+      background: #ffffff; border-radius: 24px; padding: 24px 20px 18px; text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #eef2f5; margin-bottom: 24px; position: relative; z-index: 5;
     }
-    .qr-card-mobile img { width: 220px; height: 220px; display: block; margin: 0 auto; }
-    .qr-card-mobile .qr-num { font-size: 16px; font-weight: 600; color: #18232d; margin-top: 14px; font-style: italic; }
+    .qr-card-mobile img { width: 200px; height: 200px; display: block; margin: 0 auto; }
+    .qr-card-mobile .qr-num { font-size: 16px; font-weight: 700; color: #18232d; margin-top: 12px; font-style: italic; }
 
     .summary-card-mobile {
-      background: #ffffff; border-radius: 28px; padding: 24px 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #eef2f5; margin-bottom: 24px; position: relative; z-index: 5;
+      background: #ffffff; border-radius: 24px; padding: 24px 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #eef2f5; margin-bottom: 24px; position: relative; z-index: 5;
     }
-    .summary-title { font-size: 16px; font-weight: 800; color: #18232d; margin-bottom: 6px; }
-    .summary-sub-text { font-size: 13.5px; color: #4a5764; margin-bottom: 4px; }
 
-    .course-header-title { text-align: center; margin: 16px 0 28px; }
+    /* VISTAS DE CURSOS (PROPUESTA 15) */
+    .course-header-title { text-align: center; margin: 12px 0 24px; }
+    .img-logo-hombria-negro { height: 44px; width: auto; object-fit: contain; }
+    .img-logo-fundamentos-negro { height: 44px; width: auto; object-fit: contain; }
 
-    /* ESTILOS PARA LOGOTIPOS DE PROGRAMAS */
-    .img-logo-hombria-negro { height: 42px; width: auto; object-fit: contain; }
-    .img-logo-fundamentos-negro { height: 42px; width: auto; object-fit: contain; }
+    /* TARJETA PRÓXIMA LECCIÓN CON BARRA LATERAL ROJA */
+    .box-next-lesson {
+      background: #e8ecef; border-left: 6px solid #8a2a2a; border-radius: 16px;
+      padding: 18px 24px; margin-bottom: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .next-lesson-title { font-size: 15px; font-weight: 800; color: #18232d; margin-bottom: 6px; }
+    .next-lesson-sub { font-size: 14.5px; color: #33414d; line-height: 1.4; }
 
     .card-rounded-gray {
-      background: #dfe4e8; border-radius: 24px; padding: 20px 28px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      background: #e8ecef; border-radius: 20px; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
     }
-    .next-lesson-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
-    .next-lesson-sub { font-size: 14px; color: #33414d; }
 
     .account-detail-item { padding: 12px 0; border-bottom: 1px solid #cbd2d8; font-size: 15px; }
     .account-detail-item:last-child { border-bottom: none; }
     .account-label { font-size: 12px; color: #52606d; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 2px; }
 
-    .pill-tabs-nav { display: flex; gap: 12px; margin-bottom: 24px; }
+    /* BOTONES PÍLDORA SUB-PESTAÑAS (PROPUESTA 15) */
+    .pill-tabs-nav { display: flex; gap: 14px; margin-bottom: 24px; }
     .pill-tab {
-      flex: 1; padding: 14px; border-radius: 30px; border: 0; font-size: 14px; font-weight: 800;
-      color: #ffffff; background: #5a646e; cursor: pointer; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      flex: 1; padding: 12px 20px; border-radius: 30px; border: 0; font-size: 14px; font-weight: 800;
+      color: #ffffff; background: #575a62; cursor: pointer; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.2s ease;
     }
     .pill-tab.active { background: #8a2a2a; }
 
     .progress-bar-track { width: 100%; height: 8px; background: #ffffff; border-radius: 4px; overflow: hidden; margin-top: 8px; }
-    .progress-bar-fill { height: 100%; background: #8a2a2a; border-radius: 4px; }
+    .progress-bar-fill { height: 100%; background: #8a2a2a; border-radius: 4px; transition: width 0.4s ease; }
 
     .attendance-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #cbd2d8; }
     .attendance-row:last-child { border-bottom: 0; }
@@ -332,16 +329,24 @@
     }
     .bottom-nav-item svg { width: 22px; height: 22px; fill: currentColor; margin-bottom: 2px; display: block; flex-shrink: 0; }
     .bottom-nav-item span { font-size: 10px; font-weight: 700; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: center; display: block; }
-    .bottom-nav-item.active { color: #005b92 !important; }
+    .bottom-nav-item.active { color: #082e4e !important; }
 
-    .btn-submit { width: 100%; margin-top: 22px; background: #005b92; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
-    .btn-secondary { width: 100%; margin-top: 10px; background: #eef2f5; color: #005b92; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 800; border: 0; cursor: pointer; }
+    .btn-submit { width: 100%; margin-top: 22px; background: #082e4e; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
+    .btn-secondary { width: 100%; margin-top: 10px; background: #eef2f5; color: #082e4e; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 800; border: 0; cursor: pointer; }
     .btn-logout { width: 100%; margin-top: 20px; background: #a52828; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
 
-    .success-badge-box { background: #f0f7fc; border: 2px dashed #005b92; border-radius: 20px; padding: 20px; text-align: center; margin: 20px 0; }
-    .reg-number-big { font-size: 38px; font-weight: 900; color: #005b92; letter-spacing: 2px; margin: 8px 0; }
+    .hero-carousel {
+      width: 100%; aspect-ratio: 3840 / 774; max-height: 480px;
+      background: transparent; position: relative; overflow: hidden;
+      margin: 0; padding: 0; border: none; outline: none; line-height: 0;
+    }
+    .carousel-slide { width: 100%; height: 100%; object-fit: cover; display: none; cursor: pointer; border: none; }
+    .carousel-slide.active { display: block; width: 100%; height: 100%; }
+    .carousel-indicators { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
+    .dot { width: 32px; height: 4px; background: rgba(255,255,255,0.4); border-radius: 2px; cursor: pointer; }
+    .dot.active { background: #ffffff; }
 
-    /* MODAL DIVIDIDO */
+    /* MODAL DE INSCRIPCIÓN */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.65); z-index: 3000; display: none;
@@ -382,41 +387,6 @@
     }
     .btn-inscribirme-modal:hover { transform: translateY(-2px); background: #a52828; }
 
-    .placeholder-fundamentos-box {
-      width: 220px; height: 300px; background: #dfe4e8; border-radius: 16px;
-      border: 2px dashed #a0abb6; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; padding: 20px; text-align: center;
-    }
-
-    /* ESTILOS TUTORIAL TIPO SPOTLIGHT */
-    .tutorial-overlay-spotlight {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: 10000; pointer-events: auto; display: none;
-      background: rgba(0, 0, 0, 0.7);
-    }
-    .tutorial-overlay-spotlight.active { display: block; }
-
-    .tutorial-highlight {
-      position: relative !important;
-      z-index: 10001 !important;
-      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75), 0 0 20px rgba(0, 91, 146, 0.8) !important;
-      border-radius: 20px;
-      transition: all 0.3s ease;
-      background: #ffffff !important;
-    }
-
-    .tutorial-tooltip-card {
-      position: absolute;
-      z-index: 10002;
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 24px 20px;
-      width: 320px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
     .desktop-only { display: block; }
     .mobile-only { display: none; }
 
@@ -435,7 +405,7 @@
       .contenedor { max-width: 500px; margin: 0 auto; padding: 16px; }
       .hero-carousel { aspect-ratio: 1080 / 573; max-height: 280px; }
       .attendance-row {
-        background: #dfe4e8; border-radius: 22px; padding: 18px 20px; margin-bottom: 12px; border-bottom: none; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        background: #e8ecef; border-radius: 22px; padding: 18px 20px; margin-bottom: 12px; border-bottom: none; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
       }
       .attendance-title { font-size: 15px; font-weight: 800; }
       .attendance-sub { font-size: 12.5px; color: #52606d; margin-top: 3px; }
@@ -451,27 +421,6 @@
   </style>
 </head>
 <body>
-
-<!-- OVERLAY Y TOOLTIP SPOTLIGHT PARA TUTORIAL -->
-<div id="tutorialSpotlightOverlay" class="tutorial-overlay-spotlight"></div>
-<div id="tutorialTooltip" class="tutorial-tooltip-card oculto">
-  <div class="tutorial-step-icon" id="tutIcon" style="font-size: 36px; margin-bottom: 8px;">📱</div>
-  <div class="tutorial-step-title" id="tutTitle" style="font-size: 17px; font-weight: 800; color: #005b92; margin-bottom: 8px;">Título</div>
-  <div class="tutorial-step-text" id="tutText" style="font-size: 13px; color: #52606d; line-height: 1.4; margin-bottom: 16px;">
-    Explicación del paso...
-  </div>
-  
-  <div class="tutorial-dots" style="display:flex; justify-content:center; gap:6px; margin-bottom:14px;">
-    <div class="tutorial-dot active" id="tutDot0" style="width:10px; height:10px; border-radius:50%; background:#cbd3d9;"></div>
-    <div class="tutorial-dot" id="tutDot1" style="width:10px; height:10px; border-radius:50%; background:#cbd3d9;"></div>
-    <div class="tutorial-dot" id="tutDot2" style="width:10px; height:10px; border-radius:50%; background:#cbd3d9;"></div>
-  </div>
-
-  <div style="display: flex; gap: 8px;">
-    <button class="btn-secondary" id="tutBtnPrev" style="margin: 0; flex: 1; padding: 8px; font-size: 12px; display: none;" onclick="cambiarPasoTutorial(-1)">Anterior</button>
-    <button class="btn-submit" id="tutBtnNext" style="margin: 0; flex: 1; padding: 8px; font-size: 12px;" onclick="cambiarPasoTutorial(1)">Siguiente</button>
-  </div>
-</div>
 
 <!-- PÁGINA SPLIT LAYOUT PARA AUTENTICACIÓN (LOGIN Y REGISTRO) -->
 <div id="secAuthSplitPage" class="auth-page">
@@ -492,7 +441,6 @@
     <div id="seccionLogin" class="auth-card">
       <div class="auth-card-logo">
         <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones Logo" class="img-logo-naciones-color">
-        <span>IGLESIA NACIONES</span>
       </div>
 
       <h2>Portal de seguimiento</h2>
@@ -501,7 +449,7 @@
         <div class="form-group-custom">
           <label>Número de registro</label>
           <div class="input-icon-box">
-            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             <input id="inputRegistro" type="text" placeholder="Tu número de registro" required autocomplete="off">
           </div>
         </div>
@@ -532,7 +480,6 @@
     <div id="seccionRegistroUsuario" class="auth-card oculto">
       <div class="auth-card-logo">
         <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Iglesia Naciones Logo" class="img-logo-naciones-color">
-        <span>IGLESIA NACIONES</span>
       </div>
 
       <h2>Crear Cuenta</h2>
@@ -641,14 +588,14 @@
     <!-- CARD CONFIRMACIÓN ÉXITO REGISTRO -->
     <div id="seccionExitoRegistro" class="auth-card oculto">
       <div style="font-size: 40px; margin-bottom: 10px;">🎉</div>
-      <h2 style="margin: 0 0 4px; font-size: 20px; color: #005b92;">¡Registro Exitoso!</h2>
+      <h2 style="margin: 0 0 4px; font-size: 20px; color: #082e4e;">¡Registro Exitoso!</h2>
       <p style="color: #52606d; font-size: 13.5px; margin-top: 0; font-weight: 600;">
         Bienvenido al proceso de discipulado de Iglesia Naciones.
       </p>
 
-      <div class="success-badge-box">
+      <div style="background: #f0f7fc; border: 2px dashed #082e4e; border-radius: 20px; padding: 20px; text-align: center; margin: 20px 0;">
         <span style="font-size: 11px; color: #52606d; font-weight: 800; text-transform: uppercase;">Tu número de registro asignado:</span>
-        <div class="reg-number-big" id="exitoNumRegistro">10000</div>
+        <div style="font-size: 38px; font-weight: 900; color: #082e4e; letter-spacing: 2px; margin: 8px 0;" id="exitoNumRegistro">10000</div>
         <span style="font-size: 12px; color: #71808e; display: block;">Guarda este número para ingresar al portal en el futuro.</span>
       </div>
 
@@ -681,7 +628,7 @@
         </div>
 
         <div id="modalBoxLibro" class="oculto" style="background: rgba(255,255,255,0.6); padding: 10px 14px; border-radius: 12px; border: 1px solid #cbd2d8; margin-bottom: 16px;">
-          <strong style="font-size: 11px; color: #005b92; text-transform: uppercase; display: block;">📖 Libro de Lectura:</strong>
+          <strong style="font-size: 11px; color: #082e4e; text-transform: uppercase; display: block;">📖 Libro de Lectura:</strong>
           <span id="modalTextoLibro" style="font-size: 13px; font-weight: 700; color: #18232d;">-</span>
         </div>
       </div>
@@ -692,7 +639,7 @@
     <div class="modal-split-right">
       <img id="modalImgPortada" src="" alt="Portada del libro" style="max-width: 240px; width: 100%; height: auto; object-fit: contain; filter: none; border: none; box-shadow: none;" class="oculto">
       
-      <div id="modalPlaceholderPortada" class="placeholder-fundamentos-box oculto">
+      <div id="modalPlaceholderPortada" style="width: 220px; height: 300px; background: #dfe4e8; border-radius: 16px; border: 2px dashed #a0abb6; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center;" class="oculto">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="#71808e" style="margin-bottom: 12px;"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
         <strong id="modalPlaceholderTitulo" style="font-size: 14px; color: #33414d;">Fundamentos</strong>
         <span style="font-size: 11px; color: #71808e; margin-top: 6px;">Programa de Discipulado</span>
@@ -707,10 +654,11 @@
   <div class="carousel-indicators" id="dotsContainer"></div>
 </div>
 
+<!-- HEADER NAVEGACIÓN DESKTOP ESTILO PROPUESTA 14/15 -->
 <header class="header-naciones desktop-only oculto" id="headerNacionesDesktop">
   <div class="header-inner">
     <div class="brand-box" onclick="navegarA('inicio')">
-      <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones A Color" class="img-logo-naciones">
+      <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones" class="img-logo-naciones-header">
     </div>
 
     <nav class="nav-desktop">
@@ -725,9 +673,9 @@
 
 <header class="header-naciones-mobile mobile-only oculto" id="headerNacionesMobile">
   <button onclick="abrirDrawer()" style="background:none; border:none; padding:0; cursor:pointer; position:absolute; left:16px;">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="#18232d"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#ffffff"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
   </button>
-  <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones" style="height: 30px; width: auto; object-fit: contain;">
+  <img src="https://lh3.googleusercontent.com/d/1U6Tocw31ur9fqxOzG6hLHR7Oi_EXIcTK" alt="Naciones" style="height: 28px; width: auto; object-fit: contain; filter: brightness(0) invert(1);">
 </header>
 
 <div id="drawerOverlay" class="drawer-overlay" onclick="cerrarDrawer()"></div>
@@ -744,9 +692,9 @@
 
 <main class="contenedor">
 
-  <!-- PANEL PRINCIPAL DE LA PLATAFORMA -->
   <div id="panelPrincipal" class="oculto">
 
+    <!-- VISTA INICIO (PROPUESTA 14) -->
     <section id="vistaInicio">
       <div class="desktop-only">
         <div class="profile-card-desktop">
@@ -758,6 +706,7 @@
                 <div class="program-progress-track">
                   <div class="program-progress-fill" id="sumHombriaFillDesktop" style="width: 0%;"></div>
                 </div>
+                <div class="program-summary-sub" id="sumHombriaPorcentajeDesktop">Asistencia 0%</div>
                 <div class="program-summary-sub" id="sumHombriaTextoDesktop">Próxima sesión: -</div>
               </div>
 
@@ -766,6 +715,7 @@
                 <div class="program-progress-track">
                   <div class="program-progress-fill" id="sumFundamentosFillDesktop" style="width: 0%;"></div>
                 </div>
+                <div class="program-summary-sub" id="sumFundamentosPorcentajeDesktop">Asistencia 0%</div>
                 <div class="program-summary-sub" id="sumFundamentosTextoDesktop">Próxima sesión: -</div>
               </div>
 
@@ -815,8 +765,8 @@
         </div>
       </div>
 
-      <section id="seccionOfertaInscripciones" class="card-rounded-gray" style="background: #ffffff; border: 2px solid #005b92; margin-top: 20px;">
-        <h3 style="margin-top: 0; color: #005b92; font-size: 18px;">Inscripciones Abiertas</h3>
+      <section id="seccionOfertaInscripciones" class="card-rounded-gray" style="background: #ffffff; border: 2px solid #082e4e; margin-top: 20px;">
+        <h3 style="margin-top: 0; color: #082e4e; font-size: 18px;">Inscripciones Abiertas</h3>
         <p style="font-size: 13.5px; color: #52606d; margin-bottom: 16px;">
           Cursos disponibles para tu campus y nivel actual:
         </p>
@@ -826,12 +776,13 @@
       </section>
     </section>
 
+    <!-- VISTA HOMBRÍA AL MÁXIMO (PROPUESTA 15) -->
     <section id="vistaHombria" class="oculto">
       <div class="course-header-title">
         <img src="https://lh3.googleusercontent.com/d/1ueR5IQ38o-7XbWV7K6_21WpReyjaAY3H" alt="Hombría al Máximo" class="img-logo-hombria-negro">
       </div>
 
-      <div class="card-rounded-gray" id="boxProxHombria">
+      <div class="box-next-lesson" id="boxProxHombria">
         <div class="next-lesson-title" id="titleProxHombria">Tu próxima lección:</div>
         <div class="next-lesson-sub" id="txtProxHombria">Cargando...</div>
       </div>
@@ -843,7 +794,7 @@
 
       <div id="secHombriaAsis">
         <div class="card-rounded-gray desktop-only">
-          <div style="font-weight: 800; font-size: 16px;" id="lblHombriaNivelAct">Nivel Actual</div>
+          <div style="font-weight: 800; font-size: 16px; color: #18232d;" id="lblHombriaNivelAct">Nivel Actual</div>
           <div style="font-size: 13px; color: #52606d;" id="lblHombriaConteoDesktop">0 de 10 asistencias completadas</div>
           <div class="progress-bar-track">
             <div class="progress-bar-fill" id="fillHombriaProgBar" style="width: 0%;"></div>
@@ -877,12 +828,13 @@
       </div>
     </section>
 
+    <!-- VISTA FUNDAMENTOS -->
     <section id="vistaFundamentos" class="oculto">
       <div class="course-header-title">
         <img src="https://lh3.googleusercontent.com/d/1ihlxSR7LNWOzcT8breTYLqqWZ7eaCz-v" alt="Fundamentos" class="img-logo-fundamentos-negro">
       </div>
 
-      <div class="card-rounded-gray" id="boxProxFundamentos">
+      <div class="box-next-lesson" id="boxProxFundamentos">
         <div class="next-lesson-title" id="titleProxFundamentos">Tu próxima lección:</div>
         <div class="next-lesson-sub" id="txtProxFundamentos">Cargando...</div>
       </div>
@@ -894,7 +846,7 @@
 
       <div id="secFundAsis">
         <div class="card-rounded-gray desktop-only">
-          <div style="font-weight: 800; font-size: 16px;" id="lblFundNivelAct">Bloque Actual</div>
+          <div style="font-weight: 800; font-size: 16px; color: #18232d;" id="lblFundNivelAct">Bloque Actual</div>
           <div style="font-size: 13px; color: #52606d;" id="lblFundConteoDesktop">0 de 6 asistencias completadas</div>
           <div class="progress-bar-track">
             <div class="progress-bar-fill" id="fillFundProgBar" style="width: 0%;"></div>
@@ -930,7 +882,7 @@
 
     <section id="vistaRecursos" class="oculto">
       <div class="card-rounded-gray">
-        <h2 style="margin-top: 0; color: #005b92; font-size: 20px;">Recursos</h2>
+        <h2 style="margin-top: 0; color: #082e4e; font-size: 20px;">Recursos</h2>
         <p style="color: #52606d; font-size: 14px;">Materiales de estudio y guías descargables de tu programa.</p>
         <div style="margin-top: 16px; color: #71808e; font-size: 13.5px;">
           No hay recursos descargables disponibles por el momento.
@@ -940,7 +892,7 @@
 
     <section id="vistaCuenta" class="oculto">
       <div class="card-rounded-gray">
-        <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 20px; color: #005b92;">Información Personal</h2>
+        <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 20px; color: #082e4e;">Información Personal</h2>
         
         <div class="account-detail-item">
           <span class="account-label">Nombre</span>
@@ -972,14 +924,13 @@
           <strong id="accTelefono">-</strong>
         </div>
 
-        <button class="btn-secondary" style="margin-top: 20px;" onclick="iniciarTutorialSpotlight(true)">❓ Ver Guía del Portal (Tutorial)</button>
         <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
       </div>
     </section>
 
     <section id="vistaEscaner" class="oculto">
       <div class="card-rounded-gray" style="background: #ffffff; text-align: center;">
-        <h2 style="margin-top: 0; color: #005b92;">Escáner de Asistencia QR</h2>
+        <h2 style="margin-top: 0; color: #082e4e;">Escáner de Asistencia QR</h2>
         <div style="margin-bottom: 16px;">
           <label>Programa a registrar:</label>
           <select id="selectProgEscaner">
@@ -1041,110 +992,6 @@
   }
 
   let carruselAnunciosInterval = null;
-
-  // LÓGICA TUTORIAL SPOTLIGHT
-  let pasoTutorialActual = 0;
-  const pasosTutorial = [
-    {
-      targetId: window.innerWidth <= 767 ? 'targetQrMobile' : 'targetQrDesktop',
-      icon: '📱',
-      title: 'Tu Código QR Personal',
-      text: 'Este es tu pase digital. Muéstralo en tu teléfono al ingresar a la iglesia para registrar tu asistencia.'
-    },
-    {
-      targetId: 'seccionOfertaInscripciones',
-      icon: '✍️',
-      title: 'Inscripciones Abiertas',
-      text: 'Aquí podrás ver y registrarte en las clases habilitadas según tu nivel actual y campus.'
-    },
-    {
-      targetId: window.innerWidth <= 767 ? 'targetSummaryMobile' : 'boxSummaryHombriaDesktop',
-      icon: '📚',
-      title: 'Tu Avance y Próxima Clase',
-      text: 'En las pestañas de Hombría y Fundamentos podrás ver el desglose de tus asistencias y materias aprobadas.'
-    }
-  ];
-
-  function abrirTutorialSiEsNuevo() {
-    if (!usuarioSesion) return;
-    const key = 'naciones_tutorial_visto_' + usuarioSesion.registro;
-    if (!localStorage.getItem(key)) {
-      iniciarTutorialSpotlight(false);
-    }
-  }
-
-  function iniciarTutorialSpotlight(esManual) {
-    pasoTutorialActual = 0;
-    document.getElementById('tutorialSpotlightOverlay').classList.add('active');
-    document.getElementById('tutorialTooltip').classList.remove('oculto');
-    renderizarPasoTutorial();
-  }
-
-  function cambiarPasoTutorial(delta) {
-    // Limpiar elemento resaltado previo
-    const prevTarget = pasosTutorial[pasoTutorialActual]?.targetId;
-    if (prevTarget) {
-      const el = document.getElementById(prevTarget);
-      if (el) el.classList.remove('tutorial-highlight');
-    }
-
-    pasoTutorialActual += delta;
-
-    if (pasoTutorialActual >= pasosTutorial.length) {
-      if (usuarioSesion) {
-        localStorage.setItem('naciones_tutorial_visto_' + usuarioSesion.registro, 'true');
-      }
-      cerrarTutorialSpotlight();
-      return;
-    }
-    if (pasoTutorialActual < 0) pasoTutorialActual = 0;
-
-    renderizarPasoTutorial();
-  }
-
-  function renderizarPasoTutorial() {
-    const data = pasosTutorial[pasoTutorialActual];
-    document.getElementById('tutIcon').textContent = data.icon;
-    document.getElementById('tutTitle').textContent = data.title;
-    document.getElementById('tutText').textContent = data.text;
-
-    document.getElementById('tutBtnPrev').style.display = pasoTutorialActual === 0 ? 'none' : 'block';
-    document.getElementById('tutBtnNext').textContent = pasoTutorialActual === pasosTutorial.length - 1 ? '¡Entendido!' : 'Siguiente';
-
-    for (let i = 0; i < 3; i++) {
-      const dot = document.getElementById('tutDot' + i);
-      if (dot) dot.classList.toggle('active', i === pasoTutorialActual);
-    }
-
-    // Iluminar elemento con Spotlight
-    const targetEl = document.getElementById(data.targetId);
-    if (targetEl) {
-      targetEl.classList.add('tutorial-highlight');
-      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-      // Posicionar Tooltip Flotante cerca del elemento
-      const rect = targetEl.getBoundingClientRect();
-      const tooltip = document.getElementById('tutorialTooltip');
-      
-      let topPos = rect.bottom + window.scrollY + 12;
-      if (topPos + 220 > window.innerHeight + window.scrollY) {
-        topPos = rect.top + window.scrollY - 220;
-      }
-
-      tooltip.style.top = Math.max(topPos, 20) + 'px';
-      tooltip.style.left = '50%';
-      tooltip.style.transform = 'translateX(-50%)';
-    }
-  }
-
-  function cerrarTutorialSpotlight() {
-    pasosTutorial.forEach(p => {
-      const el = document.getElementById(p.targetId);
-      if (el) el.classList.remove('tutorial-highlight');
-    });
-    document.getElementById('tutorialSpotlightOverlay').classList.remove('active');
-    document.getElementById('tutorialTooltip').classList.add('oculto');
-  }
 
   function normalizarFechaInputCliente(nacTxt) {
     if (!nacTxt) return null;
@@ -1282,7 +1129,7 @@
 
     btn.disabled = true;
     btn.textContent = 'Creando cuenta...';
-    msg.style.color = '#005b92';
+    msg.style.color = '#082e4e';
     msg.textContent = 'Guardando tus datos...';
 
     const params = new URLSearchParams({
@@ -1356,10 +1203,15 @@
     }
 
     cargarDatosEnPantalla(res);
-    cargarOfertaInscripciones();
-    navegarA('inicio');
 
-    setTimeout(() => abrirTutorialSiEsNuevo(), 600);
+    // OPTIMIZACIÓN: Si la oferta viene en la respuesta del login, renderizar al instante
+    if (res.oferta) {
+      renderizarOfertaInscripciones(res.oferta);
+    } else {
+      cargarOfertaInscripciones();
+    }
+
+    navegarA('inicio');
   }
 
   function cargarOfertaInscripciones() {
@@ -1368,40 +1220,45 @@
     fetch(`${WEB_APP_URL}?action=consultarOferta&registro=${encodeURIComponent(usuarioSesion.registro)}&nacimiento=${encodeURIComponent(usuarioSesion.nacimientoTexto)}`)
       .then(r => r.json())
       .then(res => {
-        datosOfertaCargada = res;
-        const cont = document.getElementById('contenedorCursosOfertados');
-        cont.innerHTML = '';
-
-        const insci = usuarioSesion.inscripcionesActivas || { HOMBRIA: false, FUNDAMENTOS: false };
-
-        let ofertaHombriaFiltrada = res.ofertaHombria || [];
-        let ofertaFundamentosFiltrada = res.ofertaFundamentos || [];
-
-        if (insci.HOMBRIA) ofertaHombriaFiltrada = [];
-        if (insci.FUNDAMENTOS) ofertaFundamentosFiltrada = [];
-
-        const hayOferta = (ofertaHombriaFiltrada.length > 0) || (ofertaFundamentosFiltrada.length > 0);
-
-        if (!hayOferta) {
-          document.getElementById('seccionOfertaInscripciones').classList.add('oculto');
-        } else {
-          document.getElementById('seccionOfertaInscripciones').classList.remove('oculto');
-        }
-
-        const renderCursoCard = (item, progTipo) => `
-          <div style="background: #f0f7fc; border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <strong style="color: #005b92; font-size: 14px; display: block;">${item.cursoNivel}</strong>
-              <span style="font-size: 12px; color: #52606d;">📅 ${item.horario} | Campus: <strong>${item.campus}</strong></span>
-              ${item.cupoMax ? `<br><span style="font-size: 11px; color: #005b92; font-weight: bold;">Cupo Máx: ${item.cupoMax}</span>` : ''}
-            </div>
-            <button class="btn-submit" style="width: auto; margin: 0; padding: 8px 16px; font-size: 12px;" onclick="abrirModalInscripcion('${item.idOferta}', '${progTipo}')">Más Información</button>
-          </div>
-        `;
-
-        ofertaHombriaFiltrada.forEach(c => cont.innerHTML += renderCursoCard(c, 'HOMBRIA'));
-        ofertaFundamentosFiltrada.forEach(c => cont.innerHTML += renderCursoCard(c, 'FUNDAMENTOS'));
+        renderizarOfertaInscripciones(res);
       });
+  }
+
+  function renderizarOfertaInscripciones(res) {
+    datosOfertaCargada = res;
+    const cont = document.getElementById('contenedorCursosOfertados');
+    if (!cont) return;
+    cont.innerHTML = '';
+
+    const insci = usuarioSesion.inscripcionesActivas || { HOMBRIA: false, FUNDAMENTOS: false };
+
+    let ofertaHombriaFiltrada = res.ofertaHombria || [];
+    let ofertaFundamentosFiltrada = res.ofertaFundamentos || [];
+
+    if (insci.HOMBRIA) ofertaHombriaFiltrada = [];
+    if (insci.FUNDAMENTOS) ofertaFundamentosFiltrada = [];
+
+    const hayOferta = (ofertaHombriaFiltrada.length > 0) || (ofertaFundamentosFiltrada.length > 0);
+
+    if (!hayOferta) {
+      document.getElementById('seccionOfertaInscripciones').classList.add('oculto');
+    } else {
+      document.getElementById('seccionOfertaInscripciones').classList.remove('oculto');
+    }
+
+    const renderCursoCard = (item, progTipo) => `
+      <div style="background: #f0f7fc; border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <strong style="color: #082e4e; font-size: 14px; display: block;">${item.cursoNivel}</strong>
+          <span style="font-size: 12px; color: #52606d;">📅 ${item.horario} | Campus: <strong>${item.campus}</strong></span>
+          ${item.cupoMax ? `<br><span style="font-size: 11px; color: #082e4e; font-weight: bold;">Cupo Máx: ${item.cupoMax}</span>` : ''}
+        </div>
+        <button class="btn-submit" style="width: auto; margin: 0; padding: 8px 16px; font-size: 12px;" onclick="abrirModalInscripcion('${item.idOferta}', '${progTipo}')">Más Información</button>
+      </div>
+    `;
+
+    ofertaHombriaFiltrada.forEach(c => cont.innerHTML += renderCursoCard(c, 'HOMBRIA'));
+    ofertaFundamentosFiltrada.forEach(c => cont.innerHTML += renderCursoCard(c, 'FUNDAMENTOS'));
   }
 
   function abrirModalInscripcion(idOferta, progTipo) {
@@ -1431,7 +1288,7 @@
     
     let htmlDescripcion = curso.descripcion || 'Sin descripción disponible.';
     if (curso.minAsistencias || curso.minExamen) {
-      htmlDescripcion += `<br><br><small style="color:#005b92; font-weight:bold;">Requisitos de aprobación:</small><br>`;
+      htmlDescripcion += `<br><br><small style="color:#082e4e; font-weight:bold;">Requisitos de aprobación:</small><br>`;
       if (curso.minAsistencias) htmlDescripcion += `• Mínimo de Asistencias: ${curso.minAsistencias}<br>`;
       if (curso.minExamen) htmlDescripcion += `• Calificación Mínima Examen: ${curso.minExamen}`;
     }
@@ -1482,6 +1339,7 @@
         alert(res.mensaje);
         if (res.exito) {
           cerrarModalInscripcion();
+          // REFRESCAR Y VOLVER A CARGAR DATOS
           ejecutarLogin(usuarioSesion.registro, usuarioSesion.nacimientoTexto);
         } else {
           btn.disabled = false;
@@ -1534,36 +1392,54 @@
     document.getElementById('secFundAsis').classList.toggle('oculto', !insci.FUNDAMENTOS);
     document.getElementById('secFundProg').classList.toggle('oculto', insci.FUNDAMENTOS);
 
+    /* ACTUALIZACIÓN DINÁMICA DE PRÓXIMA LECCIÓN HOMBRÍA */
     if (insci.HOMBRIA) {
       const h = res.proximaLeccion ? res.proximaLeccion.HOMBRIA : null;
-      const campusHombriaImparticion = insci.campusImparticionHombria || 'NACIONAL';
-      const fechaArranqueH = (h && h.fecha) ? h.fecha : 'próxima sesión';
+      const cursoHombriaNom = insci.cursoHombria || (h ? h.nivelCurso : 'Hombría al Máximo');
 
-      const textoConfirmacionH = `¡Registro Exitoso! Nos vemos el ${fechaArranqueH} en Campus ${campusHombriaImparticion}.`;
+      document.getElementById('lblHombriaNivelAct').textContent = cursoHombriaNom;
+      document.getElementById('sumHombriaNivelDesktop').textContent = 'Hombría al Máximo - ' + cursoHombriaNom;
+      document.getElementById('sumHombriaNivelMobile').textContent = 'Hombría al Máximo - ' + cursoHombriaNom;
 
-      document.getElementById('titleProxHombria').textContent = 'Estado de Inscripción:';
-      document.getElementById('txtProxHombria').innerHTML = `<strong>${textoConfirmacionH}</strong><br><span style="font-size:12px; color:#52606d;">Clase: ${insci.cursoHombria || (h ? h.nivelCurso : '')}</span>`;
-      
-      document.getElementById('sumHombriaNivelDesktop').textContent = 'Hombría - ' + (insci.cursoHombria || 'Inscrito');
-      document.getElementById('sumHombriaNivelMobile').textContent = 'Hombría - ' + (insci.cursoHombria || 'Inscrito');
-      document.getElementById('sumHombriaTextoDesktop').textContent = textoConfirmacionH;
-      document.getElementById('sumHombriaTextoMobile').textContent = textoConfirmacionH;
+      document.getElementById('titleProxHombria').textContent = 'Tu próxima lección:';
+
+      if (h && (h.tema || h.semana)) {
+        const textoProxH = `${h.semana ? h.semana + ': ' : ''}${h.tema || 'Por definir'}`;
+        document.getElementById('txtProxHombria').innerHTML = `<strong>${textoProxH}</strong>`;
+        document.getElementById('sumHombriaTextoDesktop').textContent = `Próxima sesión: ${h.tema || h.semana}`;
+        document.getElementById('sumHombriaTextoMobile').textContent = `Próxima sesión: ${h.tema || h.semana}`;
+      } else {
+        const fechaArranqueH = (h && h.fecha) ? h.fecha : 'próxima sesión';
+        const textoConfirmacionH = `¡Registro Exitoso! Nos vemos el ${fechaArranqueH} en Campus ${insci.campusImparticionHombria || 'NACIONAL'}.`;
+        document.getElementById('txtProxHombria').innerHTML = `<strong>${textoConfirmacionH}</strong>`;
+        document.getElementById('sumHombriaTextoDesktop').textContent = textoConfirmacionH;
+        document.getElementById('sumHombriaTextoMobile').textContent = textoConfirmacionH;
+      }
     }
 
+    /* ACTUALIZACIÓN DINÁMICA DE PRÓXIMA LECCIÓN FUNDAMENTOS */
     if (insci.FUNDAMENTOS) {
       const f = res.proximaLeccion ? res.proximaLeccion.FUNDAMENTOS : null;
-      const campusFundImparticion = res.campus || 'General';
-      const fechaArranqueF = (f && f.fecha) ? f.fecha : 'próxima sesión';
+      const cursoFundNom = insci.cursoFundamentos || (f ? f.nivelCurso : 'Fundamentos');
 
-      const textoConfirmacionF = `¡Registro Exitoso! Nos vemos el ${fechaArranqueF} en Campus ${campusFundImparticion}.`;
+      document.getElementById('lblFundNivelAct').textContent = cursoFundNom;
+      document.getElementById('sumFundamentosNivelDesktop').textContent = 'Fundamentos - ' + cursoFundNom;
+      document.getElementById('sumFundamentosNivelMobile').textContent = 'Fundamentos - ' + cursoFundNom;
 
-      document.getElementById('titleProxFundamentos').textContent = 'Estado de Inscripción:';
-      document.getElementById('txtProxFundamentos').innerHTML = `<strong>${textoConfirmacionF}</strong><br><span style="font-size:12px; color:#52606d;">Clase: ${insci.cursoFundamentos || (f ? f.nivelCurso : '')}</span>`;
+      document.getElementById('titleProxFundamentos').textContent = 'Tu próxima lección:';
 
-      document.getElementById('sumFundamentosNivelDesktop').textContent = 'Fundamentos - ' + (insci.cursoFundamentos || 'Inscrito');
-      document.getElementById('sumFundamentosNivelMobile').textContent = 'Fundamentos - ' + (insci.cursoFundamentos || 'Inscrito');
-      document.getElementById('sumFundamentosTextoDesktop').textContent = textoConfirmacionF;
-      document.getElementById('sumFundamentosTextoMobile').textContent = textoConfirmacionF;
+      if (f && (f.tema || f.semana)) {
+        const textoProxF = `${f.semana ? f.semana + ': ' : ''}${f.tema || 'Por definir'}`;
+        document.getElementById('txtProxFundamentos').innerHTML = `<strong>${textoProxF}</strong>`;
+        document.getElementById('sumFundamentosTextoDesktop').textContent = `Próxima sesión: ${f.tema || f.semana}`;
+        document.getElementById('sumFundamentosTextoMobile').textContent = `Próxima sesión: ${f.tema || f.semana}`;
+      } else {
+        const fechaArranqueF = (f && f.fecha) ? f.fecha : 'próxima sesión';
+        const textoConfirmacionF = `¡Registro Exitoso! Nos vemos el ${fechaArranqueF} en Campus ${res.campus || 'General'}.`;
+        document.getElementById('txtProxFundamentos').innerHTML = `<strong>${textoConfirmacionF}</strong>`;
+        document.getElementById('sumFundamentosTextoDesktop').textContent = textoConfirmacionF;
+        document.getElementById('sumFundamentosTextoMobile').textContent = textoConfirmacionF;
+      }
     }
 
     if (res.asistencias) {
@@ -1623,16 +1499,18 @@
     const pct = Math.min(Math.round((presentesCount / Math.max(lista.length, 1)) * 100), 100);
     
     if (programa === 'HOMBRIA') {
-      document.getElementById('lblHombriaConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias registradas`;
+      document.getElementById('lblHombriaConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias completadas`;
       document.getElementById('fillHombriaProgBar').style.width = pct + '%';
       document.getElementById('sumHombriaFillDesktop').style.width = pct + '%';
       document.getElementById('sumHombriaFillMobile').style.width = pct + '%';
+      document.getElementById('sumHombriaPorcentajeDesktop').textContent = `Asistencia ${pct}%`;
       document.getElementById('sumHombriaPorcentajeMobile').textContent = `Asistencia ${pct}%`;
     } else {
-      document.getElementById('lblFundConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias registradas`;
+      document.getElementById('lblFundConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias completadas`;
       document.getElementById('fillFundProgBar').style.width = pct + '%';
       document.getElementById('sumFundamentosFillDesktop').style.width = pct + '%';
       document.getElementById('sumFundamentosFillMobile').style.width = pct + '%';
+      document.getElementById('sumFundamentosPorcentajeDesktop').textContent = `Asistencia ${pct}%`;
       document.getElementById('sumFundamentosPorcentajeMobile').textContent = `Asistencia ${pct}%`;
     }
   }
@@ -1671,7 +1549,7 @@
 
       const blockBox = `
         <div style="margin-bottom: 20px;">
-          <div style="font-weight: 800; font-size: 14px; color: #005b92; margin-bottom: 8px;">${blq.bloque}</div>
+          <div style="font-weight: 800; font-size: 14px; color: #082e4e; margin-bottom: 8px;">${blq.bloque}</div>
           ${itemsHtml}
         </div>
       `;
@@ -1849,7 +1727,7 @@
   function iniciarEscaner() {
     const msgBox = document.getElementById('resEscaneoMsg');
     msgBox.textContent = 'Inicializando cámara...';
-    msgBox.style.color = '#005b92';
+    msgBox.style.color = '#082e4e';
 
     if (html5QrcodeScanner) {
       html5QrcodeScanner.clear();
@@ -1887,7 +1765,7 @@
     const msgBox = document.getElementById('resEscaneoMsg');
 
     msgBox.textContent = 'Procesando código QR (' + codigoQR + ')...';
-    msgBox.style.color = '#005b92';
+    msgBox.style.color = '#082e4e';
 
     const params = new URLSearchParams({
       action: 'registrarAsistencia',
