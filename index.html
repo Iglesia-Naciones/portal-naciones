@@ -504,6 +504,29 @@
   .portal-member-row:last-child{border-bottom:0}
   .portal-status{font-size:13px;font-weight:700;margin-top:10px;min-height:18px}
   @media(max-width:700px){.portal-grid{grid-template-columns:1fr}.portal-admin-card{padding:16px}.portal-member-row{align-items:flex-start;flex-direction:column}}
+
+  /* Confirmación integrada para crear grupos */
+  .grupo-confirm-overlay{position:fixed;inset:0;background:rgba(15,23,42,.58);backdrop-filter:blur(5px);z-index:5000;display:none;align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
+  .grupo-confirm-overlay.activo{display:flex}
+  .grupo-confirm-card{width:100%;max-width:480px;background:#fff;border:1px solid #e2e8f0;border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.24);overflow:hidden;animation:grupoModalEntrada .18s ease-out}
+  @keyframes grupoModalEntrada{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .grupo-confirm-head{padding:22px 24px 16px;border-bottom:1px solid #eef2f6}
+  .grupo-confirm-kicker{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:#71808e;font-weight:800;margin-bottom:7px}
+  .grupo-confirm-head h3{margin:0;color:#0b4d82;font-size:20px;font-weight:850}
+  .grupo-confirm-body{padding:20px 24px 8px}
+  .grupo-confirm-intro{font-size:13.5px;color:#64748b;line-height:1.5;margin:0 0 16px}
+  .grupo-confirm-datos{background:#f6f8fa;border:1px solid #e8edf2;border-radius:14px;padding:14px 16px}
+  .grupo-confirm-dato{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px solid #e5eaf0;font-size:13px}
+  .grupo-confirm-dato:last-child{border-bottom:0}
+  .grupo-confirm-dato span{color:#71808e}
+  .grupo-confirm-dato strong{color:#18232d;text-align:right}
+  .grupo-confirm-note{font-size:12px;color:#64748b;line-height:1.5;margin:15px 0 4px}
+  .grupo-confirm-actions{display:flex;justify-content:flex-end;gap:9px;padding:18px 24px 22px}
+  .grupo-confirm-cancel{border:1px solid #d7e0e8;background:#fff;color:#52606d;border-radius:10px;padding:11px 16px;font-weight:750;cursor:pointer}
+  .grupo-confirm-accept{border:0;background:#0b4d82;color:#fff;border-radius:10px;padding:11px 18px;font-weight:800;cursor:pointer;min-width:135px}
+  .grupo-confirm-accept:disabled{opacity:.6;cursor:wait}
+  @media(max-width:520px){.grupo-confirm-card{border-radius:18px}.grupo-confirm-head,.grupo-confirm-body{padding-left:19px;padding-right:19px}.grupo-confirm-actions{padding:16px 19px 19px}.grupo-confirm-dato{flex-direction:column;gap:3px}.grupo-confirm-dato strong{text-align:left}}
+
 </style>
 </head>
 <body>
@@ -1179,6 +1202,29 @@
       </div>
     </section>
 
+    <div id="modalConfirmarGrupo" class="grupo-confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmarGrupo" onclick="if(event.target===this) cerrarModalConfirmarGrupo()">
+      <div class="grupo-confirm-card">
+        <div class="grupo-confirm-head">
+          <div class="grupo-confirm-kicker">Grupos de Hombría</div>
+          <h3 id="tituloConfirmarGrupo">Confirmar creación del grupo</h3>
+        </div>
+        <div class="grupo-confirm-body">
+          <p class="grupo-confirm-intro">Revisa que los datos del líder sean correctos. El campus se tomará automáticamente de su registro.</p>
+          <div class="grupo-confirm-datos">
+            <div class="grupo-confirm-dato"><span>Líder</span><strong id="confirmGrupoLider">—</strong></div>
+            <div class="grupo-confirm-dato"><span>Número de registro</span><strong id="confirmGrupoRegistro">—</strong></div>
+            <div class="grupo-confirm-dato"><span>Campus registrado</span><strong id="confirmGrupoCampus">—</strong></div>
+            <div class="grupo-confirm-dato"><span>Nivel</span><strong id="confirmGrupoNivel">—</strong></div>
+          </div>
+          <p class="grupo-confirm-note">Al confirmar, se asignará al líder el rol <strong>LIDER_HOMBRIA</strong> con estado <strong>ACTIVO</strong> y se creará su grupo.</p>
+        </div>
+        <div class="grupo-confirm-actions">
+          <button type="button" class="grupo-confirm-cancel" onclick="cerrarModalConfirmarGrupo()">Cancelar</button>
+          <button type="button" id="btnConfirmarCrearGrupo" class="grupo-confirm-accept" onclick="confirmarCrearGrupoDesdeModal()">Confirmar y crear</button>
+        </div>
+      </div>
+    </div>
+
     <section id="vistaMiGrupo" class="oculto">
       <div class="portal-admin-card"><h2 style="margin-top:0;color:#005b92">Mi grupo</h2><p class="portal-muted">Acceso al grupo asignado a tu registro de líder.</p><div id="miGrupoContenido" class="portal-group-list"></div></div>
     </section>
@@ -1218,6 +1264,7 @@
   let ultimoRegistroCreado = null;
   let html5QrcodeScanner = null;
   let grupoSeleccionado = null;
+  let grupoPendienteConfirmacion = null;
   let personaPendienteAgregar = null;
   let escaneoEnProceso = false;
   let ultimoCodigoEscaneado = '';
@@ -2291,28 +2338,34 @@
 
   function cargarGruposUI(paraMiGrupo = false) {
     const cont = paraMiGrupo ? document.getElementById('miGrupoContenido') : document.getElementById('listaGrupos');
-    if (!cont) return;
+    if (!cont) return Promise.resolve(null);
     if (!usuarioSesion || !tienePermisoGruposUI()) {
       cont.innerHTML = '<p class="portal-muted">Tu cuenta no tiene permiso para consultar grupos.</p>';
-      return;
+      return Promise.resolve(null);
     }
     cont.innerHTML = '<p class="portal-muted">Consultando grupos guardados…</p>';
-    apiPortal('listarGruposHombria')
+    return apiPortal('listarGruposHombria')
       .then(data => {
         if (!data || !data.exito) {
           cont.innerHTML = `<p class="portal-muted">${escaparHTML((data && data.mensaje) || 'No fue posible cargar los grupos.')}</p>`;
-          return;
+          return data;
         }
         let grupos = Array.isArray(data.grupos) ? data.grupos : [];
         if (paraMiGrupo) grupos = grupos.filter(g => String(g.liderRegistro) === String(usuarioSesion.registro));
         if (!grupos.length) {
-          cont.innerHTML = '<p class="portal-muted">La consulta se realizó correctamente, pero no se encontraron grupos activos para tu cuenta o campus.</p>';
-          return;
+          const d = data.diagnostico || {};
+          const detalle = d.totalActivos > 0
+            ? ` Se encontraron ${d.totalActivos} grupo(s) activo(s) en “${escaparHTML(d.archivo || 'el archivo consultado')}”, pero ninguno coincide con los permisos de tu cuenta. Rol: ${escaparHTML(d.rol || usuarioSesion.rol || 'No identificado')}. Campus de tu cuenta: ${escaparHTML(d.campusUsuario || 'No identificado')}.`
+            : ` La hoja consultada es “${escaparHTML(d.hoja || 'GRUPOS_HOMBRIA')}” en el archivo “${escaparHTML(d.archivo || 'principal del portal')}” y contiene ${Number(d.totalRegistros)||0} registro(s), de los cuales ${Number(d.totalActivos)||0} están activos.`;
+          cont.innerHTML = `<p class="portal-muted">No hay grupos para mostrar.${detalle}</p>`;
+          return data;
         }
         cont.innerHTML = grupos.map(g => `<article class="portal-group"><h3>${escaparHTML(g.nombre)}</h3><span class="portal-badge">${escaparHTML(g.campus)}</span><span class="portal-badge">${escaparHTML(g.nivel)}</span><p class="portal-muted">Líder: ${escaparHTML(g.liderNombre || g.liderRegistro)} · ${Number(g.totalIntegrantes)||0} integrantes</p><button class="portal-primary" onclick="abrirGestionGrupo('${escaparHTML(g.id)}','${escaparHTML(g.nombre)}')">Ver grupo</button></article>`).join('');
+        return data;
       })
       .catch(err => {
         cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message || 'Error de conexión al consultar grupos.')}</p>`;
+        return { exito:false, mensaje:err.message || 'Error de conexión.' };
       });
   }
 
@@ -2324,17 +2377,60 @@
     msg.textContent = 'Verificando líder…'; msg.style.color = '#005b92';
     apiPortal('buscarIntegranteHombria', { registro: liderRegistro }).then(data => {
       if (!data.exito || !data.persona) throw new Error(data.mensaje || 'No se encontró al líder.');
-      const p = data.persona;
-      const confirmacion = `Confirma los datos del grupo:\n\nLíder: ${p.nombre}\nRegistro: ${p.registro}\nCampus registrado: ${p.campus}\nNivel: ${nivel}\n\nEl sistema registrará automáticamente el rol LIDER_HOMBRIA como ACTIVO y creará el grupo. ¿Deseas continuar?`;
-      if (!window.confirm(confirmacion)) { msg.textContent = 'Operación cancelada.'; msg.style.color = '#71808e'; return; }
-      msg.textContent = 'Creando grupo y registrando al líder…';
-      return apiPortal('crearGrupoHombria', { nivel, liderRegistro }).then(resultado => {
-        msg.textContent = resultado.mensaje || (resultado.exito ? 'Grupo creado.' : 'No se pudo crear.');
-        if (resultado.exito && resultado.grupoId) msg.textContent += ' ID: ' + resultado.grupoId + '. Actualizando lista…';
-        msg.style.color = resultado.exito ? '#176b3a' : '#a52828';
-        if (resultado.exito) { document.getElementById('grupoLiderRegistro').value = ''; cargarGruposUI(); }
-      });
+      grupoPendienteConfirmacion = { persona: data.persona, nivel: nivel };
+      document.getElementById('confirmGrupoLider').textContent = data.persona.nombre || '—';
+      document.getElementById('confirmGrupoRegistro').textContent = data.persona.registro || liderRegistro;
+      document.getElementById('confirmGrupoCampus').textContent = data.persona.campus || '—';
+      document.getElementById('confirmGrupoNivel').textContent = nivel;
+      document.getElementById('btnConfirmarCrearGrupo').disabled = false;
+      document.getElementById('btnConfirmarCrearGrupo').textContent = 'Confirmar y crear';
+      document.getElementById('modalConfirmarGrupo').classList.add('activo');
+      msg.textContent = '';
     }).catch(err => { msg.textContent = err.message || 'No se pudo verificar al líder.'; msg.style.color = '#a52828'; });
+  }
+
+  function cerrarModalConfirmarGrupo() {
+    const modal = document.getElementById('modalConfirmarGrupo');
+    if (modal) modal.classList.remove('activo');
+    const btn = document.getElementById('btnConfirmarCrearGrupo');
+    if (btn) { btn.disabled = false; btn.textContent = 'Confirmar y crear'; }
+    grupoPendienteConfirmacion = null;
+  }
+
+  async function confirmarCrearGrupoDesdeModal() {
+    if (!grupoPendienteConfirmacion) return;
+    const btn = document.getElementById('btnConfirmarCrearGrupo');
+    const msg = document.getElementById('msgCrearGrupo');
+    btn.disabled = true;
+    btn.textContent = 'Creando grupo…';
+    msg.textContent = 'Registrando al líder y creando el grupo…';
+    msg.style.color = '#005b92';
+    try {
+      const resultado = await apiPortal('crearGrupoHombria', {
+        nivel: grupoPendienteConfirmacion.nivel,
+        liderRegistro: grupoPendienteConfirmacion.persona.registro
+      });
+      if (!resultado || !resultado.exito) throw new Error((resultado && resultado.mensaje) || 'No se pudo crear el grupo.');
+      cerrarModalConfirmarGrupo();
+      document.getElementById('grupoLiderRegistro').value = '';
+      msg.textContent = resultado.mensaje || 'Grupo creado correctamente.';
+      msg.style.color = '#176b3a';
+      const listado = await cargarGruposUI(false);
+      const aparece = listado && Array.isArray(listado.grupos) && listado.grupos.some(g => String(g.id) === String(resultado.grupoId));
+      if (!aparece) {
+        const info = listado && listado.diagnostico ? listado.diagnostico : {};
+        document.getElementById('msgGrupos').textContent = `El servidor confirmó la creación (ID ${resultado.grupoId || 'sin ID'}), pero el grupo no aparece en la lista. Archivo consultado: ${info.archivo || 'no identificado'}. Hoja: ${info.hoja || 'no identificada'}. Grupos activos encontrados: ${info.totalActivos == null ? 'sin dato' : info.totalActivos}. Revisa la publicación de Apps Script y los permisos de campus.`;
+        document.getElementById('msgGrupos').style.color = '#a52828';
+      } else {
+        document.getElementById('msgGrupos').textContent = 'El grupo ya está disponible en la lista.';
+        document.getElementById('msgGrupos').style.color = '#176b3a';
+      }
+    } catch (err) {
+      msg.textContent = err.message || 'Ocurrió un error al crear el grupo.';
+      msg.style.color = '#a52828';
+      btn.disabled = false;
+      btn.textContent = 'Reintentar';
+    }
   }
 
   function abrirGestionGrupo(id, nombre) {
