@@ -2265,9 +2265,17 @@
   }
 
   function apiPortal(action, params = {}) {
-    if (!usuarioSesion || !usuarioSesion.sessionToken) return Promise.reject(new Error('Tu sesión expiró. Cierra sesión e inicia nuevamente.'));
-    const q = new URLSearchParams({ action, token: usuarioSesion.sessionToken, ...params });
-    return fetch(`${WEB_APP_URL}?${q.toString()}`).then(r => r.json());
+    if (!usuarioSesion || !usuarioSesion.sessionToken) {
+      return Promise.reject(new Error('Tu sesión expiró. Cierra sesión e inicia nuevamente.'));
+    }
+    // Evita que el navegador reutilice una respuesta anterior al actualizar los grupos.
+    const q = new URLSearchParams({ action, token: usuarioSesion.sessionToken, _nocache: String(Date.now()), ...params });
+    return fetch(`${WEB_APP_URL}?${q.toString()}`, { cache: 'no-store' }).then(async r => {
+      if (!r.ok) throw new Error('El servidor respondió con error HTTP ' + r.status + '.');
+      const texto = await r.text();
+      try { return JSON.parse(texto); }
+      catch (e) { throw new Error('El servidor no devolvió JSON. Verifica que hayas actualizado la implementación de Apps Script.'); }
+    });
   }
 
   function configurarPermisosUI() {
@@ -2283,17 +2291,29 @@
 
   function cargarGruposUI(paraMiGrupo = false) {
     const cont = paraMiGrupo ? document.getElementById('miGrupoContenido') : document.getElementById('listaGrupos');
-    if (!cont || !usuarioSesion || !tienePermisoGruposUI()) return;
-    cont.innerHTML = '<p class="portal-muted">Cargando grupos…</p>';
+    if (!cont) return;
+    if (!usuarioSesion || !tienePermisoGruposUI()) {
+      cont.innerHTML = '<p class="portal-muted">Tu cuenta no tiene permiso para consultar grupos.</p>';
+      return;
+    }
+    cont.innerHTML = '<p class="portal-muted">Consultando grupos guardados…</p>';
     apiPortal('listarGruposHombria')
       .then(data => {
-        if (!data.exito) { cont.innerHTML = `<p class="portal-muted">${escaparHTML(data.mensaje || 'No fue posible cargar los grupos.')}</p>`; return; }
-        let grupos = data.grupos || [];
+        if (!data || !data.exito) {
+          cont.innerHTML = `<p class="portal-muted">${escaparHTML((data && data.mensaje) || 'No fue posible cargar los grupos.')}</p>`;
+          return;
+        }
+        let grupos = Array.isArray(data.grupos) ? data.grupos : [];
         if (paraMiGrupo) grupos = grupos.filter(g => String(g.liderRegistro) === String(usuarioSesion.registro));
-        if (!grupos.length) { cont.innerHTML = '<p class="portal-muted">No hay grupos asignados para mostrar.</p>'; return; }
+        if (!grupos.length) {
+          cont.innerHTML = '<p class="portal-muted">La consulta se realizó correctamente, pero no se encontraron grupos activos para tu cuenta o campus.</p>';
+          return;
+        }
         cont.innerHTML = grupos.map(g => `<article class="portal-group"><h3>${escaparHTML(g.nombre)}</h3><span class="portal-badge">${escaparHTML(g.campus)}</span><span class="portal-badge">${escaparHTML(g.nivel)}</span><p class="portal-muted">Líder: ${escaparHTML(g.liderNombre || g.liderRegistro)} · ${Number(g.totalIntegrantes)||0} integrantes</p><button class="portal-primary" onclick="abrirGestionGrupo('${escaparHTML(g.id)}','${escaparHTML(g.nombre)}')">Ver grupo</button></article>`).join('');
       })
-      .catch(err => { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; });
+      .catch(err => {
+        cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message || 'Error de conexión al consultar grupos.')}</p>`;
+      });
   }
 
   function crearGrupoDesdeUI() {
@@ -2310,6 +2330,7 @@
       msg.textContent = 'Creando grupo y registrando al líder…';
       return apiPortal('crearGrupoHombria', { nivel, liderRegistro }).then(resultado => {
         msg.textContent = resultado.mensaje || (resultado.exito ? 'Grupo creado.' : 'No se pudo crear.');
+        if (resultado.exito && resultado.grupoId) msg.textContent += ' ID: ' + resultado.grupoId + '. Actualizando lista…';
         msg.style.color = resultado.exito ? '#176b3a' : '#a52828';
         if (resultado.exito) { document.getElementById('grupoLiderRegistro').value = ''; cargarGruposUI(); }
       });
