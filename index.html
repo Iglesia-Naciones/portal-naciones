@@ -511,6 +511,18 @@
   .portal-add-members-button{width:100%;border:1px dashed #8ba8bd;background:#f7fafc;color:#075b91;border-radius:12px;padding:14px 16px;font-size:14px;font-weight:800;cursor:pointer;text-align:center}
   .portal-add-members-button:hover{background:#edf5fa}
   .portal-add-members-panel{margin-top:16px;padding:16px;background:#f8fafc;border:1px solid #e8edf2;border-radius:14px}
+  .portal-create-group-wrap{display:flex;justify-content:center;margin-top:22px}
+  .portal-create-group-button{border:1px solid #cfe0eb;background:#f4f9fc;color:#075b91;border-radius:12px;padding:13px 22px;font-size:14px;font-weight:800;cursor:pointer;min-width:190px}
+  .portal-create-group-button:hover{background:#eaf4fa}
+  .portal-coordinator-list{display:grid;gap:12px;margin-top:16px}
+  .portal-coordinator-card{border:1px solid #e1e7ed;border-radius:14px;background:#fff;overflow:hidden}
+  .portal-coordinator-toggle{width:100%;border:0;background:#fff;padding:17px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;cursor:pointer;color:#18232d}
+  .portal-coordinator-toggle:hover{background:#f8fafc}
+  .portal-coordinator-name{font-size:16px;font-weight:800;display:block}
+  .portal-coordinator-meta{font-size:12px;color:#71808e;display:block;margin-top:5px}
+  .portal-coordinator-count{white-space:nowrap;font-size:13px;font-weight:800;color:#075b91;background:#eef6fb;border-radius:999px;padding:7px 11px}
+  .portal-coordinator-groups{padding:0 16px 16px;border-top:1px solid #edf1f4}
+  .portal-coordinator-groups .portal-group-list{margin-top:14px}
   @media(max-width:700px){.portal-grid{grid-template-columns:1fr}.portal-admin-card{padding:16px}.portal-member-row{align-items:flex-start;flex-direction:column}.portal-group-detail-meta{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.portal-group-detail-meta>div{padding:11px}}
   @media(max-width:380px){.portal-group-detail-meta{grid-template-columns:1fr 1fr}}
 
@@ -794,6 +806,7 @@
       <button class="nav-btn" id="navBtnRecursos" onclick="navegarA('recursos')">Recursos</button>
       <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
       <button class="nav-btn oculto" id="navBtnGrupos" onclick="navegarA('grupos')">Grupos</button>
+      <button class="nav-btn oculto" id="navBtnCoordinadores" onclick="navegarA('coordinadores')">Coordinadores</button>
       <button class="nav-btn oculto" id="navBtnMiGrupo" onclick="navegarA('miGrupo')">Mi grupo</button>
     </nav>
   </div>
@@ -815,6 +828,7 @@
   <div class="drawer-item" onclick="navegarA('recursos'); cerrarDrawer();">RECURSOS</div>
   <div class="drawer-item" onclick="navegarA('cuenta'); cerrarDrawer();">MI CUENTA</div>
   <div class="drawer-item oculto" id="drawerGrupos" onclick="navegarA('grupos'); cerrarDrawer();">GRUPOS DE HOMBRÍA</div>
+  <div class="drawer-item oculto" id="drawerCoordinadores" onclick="navegarA('coordinadores'); cerrarDrawer();">COORDINADORES</div>
   <div class="drawer-item oculto" id="drawerMiGrupo" onclick="navegarA('miGrupo'); cerrarDrawer();">MI GRUPO</div>
   <div class="drawer-item oculto" id="itemRegistro" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO (ESCANEAR QR)</div>
   <div class="drawer-item" onclick="cerrarSesion(); cerrarDrawer();" style="color: #a52828; margin-top: auto;">CERRAR SESIÓN</div>
@@ -1191,13 +1205,25 @@
       <div class="portal-admin-card">
         <h2 style="margin-top:0;color:#005b92">Grupos de Hombría</h2>
         <p class="portal-muted">Consulta y administra los grupos según los permisos de tu rol y campus.</p>
-        <div id="formCrearGrupo" class="portal-grid oculto">
-          <div class="portal-field"><label for="grupoLiderRegistro"># de Registro del líder</label><input id="grupoLiderRegistro" inputmode="numeric" placeholder="Número de registro" autocomplete="off"></div>
-          <div class="portal-field"><label for="grupoNivel">Nivel</label><select id="grupoNivel"><option>Nivel 1: Hombría al Máximo</option><option>Nivel 2: Valor</option><option>Nivel 3: Integridad Sexual</option><option>Nivel 4: El Principio del Potencial</option><option>Nivel 5: Nunca Te Rindas</option><option>Nivel 6: Comunicación, Sexo y Dinero</option><option>Nivel 7: Un Hombre de Verdad I</option><option>Nivel 8: Un Hombre de Verdad II</option><option>Nivel 9</option><option>Nivel 10</option></select></div>
-          <div><button class="portal-primary" onclick="crearGrupoDesdeUI()">Crear grupo</button><div id="msgCrearGrupo" class="portal-status"></div></div>
-        </div>
         <div id="listaGrupos" class="portal-group-list"><p class="portal-muted">Cargando grupos…</p></div>
         <div id="msgGrupos" class="portal-status"></div>
+        <div id="crearGrupoTrigger" class="portal-create-group-wrap oculto">
+          <button type="button" class="portal-create-group-button" onclick="toggleCrearGrupoUI()">＋ Crear grupo</button>
+        </div>
+        <div id="formCrearGrupo" class="portal-grid oculto" style="margin-top:18px">
+          <div class="portal-field"><label for="grupoLiderRegistro"># de Registro del líder</label><input id="grupoLiderRegistro" inputmode="numeric" placeholder="Número de registro" autocomplete="off"></div>
+          <div class="portal-field"><label for="grupoNivel">Nivel</label><select id="grupoNivel"><option>Nivel 1: Hombría al Máximo</option><option>Nivel 2: Valor</option><option>Nivel 3: Integridad Sexual</option><option>Nivel 4: El Principio del Potencial</option><option>Nivel 5: Nunca Te Rindas</option><option>Nivel 6: Comunicación, Sexo y Dinero</option><option>Nivel 7: Un Hombre de Verdad I</option><option>Nivel 8: Un Hombre de Verdad II</option><option>Nivel 9: Hombres Fuertes</option><option>Nivel 10: Mujer Única</option></select></div>
+          <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap"><button class="portal-primary" onclick="crearGrupoDesdeUI()">Continuar</button><button class="portal-secondary" type="button" onclick="cancelarCrearGrupoUI()">Cancelar</button><div id="msgCrearGrupo" class="portal-status" style="width:100%"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="vistaCoordinadores" class="oculto">
+      <div class="portal-admin-card">
+        <h2 style="margin-top:0;color:#005b92">Coordinadores</h2>
+        <p class="portal-muted">Consulta a los coordinadores de tu campus y revisa los grupos que tiene asignados cada uno. Los grupos nuevos creados por un coordinador se relacionan automáticamente con su cuenta.</p>
+        <div id="listaCoordinadores" class="portal-coordinator-list"><p class="portal-muted">Cargando coordinadores…</p></div>
+        <div id="msgCoordinadores" class="portal-status"></div>
       </div>
     </section>
 
@@ -2134,7 +2160,7 @@
 
   function navegarA(vista) {
     if (vista !== 'escaner') detenerEscaner();
-    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaEscaner','vistaGrupos','vistaMiGrupo','vistaDetalleGrupo'].forEach(id => {
+    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaEscaner','vistaGrupos','vistaCoordinadores','vistaMiGrupo','vistaDetalleGrupo'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.add('oculto');
     });
@@ -2157,12 +2183,17 @@
     } else if (vista === 'grupos') {
       if (!tienePermisoGruposUI()) return navegarA('inicio');
       mostrar('vistaGrupos'); activar('navBtnGrupos'); cargarGruposUI();
+    } else if (vista === 'coordinadores') {
+      const rol = String(usuarioSesion?.rol || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (!['PASTOR','ADMIN_GLOBAL'].includes(rol)) return navegarA('inicio');
+      mostrar('vistaCoordinadores'); activar('navBtnCoordinadores'); cargarCoordinadoresUI();
     } else if (vista === 'miGrupo') {
-      if (String(usuarioSesion?.rol || '').toUpperCase() !== 'LIDER_HOMBRIA') return navegarA('inicio');
+      const rol = String(usuarioSesion?.rol || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      if (!['LIDER_HOMBRIA','ADMIN_GLOBAL'].includes(rol)) return navegarA('inicio');
       grupoOrigenVista = 'miGrupo';
       mostrar('vistaMiGrupo'); activar('navBtnMiGrupo'); cargarGruposUI(true);
     } else if (vista === 'detalleGrupo') {
-      if (!grupoSeleccionado) return navegarA(String(usuarioSesion?.rol || '').toUpperCase() === 'LIDER_HOMBRIA' ? 'miGrupo' : 'grupos');
+      if (!grupoSeleccionado) return navegarA(['LIDER_HOMBRIA'].includes(String(usuarioSesion?.rol || '').toUpperCase()) ? 'miGrupo' : 'grupos');
       mostrar('vistaDetalleGrupo');
       cargarIntegrantesGrupoUI();
     }
@@ -2378,14 +2409,17 @@
   }
 
   function configurarPermisosUI() {
-    const rol = String(usuarioSesion && usuarioSesion.rol || '').toUpperCase();
+    const rol = String(usuarioSesion && usuarioSesion.rol || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const mostrar = (id, visible) => { const el = document.getElementById(id); if (el) el.classList.toggle('oculto', !visible); };
     const grupos = ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol);
+    const puedeVerCoordinadores = ['ADMIN_GLOBAL','PASTOR'].includes(rol);
     const puedeCrear = grupos;
     mostrar('navBtnGrupos', grupos); mostrar('drawerGrupos', grupos);
-    mostrar('navBtnMiGrupo', rol === 'LIDER_HOMBRIA'); mostrar('drawerMiGrupo', rol === 'LIDER_HOMBRIA');
+    mostrar('navBtnCoordinadores', puedeVerCoordinadores); mostrar('drawerCoordinadores', puedeVerCoordinadores);
+    mostrar('navBtnMiGrupo', ['LIDER_HOMBRIA','ADMIN_GLOBAL'].includes(rol)); mostrar('drawerMiGrupo', ['LIDER_HOMBRIA','ADMIN_GLOBAL'].includes(rol));
     mostrar('itemRegistro', ['REGISTRO','ADMIN_CAMPUS','ADMIN_GLOBAL','PASTOR'].includes(rol));
-    mostrar('formCrearGrupo', puedeCrear);
+    mostrar('crearGrupoTrigger', puedeCrear);
+    mostrar('formCrearGrupo', false);
   }
 
   function cargarGruposUI(paraMiGrupo = false) {
@@ -2405,6 +2439,7 @@
         }
         let grupos = Array.isArray(data.grupos) ? data.grupos : [];
         if (paraMiGrupo) grupos = grupos.filter(g => String(g.liderRegistro) === String(usuarioSesion.registro));
+        grupos.sort((a, b) => String(a.liderNombre || a.liderRegistro || '').localeCompare(String(b.liderNombre || b.liderRegistro || ''), 'es'));
         if (!grupos.length) {
           const d = data.diagnostico || {};
           const detalle = d.totalActivos > 0
@@ -2415,7 +2450,7 @@
         }
         cont.innerHTML = grupos.map(g => {
           const grupoJson = encodeURIComponent(JSON.stringify(g));
-          return `<article class="portal-group"><h3>${escaparHTML(g.nombre)}</h3><span class="portal-badge">${escaparHTML(g.campus)}</span> <span class="portal-badge">${escaparHTML(g.nivel)}</span><p class="portal-muted">Líder: ${escaparHTML(g.liderNombre || g.liderRegistro)} · ${Number(g.totalIntegrantes)||0} integrantes</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGestionGrupoDesdeBoton(this)">Ver grupo</button></article>`;
+          return `<article class="portal-group"><h3>${escaparHTML(g.liderNombre || g.liderRegistro || 'Grupo de Hombría')}</h3><p class="portal-muted" style="margin:4px 0 14px">${escaparHTML(g.campus)} · ${escaparHTML(g.nivel)}</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGestionGrupoDesdeBoton(this)">Ver Grupo</button></article>`;
         }).join('');
         return data;
       })
@@ -2423,6 +2458,61 @@
         cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message || 'Error de conexión al consultar grupos.')}</p>`;
         return { exito:false, mensaje:err.message || 'Error de conexión.' };
       });
+  }
+
+  function toggleCrearGrupoUI() {
+    const form = document.getElementById('formCrearGrupo');
+    if (!form) return;
+    const abrir = form.classList.contains('oculto');
+    form.classList.toggle('oculto', !abrir);
+    if (abrir) document.getElementById('grupoLiderRegistro')?.focus();
+  }
+
+  function cancelarCrearGrupoUI() {
+    const form = document.getElementById('formCrearGrupo');
+    if (form) form.classList.add('oculto');
+    document.getElementById('grupoLiderRegistro').value = '';
+    document.getElementById('msgCrearGrupo').textContent = '';
+  }
+
+  function cargarCoordinadoresUI() {
+    const cont = document.getElementById('listaCoordinadores');
+    const msg = document.getElementById('msgCoordinadores');
+    if (!cont) return Promise.resolve(null);
+    cont.innerHTML = '<p class="portal-muted">Consultando coordinadores de tu campus…</p>';
+    if (msg) msg.textContent = '';
+    return apiPortal('listarCoordinadoresHombria').then(data => {
+      if (!data || !data.exito) throw new Error((data && data.mensaje) || 'No fue posible consultar a los coordinadores.');
+      const coordinadores = Array.isArray(data.coordinadores) ? data.coordinadores : [];
+      if (!coordinadores.length) {
+        cont.innerHTML = '<p class="portal-muted">No hay coordinadores activos registrados para este campus.</p>';
+        return data;
+      }
+      cont.innerHTML = coordinadores.map(c => {
+        const grupos = Array.isArray(c.grupos) ? c.grupos : [];
+        grupos.sort((a, b) => String(a.liderNombre || a.liderRegistro || '').localeCompare(String(b.liderNombre || b.liderRegistro || ''), 'es'));
+        const gruposHtml = grupos.length ? `<div class="portal-group-list">${grupos.map(g => {
+          const grupoJson = encodeURIComponent(JSON.stringify(g));
+          return `<article class="portal-group"><h3>${escaparHTML(g.liderNombre || g.liderRegistro || 'Grupo de Hombría')}</h3><p class="portal-muted" style="margin:4px 0 14px">${escaparHTML(g.campus)} · ${escaparHTML(g.nivel)}</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGrupoDeCoordinadorDesdeBoton(this)">Ver Grupo</button></article>`;
+        }).join('')}</div>` : '<p class="portal-muted" style="margin:14px 0 0">Este coordinador todavía no tiene grupos asignados.</p>';
+        return `<article class="portal-coordinator-card"><button type="button" class="portal-coordinator-toggle" data-coordinador="${encodeURIComponent(JSON.stringify(c))}" onclick="toggleCoordinadorDesdeBoton(this)"><span><strong class="portal-coordinator-name">${escaparHTML(c.nombre)}</strong><span class="portal-coordinator-meta">${escaparHTML(c.campus)}</span></span><span class="portal-coordinator-count">${Number(c.totalGrupos)||0} ${Number(c.totalGrupos)===1?'grupo':'grupos'}</span></button><div class="portal-coordinator-groups oculto">${gruposHtml}</div></article>`;
+      }).join('');
+      return data;
+    }).catch(err => {
+      cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message || 'Error al cargar coordinadores.')}</p>`;
+      return { exito:false, mensaje:err.message || 'Error al cargar coordinadores.' };
+    });
+  }
+
+  function toggleCoordinadorDesdeBoton(boton) {
+    const panel = boton?.nextElementSibling;
+    if (!panel) return;
+    panel.classList.toggle('oculto');
+  }
+
+  function abrirGrupoDeCoordinadorDesdeBoton(boton) {
+    grupoOrigenVista = 'coordinadores';
+    abrirGestionGrupoDesdeBoton(boton);
   }
 
   function crearGrupoDesdeUI() {
@@ -2468,6 +2558,7 @@
       });
       if (!resultado || !resultado.exito) throw new Error((resultado && resultado.mensaje) || 'No se pudo crear el grupo.');
       cerrarModalConfirmarGrupo();
+      document.getElementById('formCrearGrupo')?.classList.add('oculto');
       document.getElementById('grupoLiderRegistro').value = '';
       msg.textContent = resultado.mensaje || 'Grupo creado correctamente.';
       msg.style.color = '#176b3a';
