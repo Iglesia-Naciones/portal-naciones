@@ -192,15 +192,15 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
     .header-inner {
-      max-width: 1080px; margin: 0 auto; padding: 0 20px;
-      display: flex; justify-content: space-between; align-items: center; height: 56px;
+      max-width: 1320px; margin: 0 auto; padding: 0 16px;
+      display: flex; justify-content: space-between; align-items: center; height: 56px; gap: 12px;
     }
     .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .img-logo-naciones-header { height: 28px; width: auto; display: block; object-fit: contain; }
 
-    .nav-desktop { display: flex; align-items: center; gap: 12px; height: 100%; }
+    .nav-desktop { display: flex; align-items: center; gap: 6px; height: 100%; min-width: 0; }
     .nav-btn {
-      padding: 16px 14px; border: 0; background: transparent; font-size: 13.5px; font-weight: 600;
+      padding: 16px 9px; border: 0; background: transparent; font-size: 12.5px; font-weight: 600; white-space: nowrap;
       color: #64748b; cursor: pointer; position: relative; transition: all 0.2s ease;
     }
     .nav-btn:hover { color: #0b4d82; }
@@ -548,6 +548,40 @@
   .grupo-confirm-accept:disabled{opacity:.6;cursor:wait}
   @media(max-width:520px){.grupo-confirm-card{border-radius:18px}.grupo-confirm-head,.grupo-confirm-body{padding-left:19px;padding-right:19px}.grupo-confirm-actions{padding:16px 19px 19px}.grupo-confirm-dato{flex-direction:column;gap:3px}.grupo-confirm-dato strong{text-align:left}}
 
+
+  /* Panel centralizado por campus */
+  .campus-topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px}
+  .campus-search{display:flex;align-items:center;gap:8px;width:min(100%,360px);margin-left:auto}
+  .campus-search input{flex:1;min-width:150px;border:1px solid #d7e0e8;border-radius:11px;padding:10px 12px;font:inherit;font-size:13px;background:#fff}
+  .campus-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+  .campus-metric{background:#f7f9fb;border:1px solid #e7edf2;border-radius:15px;padding:18px}
+  .campus-metric span{display:block;color:#71808e;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.45px}
+  .campus-metric strong{display:block;color:#075b91;font-size:30px;line-height:1.15;margin-top:7px}
+  .campus-chart-wrap{background:#fff;border:1px solid #e7edf2;border-radius:15px;padding:16px;margin:14px 0 20px;overflow:hidden}
+  .campus-chart{width:100%;height:auto;display:block;min-height:190px}
+  .campus-search-results{display:grid;gap:8px;margin-top:10px}
+  .campus-search-result{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;border:1px solid #e1e8ee;background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;color:#18232d}
+  .campus-search-result:hover{background:#f7fafc;border-color:#b9d0df}
+  .campus-person-detail{margin-top:16px;border-top:1px solid #e7edf2;padding-top:18px}
+  .campus-person-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .campus-person-head h3{margin:0;color:#17232d;font-size:19px}
+  .campus-progress-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .campus-progress-block{border:1px solid #e7edf2;border-radius:13px;padding:13px;background:#fff}
+  .campus-progress-block h4{margin:0 0 10px;color:#075b91}
+  .campus-progress-item{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid #f0f2f4;font-size:12px}
+  .campus-progress-item:last-child{border-bottom:0}
+  .campus-mini-status{font-size:10px;font-weight:800;white-space:nowrap;border-radius:99px;padding:4px 7px;background:#edf1f4;color:#64748b}
+  .campus-mini-status.ok{background:#e0f3e6;color:#176b3a}
+  .campus-attendance-list{display:grid;gap:7px}
+  .campus-attendance-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #edf1f4;font-size:12px}
+  .campus-attendance-item:last-child{border-bottom:0}
+  .campus-registration-tools{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-top:15px;padding:14px;background:#f7fafc;border:1px solid #e7edf2;border-radius:13px}
+  .campus-registration-tools .portal-field{margin:0;min-width:190px;flex:1}
+  .campus-scanner-tabs{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:12px 0 18px}
+  .campus-scanner-tabs button{border:1px solid #cdd9e2;background:#fff;color:#31536b;border-radius:999px;padding:10px 16px;font-weight:800;cursor:pointer}
+  .campus-scanner-tabs button.active{background:#075b91;color:#fff;border-color:#075b91}
+  @media(max-width:700px){.campus-progress-grid{grid-template-columns:1fr}.campus-topbar{display:block}.campus-search{margin:14px 0 0;width:100%}.campus-metric{padding:14px}.campus-metric strong{font-size:26px}}
+
 </style>
 </head>
 <body>
@@ -805,6 +839,8 @@
       <button class="nav-btn" id="navBtnHombria" onclick="navegarA('hombria')">Hombría al Máximo</button>
       <button class="nav-btn" id="navBtnRecursos" onclick="navegarA('recursos')">Recursos</button>
       <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
+      <button class="nav-btn oculto" id="navBtnCampus" onclick="navegarA('campus')">Campus</button>
+      <button class="nav-btn oculto" id="navBtnRegistro" onclick="navegarA('escaner')">Registro</button>
       <button class="nav-btn oculto" id="navBtnGrupos" onclick="navegarA('grupos')">Grupos</button>
       <button class="nav-btn oculto" id="navBtnCoordinadores" onclick="navegarA('coordinadores')">Coordinadores</button>
       <button class="nav-btn oculto" id="navBtnMiGrupo" onclick="navegarA('miGrupo')">Mi grupo</button>
@@ -827,10 +863,11 @@
   <div class="drawer-item" onclick="navegarA('hombria'); cerrarDrawer();">HOMBRÍA AL MÁXIMO</div>
   <div class="drawer-item" onclick="navegarA('recursos'); cerrarDrawer();">RECURSOS</div>
   <div class="drawer-item" onclick="navegarA('cuenta'); cerrarDrawer();">MI CUENTA</div>
+  <div class="drawer-item oculto" id="drawerCampus" onclick="navegarA('campus'); cerrarDrawer();">CAMPUS</div>
   <div class="drawer-item oculto" id="drawerGrupos" onclick="navegarA('grupos'); cerrarDrawer();">GRUPOS DE HOMBRÍA</div>
   <div class="drawer-item oculto" id="drawerCoordinadores" onclick="navegarA('coordinadores'); cerrarDrawer();">COORDINADORES</div>
   <div class="drawer-item oculto" id="drawerMiGrupo" onclick="navegarA('miGrupo'); cerrarDrawer();">MI GRUPO</div>
-  <div class="drawer-item oculto" id="itemRegistro" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO (ESCANEAR QR)</div>
+  <div class="drawer-item oculto" id="itemRegistro" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO</div>
   <div class="drawer-item" onclick="cerrarSesion(); cerrarDrawer();" style="color: #a52828; margin-top: auto;">CERRAR SESIÓN</div>
 </aside>
 
@@ -1185,9 +1222,33 @@
       </div>
     </section>
 
+
+    <section id="vistaCampus" class="oculto">
+      <div class="portal-admin-card">
+        <div class="campus-topbar">
+          <div><h2 style="margin:0;color:#005b92">Campus</h2><p id="campusPanelNombre" class="portal-muted" style="margin:6px 0 0">Cargando campus…</p></div>
+          <div class="campus-search"><input id="buscarPersonaCampusInput" type="search" placeholder="Buscar por nombre o # de registro" autocomplete="off" onkeydown="if(event.key==='Enter')buscarPersonasCampusUI()"><button class="portal-primary" onclick="buscarPersonasCampusUI()" type="button">Buscar</button></div>
+        </div>
+        <div class="campus-metrics">
+          <div class="campus-metric"><span>Asistencias de la temporada</span><strong id="campusTotalAsistencias">—</strong></div>
+          <div class="campus-metric"><span>Grupos activos</span><strong id="campusTotalGrupos">—</strong></div>
+        </div>
+        <div class="campus-chart-wrap"><h3 style="margin:0 0 6px;color:#18232d;font-size:15px">Asistencias por fecha</h3><p class="portal-muted" style="margin:0 0 8px">Asistencias registradas en Hombría al Máximo durante la temporada.</p><div id="campusGraficaAsistencias"><p class="portal-muted">Cargando gráfica…</p></div></div>
+        <div id="campusResultadosBusqueda" class="campus-search-results"></div>
+        <div id="campusDetallePersona" class="campus-person-detail oculto"></div>
+        <div id="campusPanelMensaje" class="portal-status"></div>
+      </div>
+    </section>
+
     <section id="vistaEscaner" class="oculto">
       <div class="card-rounded-gray" style="background: #ffffff; text-align: center;">
-        <h2 style="margin-top: 0; color: #0b4d82;">Escáner de Asistencia QR</h2>
+        <h2 style="margin-top: 0; color: #0b4d82;">Registro de asistencia</h2>
+        <p class="portal-muted">Selecciona el campus antes de comenzar a escanear.</p>
+        <div class="campus-scanner-tabs" id="campusScannerTabs">
+          <button type="button" data-campus="NACIONAL" class="active" onclick="seleccionarCampusEscaner('NACIONAL')">Nacional <span style="font-weight:500">· 11 Sur + Nacional</span></button>
+          <button type="button" data-campus="JUAN BAUTISTA" onclick="seleccionarCampusEscaner('JUAN BAUTISTA')">Juan Bautista</button>
+          <button type="button" data-campus="HUEJOTZINGO" onclick="seleccionarCampusEscaner('HUEJOTZINGO')">Huejotzingo</button>
+        </div>
         <div style="margin-bottom: 16px;">
           <label>Programa a registrar:</label>
           <select id="selectProgEscaner">
@@ -1203,7 +1264,7 @@
 
     <section id="vistaGrupos" class="oculto">
       <div class="portal-admin-card">
-        <h2 style="margin-top:0;color:#005b92">Grupos de Hombría</h2>
+        <h2 id="tituloVistaGrupos" style="margin-top:0;color:#005b92">Grupos de Hombría</h2>
         <p class="portal-muted">Consulta y administra los grupos según los permisos de tu rol y campus.</p>
         <div id="listaGrupos" class="portal-group-list"><p class="portal-muted">Cargando grupos…</p></div>
         <div id="msgGrupos" class="portal-status"></div>
@@ -1241,7 +1302,7 @@
         <div class="portal-detail-section-title">Personas del grupo</div>
         <div id="listaIntegrantesGrupo"><p class="portal-muted">Cargando integrantes…</p></div>
         <div class="portal-add-members">
-          <button class="portal-add-members-button" type="button" onclick="toggleFormularioAgregarMiembros()">＋ Agregar miembros</button>
+          <button class="portal-add-members-button" type="button" onclick="toggleFormularioAgregarMiembros()">＋ Agregar personas</button>
           <div id="panelAgregarIntegrante" class="portal-add-members-panel oculto">
             <p class="portal-muted">Busca a la persona por su número de registro. Verifica sus datos antes de agregarla.</p>
             <div class="portal-grid">
@@ -1346,6 +1407,9 @@
   let coordinadoresUICacheAt = 0;
   let coordinadoresUIPromise = null;
   const PORTAL_LISTAS_CACHE_MS = 20000;
+  let campusEscanerActual = 'NACIONAL';
+  let campusPanelCache = null;
+  let campusPanelCacheAt = 0;
   let escaneoEnProceso = false;
   let ultimoCodigoEscaneado = '';
   let ultimoTiempoEscaneo = 0;
@@ -1842,7 +1906,7 @@
     renderizarListaProgreso('FUNDAMENTOS', res.progresoFundamentos || []);
 
     const rol = String(res.rol || '').toUpperCase();
-    const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_CAMPUS' || rol === 'ADMIN_GLOBAL');
+    const esVoluntario = (rol === 'REGISTRO' || rol === 'ADMIN_GLOBAL');
     document.getElementById('itemRegistro').classList.toggle('oculto', !esVoluntario);
   }
 
@@ -2168,7 +2232,7 @@
 
   function navegarA(vista) {
     if (vista !== 'escaner') detenerEscaner();
-    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaEscaner','vistaGrupos','vistaCoordinadores','vistaMiGrupo','vistaDetalleGrupo'].forEach(id => {
+    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaCampus','vistaEscaner','vistaGrupos','vistaCoordinadores','vistaMiGrupo','vistaDetalleGrupo'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.add('oculto');
     });
@@ -2186,14 +2250,20 @@
       mostrar('vistaRecursos'); activar('navBtnRecursos'); activar('bnavRecursos'); renderizarListaRecursosUI();
     } else if (vista === 'cuenta') {
       mostrar('vistaCuentaMain'); activar('navBtnCuenta'); activar('bnavCuenta');
+    } else if (vista === 'campus') {
+      const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
+      if (!['ADMIN_GLOBAL','ADMIN_CAMPUS','PASTOR'].includes(rol)) return navegarA('inicio');
+      mostrar('vistaCampus'); activar('navBtnCampus'); cargarCampusPanelUI();
     } else if (vista === 'escaner') {
-      mostrar('vistaEscaner'); iniciarEscaner();
+      const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
+      if (!['REGISTRO','ADMIN_GLOBAL'].includes(rol)) return navegarA('inicio');
+      mostrar('vistaEscaner'); activar('navBtnRegistro'); seleccionarCampusEscaner(campusEscanerActual || 'NACIONAL');
     } else if (vista === 'grupos') {
       if (!tienePermisoGruposUI()) return navegarA('inicio');
       mostrar('vistaGrupos'); activar('navBtnGrupos'); cargarGruposUI();
     } else if (vista === 'coordinadores') {
       const rol = String(usuarioSesion?.rol || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      if (!['PASTOR','ADMIN_GLOBAL'].includes(rol)) return navegarA('inicio');
+      if (!['PASTOR','ADMIN_CAMPUS','ADMIN_GLOBAL'].includes(rol)) return navegarA('inicio');
       mostrar('vistaCoordinadores'); activar('navBtnCoordinadores'); cargarCoordinadoresUI();
     } else if (vista === 'miGrupo') {
       const rol = String(usuarioSesion?.rol || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -2201,10 +2271,118 @@
       grupoOrigenVista = 'miGrupo';
       mostrar('vistaMiGrupo'); activar('navBtnMiGrupo'); cargarGruposUI(true);
     } else if (vista === 'detalleGrupo') {
-      if (!grupoSeleccionado) return navegarA(['LIDER_HOMBRIA'].includes(String(usuarioSesion?.rol || '').toUpperCase()) ? 'miGrupo' : 'grupos');
+      if (!grupoSeleccionado) {
+        const origen = grupoOrigenVista || '';
+        if (origen === 'coordinadores') return navegarA('coordinadores');
+        if (origen === 'miGrupo' || String(usuarioSesion?.rol || '').toUpperCase() === 'LIDER_HOMBRIA') return navegarA('miGrupo');
+        return navegarA('grupos');
+      }
       mostrar('vistaDetalleGrupo');
       cargarIntegrantesGrupoUI();
     }
+  }
+
+  function cargarCampusPanelUI(forzar = false) {
+    const mensaje = document.getElementById('campusPanelMensaje');
+    if (mensaje) mensaje.textContent = '';
+    if (!forzar && campusPanelCache && Date.now() - campusPanelCacheAt < PORTAL_LISTAS_CACHE_MS) {
+      renderizarCampusPanelUI(campusPanelCache);
+      return Promise.resolve(campusPanelCache);
+    }
+    document.getElementById('campusPanelNombre').textContent = 'Consultando campus…';
+    document.getElementById('campusGraficaAsistencias').innerHTML = '<p class="portal-muted">Cargando gráfica…</p>';
+    return apiPortal('obtenerPanelCampusHombria').then(data => {
+      if (!data || !data.exito) throw new Error(data?.mensaje || 'No se pudo consultar el panel.');
+      campusPanelCache = data; campusPanelCacheAt = Date.now();
+      renderizarCampusPanelUI(data);
+      return data;
+    }).catch(err => {
+      document.getElementById('campusPanelNombre').textContent = 'No fue posible cargar el campus.';
+      document.getElementById('campusGraficaAsistencias').innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`;
+      return null;
+    });
+  }
+
+  function renderizarCampusPanelUI(data) {
+    document.getElementById('campusPanelNombre').textContent = data.campus || 'Campus';
+    document.getElementById('campusTotalAsistencias').textContent = Number(data.totalAsistencias || 0).toLocaleString('es-MX');
+    document.getElementById('campusTotalGrupos').textContent = Number(data.totalGrupos || 0).toLocaleString('es-MX');
+    renderizarGraficaCampus_(Array.isArray(data.serie) ? data.serie : []);
+  }
+
+  function renderizarGraficaCampus_(serie) {
+    const cont = document.getElementById('campusGraficaAsistencias');
+    if (!serie.length) { cont.innerHTML = '<p class="portal-muted">No hay fechas de temporada registradas en el calendario.</p>'; return; }
+    const w=900,h=260,left=48,right=20,top=18,bottom=46;
+    const max=Math.max(1,...serie.map(x=>Number(x.total)||0));
+    const x=i=>serie.length===1?(left+right+w-left-right)/2:left+i*(w-left-right)/(serie.length-1);
+    const y=v=>h-bottom-(Number(v)||0)/max*(h-top-bottom);
+    const points=serie.map((p,i)=>`${x(i).toFixed(1)},${y(p.total).toFixed(1)}`).join(' ');
+    const grid=[0,.25,.5,.75,1].map(t=>{const yy=y(max*t);return `<line x1="${left}" y1="${yy}" x2="${w-right}" y2="${yy}" stroke="#e8edf2" stroke-width="1"/><text x="${left-10}" y="${yy+4}" text-anchor="end" font-size="11" fill="#71808e">${Math.round(max*t)}</text>`}).join('');
+    const step=Math.max(1,Math.ceil(serie.length/8));
+    const labels=serie.map((p,i)=>i%step===0||i===serie.length-1?`<text x="${x(i)}" y="${h-16}" text-anchor="middle" font-size="11" fill="#71808e">${escaparHTML(p.etiqueta||p.fecha)}</text>`:'').join('');
+    const dots=serie.map((p,i)=>`<circle cx="${x(i)}" cy="${y(p.total)}" r="3.5" fill="#075b91"><title>${escaparHTML(p.fecha)}: ${Number(p.total)||0} asistencias</title></circle>`).join('');
+    cont.innerHTML=`<svg class="campus-chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Asistencias por fecha"><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="#cbd5df"/>${grid}<polyline points="${points}" fill="none" stroke="#075b91" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+  }
+
+  function buscarPersonasCampusUI() {
+    const q=document.getElementById('buscarPersonaCampusInput').value.trim();
+    const cont=document.getElementById('campusResultadosBusqueda');
+    const detail=document.getElementById('campusDetallePersona');
+    detail.classList.add('oculto'); detail.innerHTML='';
+    if(q.length<2){cont.innerHTML='<p class="portal-muted">Escribe al menos dos caracteres o números para buscar.</p>';return;}
+    cont.innerHTML='<p class="portal-muted">Buscando personas…</p>';
+    apiPortal('buscarPersonasCampus',{termino:q}).then(data=>{
+      if(!data.exito)throw new Error(data.mensaje||'No se pudo buscar.');
+      const personas=data.personas||[];
+      if(!personas.length){cont.innerHTML='<p class="portal-muted">No se encontraron personas de tu campus.</p>';return;}
+      cont.innerHTML=personas.map(p=>`<button class="campus-search-result" type="button" data-registro="${escaparHTML(p.registro)}" onclick="seleccionarPersonaCampus(this)"><span><strong>${escaparHTML(p.nombre)}</strong><br><small class="portal-muted">${escaparHTML(p.campus)} · Registro ${escaparHTML(p.registro)}</small></span><span style="color:#075b91;font-weight:800">Ver ficha →</span></button>`).join('');
+    }).catch(err=>{cont.innerHTML=`<p class="portal-muted">${escaparHTML(err.message)}</p>`;});
+  }
+
+  function seleccionarPersonaCampus(btn) { cargarDetallePersonaCampus(btn?.dataset?.registro || ''); }
+
+  function cargarDetallePersonaCampus(registro) {
+    const cont=document.getElementById('campusDetallePersona');
+    cont.classList.remove('oculto'); cont.innerHTML='<p class="portal-muted">Cargando historial y progreso…</p>';
+    apiPortal('detallePersonaCampus',{registro}).then(data=>{
+      if(!data.exito)throw new Error(data.mensaje||'No se pudo cargar la ficha.');
+      renderizarDetallePersonaCampus(data);
+    }).catch(err=>{cont.innerHTML=`<p class="portal-muted">${escaparHTML(err.message)}</p>`;});
+  }
+
+  function renderizarProgresoCampus_(programa, bloques) {
+    if(!Array.isArray(bloques)||!bloques.length)return '<p class="portal-muted">Sin información académica disponible.</p>';
+    return `<div class="campus-progress-grid">${bloques.map(b=>`<div class="campus-progress-block"><h4>${escaparHTML(b.bloque||'Progreso')}</h4>${(b.items||[]).map(it=>`<div class="campus-progress-item"><span>${escaparHTML(it.nombre)}</span><span class="campus-mini-status ${it.completado?'ok':''}">${it.completado?'Completado':'Pendiente'}</span></div>`).join('')}</div>`).join('')}</div>`;
+  }
+
+  function renderizarHistorialCampus_(lista) {
+    if(!Array.isArray(lista)||!lista.length)return '<p class="portal-muted">No hay sesiones para mostrar.</p>';
+    return `<div class="campus-attendance-list">${lista.map(a=>`<div class="campus-attendance-item"><span><strong>${escaparHTML(a.fecha||'—')}</strong><br><small class="portal-muted">${escaparHTML(a.sesion||'')} · ${escaparHTML(a.leccion||a.curso||'')}</small></span><span class="portal-mini-status ${['PRESENTE','RETARDO'].includes(String(a.estado||'').toUpperCase())?'ok':''}">${escaparHTML(a.estado||'—')}</span></div>`).join('')}</div>`;
+  }
+
+  function renderizarDetallePersonaCampus(data) {
+    const p=data.persona||{}; const a=data.asistencias||{}; const prog=data.progreso||{}; const ins=data.inscripciones||{};
+    const rol=String(usuarioSesion?.rol||'').toUpperCase();
+    const puedeRegistrar=['ADMIN_CAMPUS','ADMIN_GLOBAL'].includes(rol);
+    const cont=document.getElementById('campusDetallePersona');
+    cont.innerHTML=`<div class="campus-person-head"><div><h3>${escaparHTML(p.nombre||'Persona')}</h3><p class="portal-muted" style="margin:6px 0 0">Registro ${escaparHTML(p.registro||'—')} · ${escaparHTML(p.campus||'—')}</p></div><span class="portal-badge">Ficha de participante</span></div>
+      <div class="portal-detail-section-title">Inscripciones activas</div><div class="portal-group-detail-meta" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div><span>Hombría al Máximo</span><strong>${ins.HOMBRIA?escaparHTML(ins.cursoHombria||'Inscrito'):'No inscrito'}</strong></div><div><span>Fundamentos</span><strong>${ins.FUNDAMENTOS?escaparHTML(ins.cursoFundamentos||'Inscrito'):'No inscrito'}</strong></div></div>
+      <div class="portal-detail-section-title">Historial de asistencias · Hombría al Máximo</div>${renderizarHistorialCampus_(a.HOMBRIA||[])}
+      <div class="portal-detail-section-title">Historial de asistencias · Fundamentos</div>${renderizarHistorialCampus_(a.FUNDAMENTOS||[])}
+      <div class="portal-detail-section-title">Progreso académico · Hombría al Máximo</div>${renderizarProgresoCampus_('HOMBRIA',prog.HOMBRIA||[])}
+      <div class="portal-detail-section-title">Progreso académico · Fundamentos</div>${renderizarProgresoCampus_('FUNDAMENTOS',prog.FUNDAMENTOS||[])}
+      ${puedeRegistrar?`<div class="campus-registration-tools"><div class="portal-field"><label for="campusProgramaAsistencia">Registrar asistencia de hoy</label><select id="campusProgramaAsistencia"><option value="HOMBRIA">Hombría al Máximo</option><option value="FUNDAMENTOS">Fundamentos</option></select></div><button class="portal-primary" type="button" onclick="registrarAsistenciaPersonaCampus('${escaparHTML(p.registro)}')">Registrar asistencia</button></div>`:''}`;
+  }
+
+  function registrarAsistenciaPersonaCampus(registro) {
+    const programa=document.getElementById('campusProgramaAsistencia')?.value||'HOMBRIA';
+    const msg=document.getElementById('campusPanelMensaje');
+    msg.textContent='Registrando asistencia…'; msg.style.color='#075b91';
+    apiPortal('registrarAsistenciaCampus',{registro,programa}).then(data=>{
+      msg.textContent=data.mensaje||''; msg.style.color=data.exito?'#176b3a':'#a52828';
+      if(data.exito){campusPanelCache=null;campusPanelCacheAt=0;cargarCampusPanelUI(true);cargarDetallePersonaCampus(registro);}
+    }).catch(err=>{msg.textContent=err.message;msg.style.color='#a52828';});
   }
 
   function toggleSubPestana(programa, sub) {
@@ -2327,6 +2505,17 @@
     }
   }
 
+  function seleccionarCampusEscaner(campus) {
+    campusEscanerActual = campus || 'NACIONAL';
+    document.querySelectorAll('#campusScannerTabs button').forEach(b => b.classList.toggle('active', b.dataset.campus === campusEscanerActual));
+    const msg = document.getElementById('resEscaneoMsg');
+    if (msg) msg.textContent = 'Campus seleccionado: ' + (campusEscanerActual === 'NACIONAL' ? 'Nacional + 11 Sur' : (campusEscanerActual === 'HUEJOTZINGO' ? 'Huejotzingo' : 'Juan Bautista')) + '. La cámara está lista para escanear.';
+    if (!document.getElementById('vistaEscaner')?.classList.contains('oculto')) {
+      detenerEscaner();
+      setTimeout(() => iniciarEscaner(), 450);
+    }
+  }
+
   function iniciarEscaner() {
     const msgBox = document.getElementById('resEscaneoMsg');
     msgBox.textContent = 'Inicializando cámara...';
@@ -2374,8 +2563,9 @@
       action: 'registrarAsistencia',
       registro: codigoQR,
       programa: prog,
-      campus: usuarioSesion.campus || '11 SUR',
-      voluntarioRegistro: usuarioSesion.registro
+      campus: campusEscanerActual || 'NACIONAL',
+      voluntarioRegistro: usuarioSesion.registro,
+      token: usuarioSesion.sessionToken
     });
 
     fetch(`${WEB_APP_URL}?${params.toString()}`)
@@ -2399,7 +2589,7 @@
 
   function tienePermisoGruposUI() {
     const rol = String(usuarioSesion && usuarioSesion.rol || '').toUpperCase();
-    return ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rol);
+    return ['ADMIN_GLOBAL','ADMIN_CAMPUS','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rol);
   }
 
   function apiPortal(action, params = {}) {
@@ -2419,15 +2609,29 @@
   function configurarPermisosUI() {
     const rol = String(usuarioSesion && usuarioSesion.rol || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const mostrar = (id, visible) => { const el = document.getElementById(id); if (el) el.classList.toggle('oculto', !visible); };
-    const grupos = ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol);
-    const puedeVerCoordinadores = ['ADMIN_GLOBAL','PASTOR'].includes(rol);
-    const puedeCrear = grupos;
+    const global = rol === 'ADMIN_GLOBAL';
+    const campus = ['ADMIN_CAMPUS','PASTOR'].includes(rol) || global;
+    const coordinadores = ['ADMIN_CAMPUS','PASTOR'].includes(rol) || global;
+    const grupos = ['ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol) || global;
+    const miGrupo = rol === 'LIDER_HOMBRIA' || global;
+    const registro = rol === 'REGISTRO' || global;
+    mostrar('navBtnCampus', campus); mostrar('drawerCampus', campus);
     mostrar('navBtnGrupos', grupos); mostrar('drawerGrupos', grupos);
-    mostrar('navBtnCoordinadores', puedeVerCoordinadores); mostrar('drawerCoordinadores', puedeVerCoordinadores);
-    mostrar('navBtnMiGrupo', ['LIDER_HOMBRIA','ADMIN_GLOBAL'].includes(rol)); mostrar('drawerMiGrupo', ['LIDER_HOMBRIA','ADMIN_GLOBAL'].includes(rol));
-    mostrar('itemRegistro', ['REGISTRO','ADMIN_CAMPUS','ADMIN_GLOBAL','PASTOR'].includes(rol));
-    mostrar('crearGrupoTrigger', puedeCrear);
+    mostrar('navBtnCoordinadores', coordinadores); mostrar('drawerCoordinadores', coordinadores);
+    mostrar('navBtnMiGrupo', miGrupo); mostrar('drawerMiGrupo', miGrupo);
+    mostrar('navBtnRegistro', registro); mostrar('itemRegistro', registro);
+    const bGrupos = document.getElementById('navBtnGrupos');
+    const dGrupos = document.getElementById('drawerGrupos');
+    if (bGrupos) bGrupos.textContent = rol === 'COORDINADOR_HOMBRIA' ? 'Mis grupos' : 'Grupos';
+    if (dGrupos) dGrupos.textContent = rol === 'COORDINADOR_HOMBRIA' ? 'MIS GRUPOS' : 'GRUPOS';
+    const tituloGrupos = document.getElementById('tituloVistaGrupos');
+    if (tituloGrupos) tituloGrupos.textContent = rol === 'COORDINADOR_HOMBRIA' ? 'Mis grupos' : 'Grupos de Hombría';
+    const bMi = document.getElementById('navBtnMiGrupo');
+    if (bMi) bMi.textContent = 'Mi grupo';
+    mostrar('crearGrupoTrigger', ['ADMIN_GLOBAL','ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol));
     mostrar('formCrearGrupo', false);
+    // La administración del campus busca y registra asistencia; el pastor solo consulta.
+    if (rol === 'PASTOR') document.querySelector('.portal-add-members')?.classList.add('oculto');
   }
 
   function invalidarCacheGruposUI() {
@@ -2465,7 +2669,7 @@
       }
       cont.innerHTML = grupos.map(g => {
         const grupoJson = encodeURIComponent(JSON.stringify(g));
-        return `<article class="portal-group"><h3>${escaparHTML(g.liderNombre || g.liderRegistro || 'Grupo de Hombría')}</h3><p class="portal-muted" style="margin:4px 0 14px">${escaparHTML(g.campus)} · ${escaparHTML(g.nivel)}</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGestionGrupoDesdeBoton(this)">Ver Grupo</button></article>`;
+        return `<article class="portal-group"><h3>${escaparHTML(g.liderNombre || g.liderRegistro || 'Grupo de Hombría')}</h3><p class="portal-muted" style="margin:4px 0 8px">${escaparHTML(g.campus)} · ${escaparHTML(g.nivel)}</p><p class="portal-muted" style="margin:0 0 14px">${Number(g.totalIntegrantes)||0} integrantes</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGestionGrupoDesdeBoton(this)">Ver Grupo</button></article>`;
       }).join('');
       return data;
     };
@@ -2528,7 +2732,7 @@
         grupos.sort((a, b) => String(a.liderNombre || a.liderRegistro || '').localeCompare(String(b.liderNombre || b.liderRegistro || ''), 'es'));
         const gruposHtml = grupos.length ? `<div class="portal-group-list">${grupos.map(g => {
           const grupoJson = encodeURIComponent(JSON.stringify(g));
-          return `<article class="portal-group"><h3>${escaparHTML(g.liderNombre || g.liderRegistro || 'Grupo de Hombría')}</h3><p class="portal-muted" style="margin:4px 0 14px">${escaparHTML(g.campus)} · ${escaparHTML(g.nivel)}</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGrupoDeCoordinadorDesdeBoton(this)">Ver Grupo</button></article>`;
+          return `<article class="portal-group"><h3>${escaparHTML(g.liderNombre || g.liderRegistro || 'Grupo de Hombría')}</h3><p class="portal-muted" style="margin:4px 0 8px">${escaparHTML(g.campus)} · ${escaparHTML(g.nivel)}</p><p class="portal-muted" style="margin:0 0 14px">${Number(g.totalIntegrantes)||0} integrantes</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGrupoDeCoordinadorDesdeBoton(this)">Ver Grupo</button></article>`;
         }).join('')}</div>` : '<p class="portal-muted" style="margin:14px 0 0">Este coordinador todavía no tiene grupos asignados.</p>';
         return `<article class="portal-coordinator-card"><button type="button" class="portal-coordinator-toggle" data-coordinador="${encodeURIComponent(JSON.stringify(c))}" onclick="toggleCoordinadorDesdeBoton(this)"><span><strong class="portal-coordinator-name">${escaparHTML(c.nombre)}</strong><span class="portal-coordinator-meta">${escaparHTML(c.campus)}</span></span><span class="portal-coordinator-count">${Number(c.totalGrupos)||0} ${Number(c.totalGrupos)===1?'grupo':'grupos'}</span></button><div class="portal-coordinator-groups oculto">${gruposHtml}</div></article>`;
       }).join('');
@@ -2624,6 +2828,7 @@
       grupoOrigenVista = 'grupos';
       invalidarCacheGruposUI();
       coordinadoresUICache = null; coordinadoresUICacheAt = 0;
+      campusPanelCache = null; campusPanelCacheAt = 0;
       const listado = await cargarGruposUI(false);
       const grupoNuevo = listado && Array.isArray(listado.grupos) ? listado.grupos.find(g => String(g.id) === String(resultado.grupoId)) : null;
       if (grupoNuevo) {
@@ -2654,6 +2859,9 @@
 
   function abrirGestionGrupo(grupo) {
     if (!grupo || !grupo.id) return;
+    const rolActual = String(usuarioSesion?.rol || '').toUpperCase();
+    const puedeEditar = ['ADMIN_GLOBAL','ADMIN_CAMPUS','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rolActual);
+    document.querySelector('.portal-add-members')?.classList.toggle('oculto', !puedeEditar);
     grupoSeleccionado = {
       id: String(grupo.id), nombre: String(grupo.nombre || 'Grupo de Hombría'),
       campus: String(grupo.campus || '—'), nivel: String(grupo.nivel || '—'),
@@ -2661,9 +2869,9 @@
       liderRegistro: String(grupo.liderRegistro || ''),
       totalIntegrantes: Number(grupo.totalIntegrantes) || 0
     };
-    document.getElementById('btnVolverDetalleGrupo').textContent = grupoOrigenVista === 'miGrupo' ? '← Volver a mi grupo' : '← Volver a grupos';
+    document.getElementById('btnVolverDetalleGrupo').textContent = grupoOrigenVista === 'miGrupo' ? '← Volver a mi grupo' : (grupoOrigenVista === 'coordinadores' ? '← Volver a coordinadores' : '← Volver a grupos');
     document.getElementById('tituloGestionGrupo').textContent = grupoSeleccionado.nombre;
-    document.getElementById('subtituloGestionGrupo').textContent = 'Información y administración de este grupo.';
+    document.getElementById('subtituloGestionGrupo').textContent = puedeEditar ? 'Información y administración de este grupo.' : 'Consulta la información de este grupo.';
     document.getElementById('detalleGrupoCampus').textContent = grupoSeleccionado.campus;
     document.getElementById('detalleGrupoNivel').textContent = grupoSeleccionado.nivel;
     document.getElementById('detalleGrupoLider').textContent = grupoSeleccionado.liderNombre;
@@ -2702,8 +2910,9 @@
       const items = data.integrantes || [];
       grupoSeleccionado.totalIntegrantes = items.length;
       document.getElementById('detalleGrupoTotal').textContent = String(items.length);
-      if (!items.length) { cont.innerHTML = '<p class="portal-muted">Este grupo todavía no tiene integrantes. Puedes agregarlos con el botón de abajo.</p>'; return; }
-      cont.innerHTML = '<h3 style="color:#18232d;font-size:15px;margin:0 0 8px">Integrantes y asistencia de hoy</h3>' + items.map(p => `<div class="portal-member-row"><div><strong>${escaparHTML(p.nombre)}</strong><br><span class="portal-muted">Registro ${escaparHTML(p.registro)} · Hoy: ${escaparHTML(p.asistenciaHoy || 'Sin registrar')}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','PRESENTE')">Presente</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','FALTA')">Falta</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','JUSTIFICADA')">Justificada</button><button class="portal-secondary" onclick="quitarIntegranteGrupo('${escaparHTML(p.registro)}')">Retirar</button></div></div>`).join('');
+      const puedeEditar = ['ADMIN_GLOBAL','ADMIN_CAMPUS','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(String(usuarioSesion?.rol || '').toUpperCase());
+      if (!items.length) { cont.innerHTML = `<p class="portal-muted">Este grupo todavía no tiene integrantes.${puedeEditar ? ' Puedes agregarlos con el botón de abajo.' : ''}</p>`; return; }
+      cont.innerHTML = '<h3 style="color:#18232d;font-size:15px;margin:0 0 8px">Integrantes' + (puedeEditar ? ' y asistencia de hoy' : '') + '</h3>' + items.map(p => `<div class="portal-member-row"><div><strong>${escaparHTML(p.nombre)}</strong><br><span class="portal-muted">Registro ${escaparHTML(p.registro)} · Hoy: ${escaparHTML(p.asistenciaHoy || 'Sin registrar')}</span></div>${puedeEditar ? `<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','PRESENTE')">Presente</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','FALTA')">Falta</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','JUSTIFICADA')">Justificada</button><button class="portal-secondary" onclick="quitarIntegranteGrupo('${escaparHTML(p.registro)}')">Retirar</button></div>` : ''}</div>`).join('');
     }).catch(err => { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; });
   }
 
