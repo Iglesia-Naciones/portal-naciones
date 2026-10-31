@@ -1339,6 +1339,13 @@
   let grupoOrigenVista = 'grupos';
   let grupoPendienteConfirmacion = null;
   let personaPendienteAgregar = null;
+  let gruposUICache = null;
+  let gruposUICacheAt = 0;
+  let gruposUIPromise = null;
+  let coordinadoresUICache = null;
+  let coordinadoresUICacheAt = 0;
+  let coordinadoresUIPromise = null;
+  const PORTAL_LISTAS_CACHE_MS = 20000;
   let escaneoEnProceso = false;
   let ultimoCodigoEscaneado = '';
   let ultimoTiempoEscaneo = 0;
@@ -1572,7 +1579,8 @@
 
     cargarDatosEnPantalla(res);
     configurarPermisosUI();
-    if (res.sessionToken && tienePermisoGruposUI()) cargarGruposUI();
+    // Los grupos se consultan de forma diferida, únicamente cuando se abre esa sección.
+    // Evita una llamada pesada al servidor durante cada inicio de sesión.
 
     if (res.recursos) {
       recursosListaCompleta = res.recursos;
@@ -2422,7 +2430,15 @@
     mostrar('formCrearGrupo', false);
   }
 
-  function cargarGruposUI(paraMiGrupo = false) {
+  function invalidarCacheGruposUI() {
+    gruposUICache = null;
+    gruposUICacheAt = 0;
+    // Desvincula también una solicitud anterior para que una actualización posterior
+    // pueda consultar el dato recién guardado sin esperar a la petición vieja.
+    gruposUIPromise = null;
+  }
+
+  function cargarGruposUI(paraMiGrupo = false, forzar = false) {
     const cont = paraMiGrupo ? document.getElementById('miGrupoContenido') : document.getElementById('listaGrupos');
     if (!cont) return Promise.resolve(null);
     grupoOrigenVista = paraMiGrupo ? 'miGrupo' : 'grupos';
@@ -2430,34 +2446,54 @@
       cont.innerHTML = '<p class="portal-muted">Tu cuenta no tiene permiso para consultar grupos.</p>';
       return Promise.resolve(null);
     }
-    cont.innerHTML = '<p class="portal-muted">Consultando grupos guardados…</p>';
-    return apiPortal('listarGruposHombria')
+
+    const renderizar = data => {
+      if (!data || !data.exito) {
+        cont.innerHTML = `<p class="portal-muted">${escaparHTML((data && data.mensaje) || 'No fue posible cargar los grupos.')}</p>`;
+        return data;
+      }
+      let grupos = Array.isArray(data.grupos) ? data.grupos.slice() : [];
+      if (paraMiGrupo) grupos = grupos.filter(g => String(g.liderRegistro) === String(usuarioSesion.registro));
+      grupos.sort((a, b) => String(a.liderNombre || a.liderRegistro || '').localeCompare(String(b.liderNombre || b.liderRegistro || ''), 'es'));
+      if (!grupos.length) {
+        const d = data.diagnostico || {};
+        const detalle = d.totalActivos > 0
+          ? ` Se encontraron ${d.totalActivos} grupo(s) activo(s), pero ninguno coincide con los permisos de tu cuenta. Rol: ${escaparHTML(d.rol || usuarioSesion.rol || 'No identificado')}. Campus: ${escaparHTML(d.campusUsuario || 'No identificado')}.`
+          : ` La hoja consultada es “${escaparHTML(d.hoja || 'GRUPOS_HOMBRIA')}” en “${escaparHTML(d.archivo || 'el archivo de grupos')}” y contiene ${Number(d.totalRegistros)||0} registro(s) activo(s): ${Number(d.totalActivos)||0}.`;
+        cont.innerHTML = `<p class="portal-muted">${paraMiGrupo ? 'Todavía no tienes un grupo asignado.' : 'No hay grupos para mostrar.'}${detalle}</p>`;
+        return data;
+      }
+      cont.innerHTML = grupos.map(g => {
+        const grupoJson = encodeURIComponent(JSON.stringify(g));
+        return `<article class="portal-group"><h3>${escaparHTML(g.liderNombre || g.liderRegistro || 'Grupo de Hombría')}</h3><p class="portal-muted" style="margin:4px 0 14px">${escaparHTML(g.campus)} · ${escaparHTML(g.nivel)}</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGestionGrupoDesdeBoton(this)">Ver Grupo</button></article>`;
+      }).join('');
+      return data;
+    };
+
+    if (forzar) invalidarCacheGruposUI();
+    if (gruposUICache && (Date.now() - gruposUICacheAt) < PORTAL_LISTAS_CACHE_MS) {
+      return Promise.resolve(renderizar(gruposUICache));
+    }
+    if (gruposUIPromise) return gruposUIPromise.then(renderizar);
+
+    cont.innerHTML = '<p class="portal-muted">Cargando grupos…</p>';
+    let solicitud;
+    solicitud = apiPortal('listarGruposHombria')
       .then(data => {
-        if (!data || !data.exito) {
-          cont.innerHTML = `<p class="portal-muted">${escaparHTML((data && data.mensaje) || 'No fue posible cargar los grupos.')}</p>`;
-          return data;
+        if (data && data.exito) {
+          gruposUICache = data;
+          gruposUICacheAt = Date.now();
         }
-        let grupos = Array.isArray(data.grupos) ? data.grupos : [];
-        if (paraMiGrupo) grupos = grupos.filter(g => String(g.liderRegistro) === String(usuarioSesion.registro));
-        grupos.sort((a, b) => String(a.liderNombre || a.liderRegistro || '').localeCompare(String(b.liderNombre || b.liderRegistro || ''), 'es'));
-        if (!grupos.length) {
-          const d = data.diagnostico || {};
-          const detalle = d.totalActivos > 0
-            ? ` Se encontraron ${d.totalActivos} grupo(s) activo(s), pero ninguno coincide con los permisos de tu cuenta. Rol: ${escaparHTML(d.rol || usuarioSesion.rol || 'No identificado')}. Campus: ${escaparHTML(d.campusUsuario || 'No identificado')}.`
-            : ` La hoja consultada es “${escaparHTML(d.hoja || 'GRUPOS_HOMBRIA')}” en “${escaparHTML(d.archivo || 'el archivo de grupos')}” y contiene ${Number(d.totalRegistros)||0} registro(s) activo(s): ${Number(d.totalActivos)||0}.`;
-          cont.innerHTML = `<p class="portal-muted">${paraMiGrupo ? 'Todavía no tienes un grupo asignado.' : 'No hay grupos para mostrar.'}${detalle}</p>`;
-          return data;
-        }
-        cont.innerHTML = grupos.map(g => {
-          const grupoJson = encodeURIComponent(JSON.stringify(g));
-          return `<article class="portal-group"><h3>${escaparHTML(g.liderNombre || g.liderRegistro || 'Grupo de Hombría')}</h3><p class="portal-muted" style="margin:4px 0 14px">${escaparHTML(g.campus)} · ${escaparHTML(g.nivel)}</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGestionGrupoDesdeBoton(this)">Ver Grupo</button></article>`;
-        }).join('');
         return data;
       })
       .catch(err => {
-        cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message || 'Error de conexión al consultar grupos.')}</p>`;
-        return { exito:false, mensaje:err.message || 'Error de conexión.' };
+        return { exito:false, mensaje:err.message || 'Error de conexión al consultar grupos.', grupos:[] };
+      })
+      .finally(() => {
+        if (gruposUIPromise === solicitud) gruposUIPromise = null;
       });
+    gruposUIPromise = solicitud;
+    return solicitud.then(renderizar);
   }
 
   function toggleCrearGrupoUI() {
@@ -2475,13 +2511,12 @@
     document.getElementById('msgCrearGrupo').textContent = '';
   }
 
-  function cargarCoordinadoresUI() {
+  function cargarCoordinadoresUI(forzar = false) {
     const cont = document.getElementById('listaCoordinadores');
     const msg = document.getElementById('msgCoordinadores');
     if (!cont) return Promise.resolve(null);
-    cont.innerHTML = '<p class="portal-muted">Consultando coordinadores de tu campus…</p>';
     if (msg) msg.textContent = '';
-    return apiPortal('listarCoordinadoresHombria').then(data => {
+    const renderizar = data => {
       if (!data || !data.exito) throw new Error((data && data.mensaje) || 'No fue posible consultar a los coordinadores.');
       const coordinadores = Array.isArray(data.coordinadores) ? data.coordinadores : [];
       if (!coordinadores.length) {
@@ -2489,7 +2524,7 @@
         return data;
       }
       cont.innerHTML = coordinadores.map(c => {
-        const grupos = Array.isArray(c.grupos) ? c.grupos : [];
+        const grupos = Array.isArray(c.grupos) ? c.grupos.slice() : [];
         grupos.sort((a, b) => String(a.liderNombre || a.liderRegistro || '').localeCompare(String(b.liderNombre || b.liderRegistro || ''), 'es'));
         const gruposHtml = grupos.length ? `<div class="portal-group-list">${grupos.map(g => {
           const grupoJson = encodeURIComponent(JSON.stringify(g));
@@ -2498,6 +2533,30 @@
         return `<article class="portal-coordinator-card"><button type="button" class="portal-coordinator-toggle" data-coordinador="${encodeURIComponent(JSON.stringify(c))}" onclick="toggleCoordinadorDesdeBoton(this)"><span><strong class="portal-coordinator-name">${escaparHTML(c.nombre)}</strong><span class="portal-coordinator-meta">${escaparHTML(c.campus)}</span></span><span class="portal-coordinator-count">${Number(c.totalGrupos)||0} ${Number(c.totalGrupos)===1?'grupo':'grupos'}</span></button><div class="portal-coordinator-groups oculto">${gruposHtml}</div></article>`;
       }).join('');
       return data;
+    };
+
+    if (forzar) { coordinadoresUICache = null; coordinadoresUICacheAt = 0; }
+    if (coordinadoresUICache && (Date.now() - coordinadoresUICacheAt) < PORTAL_LISTAS_CACHE_MS) {
+      try { return Promise.resolve(renderizar(coordinadoresUICache)); }
+      catch (err) { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; return Promise.resolve(null); }
+    }
+    if (coordinadoresUIPromise) return coordinadoresUIPromise.then(data => {
+      try { return renderizar(data); }
+      catch (err) { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; return null; }
+    });
+
+    cont.innerHTML = '<p class="portal-muted">Cargando coordinadores…</p>';
+    let solicitud;
+    solicitud = apiPortal('listarCoordinadoresHombria')
+      .then(data => {
+        if (data && data.exito) { coordinadoresUICache = data; coordinadoresUICacheAt = Date.now(); }
+        return data;
+      })
+      .finally(() => { if (coordinadoresUIPromise === solicitud) coordinadoresUIPromise = null; });
+    coordinadoresUIPromise = solicitud;
+    return solicitud.then(data => {
+      try { return renderizar(data); }
+      catch (err) { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message || 'Error al cargar coordinadores.')}</p>`; return { exito:false, mensaje:err.message || 'Error al cargar coordinadores.' }; }
     }).catch(err => {
       cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message || 'Error al cargar coordinadores.')}</p>`;
       return { exito:false, mensaje:err.message || 'Error al cargar coordinadores.' };
@@ -2563,6 +2622,8 @@
       msg.textContent = resultado.mensaje || 'Grupo creado correctamente.';
       msg.style.color = '#176b3a';
       grupoOrigenVista = 'grupos';
+      invalidarCacheGruposUI();
+      coordinadoresUICache = null; coordinadoresUICacheAt = 0;
       const listado = await cargarGruposUI(false);
       const grupoNuevo = listado && Array.isArray(listado.grupos) ? listado.grupos.find(g => String(g.id) === String(resultado.grupoId)) : null;
       if (grupoNuevo) {
@@ -2658,7 +2719,11 @@
     if (!grupoSeleccionado || !confirm('¿Retirar a esta persona del grupo? El historial de asistencia se conservará.')) return;
     apiPortal('quitarIntegranteHombria', { grupoId: grupoSeleccionado.id, registro }).then(data => {
       const msg = document.getElementById('msgGestionGrupo'); msg.textContent = data.mensaje || ''; msg.style.color = data.exito ? '#176b3a' : '#a52828';
-      if (data.exito) { cargarIntegrantesGrupoUI(); }
+      if (data.exito) {
+        invalidarCacheGruposUI();
+        coordinadoresUICache = null; coordinadoresUICacheAt = 0;
+        cargarIntegrantesGrupoUI();
+      }
     }).catch(err => { document.getElementById('msgGestionGrupo').textContent = err.message; });
   }
 
@@ -2712,6 +2777,8 @@
         return;
       }
       cerrarModalConfirmarIntegrante();
+      invalidarCacheGruposUI();
+      coordinadoresUICache = null; coordinadoresUICacheAt = 0;
       personaPendienteAgregar = null;
       document.getElementById('resultadoBusquedaIntegrante').textContent = '';
       document.getElementById('integranteRegistro').value = '';
