@@ -581,6 +581,32 @@
   .campus-scanner-tabs button{border:1px solid #cdd9e2;background:#fff;color:#31536b;border-radius:999px;padding:10px 16px;font-weight:800;cursor:pointer}
   .campus-scanner-tabs button.active{background:#075b91;color:#fff;border-color:#075b91}
   @media(max-width:700px){.campus-progress-grid{grid-template-columns:1fr}.campus-topbar{display:block}.campus-search{margin:14px 0 0;width:100%}.campus-metric{padding:14px}.campus-metric strong{font-size:26px}}
+  .campus-heading-wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .campus-selector{border:0;background:#e9edf0;color:#20242a;border-radius:999px;padding:11px 38px 11px 16px;font:inherit;font-weight:750;min-width:170px;cursor:pointer}
+  .campus-program-tabs{display:flex;gap:44px;align-items:center;margin:24px 0 20px;padding-left:10px;border-bottom:1px solid #e8edf2}
+  .campus-program-tabs button{background:transparent;border:0;border-bottom:3px solid transparent;padding:0 0 12px;color:#9aa0a6;font-weight:650;font-size:16px;cursor:pointer}
+  .campus-program-tabs button.active{color:#075b91;border-color:#075b91}
+  .campus-weekly-pill{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:560px;background:#fff;border-radius:999px;padding:18px 28px;margin:18px 0 24px;box-shadow:0 5px 9px rgba(24,35,45,.16);font-size:16px;font-weight:850;color:#20242a}
+  .campus-weekly-pill strong{font-size:24px}
+  .campus-overview-grid{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:18px;align-items:stretch;margin-bottom:38px}
+  .campus-chart-wrap{margin:0;min-height:310px;border:0;border-radius:28px;padding:26px 30px;box-shadow:0 7px 11px rgba(24,35,45,.15)}
+  .campus-chart-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .campus-season-total{color:#7a8792;font-size:12px}.campus-season-total strong{color:#20242a;font-size:16px}
+  .campus-group-kpi{background:#fff;border-radius:28px;box-shadow:0 7px 11px rgba(24,35,45,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:310px;padding:22px}
+  .campus-group-kpi strong{font-size:64px;line-height:1;color:#075b91;font-weight:850}
+  .campus-group-kpi span{font-size:16px;letter-spacing:.5px;font-weight:850;color:#20242a;margin-top:10px}
+  .campus-group-kpi small{font-size:11px;color:#8a96a1;text-align:center;margin-top:8px}
+  .campus-section{margin-top:34px}
+  .campus-section>h3{font-size:19px;font-weight:850;color:#20242a;margin:0 0 18px 8px}
+  .campus-main-card{background:linear-gradient(180deg,#fbfcfd 0%,#f0f2f5 100%);border:0;box-shadow:none;padding:24px 26px}
+  .campus-coordinator-toggle{min-height:78px}
+  #campusPanelNombre{text-transform:uppercase;font-size:29px;font-weight:850;letter-spacing:-.5px}
+  .campus-coordinator-card{border:0;border-radius:23px;box-shadow:0 7px 12px rgba(17,24,39,.13)}
+  .portal-coordinator-toggle{min-height:82px;padding:20px 24px}
+  .portal-coordinator-toggle:after{content:'›';font-size:30px;line-height:1;color:#89939b;margin-left:8px}
+  .portal-coordinator-count{font-size:15px;background:transparent;color:#20242a;padding:5px 4px}
+  @media(max-width:900px){.campus-overview-grid{grid-template-columns:minmax(0,1fr) 180px}.campus-group-kpi{min-height:270px}.campus-chart-wrap{min-height:270px}}
+  @media(max-width:700px){.campus-main-card{padding:14px}.campus-overview-grid{grid-template-columns:1fr}.campus-chart-wrap{min-height:240px;padding:18px}.campus-group-kpi{min-height:145px;border-radius:20px}.campus-weekly-pill{max-width:none;padding:14px 20px;font-size:13px}.campus-weekly-pill strong{font-size:21px}.campus-program-tabs{gap:20px;padding-left:4px}.campus-program-tabs button{font-size:13px}.campus-selector{min-width:150px}}
 
 </style>
 </head>
@@ -841,9 +867,6 @@
       <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
       <button class="nav-btn oculto" id="navBtnCampus" onclick="navegarA('campus')">Campus</button>
       <button class="nav-btn oculto" id="navBtnRegistro" onclick="navegarA('escaner')">Registro</button>
-      <button class="nav-btn oculto" id="navBtnGrupos" onclick="navegarA('grupos')">Grupos</button>
-      <button class="nav-btn oculto" id="navBtnCoordinadores" onclick="navegarA('coordinadores')">Coordinadores</button>
-      <button class="nav-btn oculto" id="navBtnMiGrupo" onclick="navegarA('miGrupo')">Mi grupo</button>
     </nav>
   </div>
 </header>
@@ -864,9 +887,6 @@
   <div class="drawer-item" onclick="navegarA('recursos'); cerrarDrawer();">RECURSOS</div>
   <div class="drawer-item" onclick="navegarA('cuenta'); cerrarDrawer();">MI CUENTA</div>
   <div class="drawer-item oculto" id="drawerCampus" onclick="navegarA('campus'); cerrarDrawer();">CAMPUS</div>
-  <div class="drawer-item oculto" id="drawerGrupos" onclick="navegarA('grupos'); cerrarDrawer();">GRUPOS DE HOMBRÍA</div>
-  <div class="drawer-item oculto" id="drawerCoordinadores" onclick="navegarA('coordinadores'); cerrarDrawer();">COORDINADORES</div>
-  <div class="drawer-item oculto" id="drawerMiGrupo" onclick="navegarA('miGrupo'); cerrarDrawer();">MI GRUPO</div>
   <div class="drawer-item oculto" id="itemRegistro" onclick="navegarA('escaner'); cerrarDrawer();">REGISTRO</div>
   <div class="drawer-item" onclick="cerrarSesion(); cerrarDrawer();" style="color: #a52828; margin-top: auto;">CERRAR SESIÓN</div>
 </aside>
@@ -1224,16 +1244,76 @@
 
 
     <section id="vistaCampus" class="oculto">
-      <div class="portal-admin-card">
+      <div class="portal-admin-card campus-main-card">
         <div class="campus-topbar">
-          <div><h2 style="margin:0;color:#005b92">Campus</h2><p id="campusPanelNombre" class="portal-muted" style="margin:6px 0 0">Cargando campus…</p></div>
-          <div class="campus-search"><input id="buscarPersonaCampusInput" type="search" placeholder="Buscar por nombre o # de registro" autocomplete="off" onkeydown="if(event.key==='Enter')buscarPersonasCampusUI()"><button class="portal-primary" onclick="buscarPersonasCampusUI()" type="button">Buscar</button></div>
+          <div class="campus-heading-wrap">
+            <h2 id="campusPanelNombre" style="margin:0;color:#20242a">Campus</h2>
+            <select id="campusSelectorPanel" class="campus-selector oculto" onchange="cambiarCampusPanelUI()" aria-label="Seleccionar campus"></select>
+          </div>
+          <div class="campus-search" id="campusSearchWrap">
+            <input id="buscarPersonaCampusInput" type="search" placeholder="Buscar por nombre o # de registro" autocomplete="off" onkeydown="if(event.key==='Enter')buscarPersonasCampusUI()">
+            <button class="portal-primary" onclick="buscarPersonasCampusUI()" type="button">Buscar</button>
+          </div>
         </div>
-        <div class="campus-metrics">
-          <div class="campus-metric"><span>Asistencias de la temporada</span><strong id="campusTotalAsistencias">—</strong></div>
-          <div class="campus-metric"><span>Grupos activos</span><strong id="campusTotalGrupos">—</strong></div>
+
+        <div id="campusDashboardMetricas">
+          <div class="campus-program-tabs" role="tablist" aria-label="Programa">
+            <button id="campusTabHombria" class="active" type="button" onclick="cambiarProgramaCampusUI('HOMBRIA')">HOMBRÍA AL MÁXIMO</button>
+            <button id="campusTabFundamentos" type="button" onclick="cambiarProgramaCampusUI('FUNDAMENTOS')">FUNDAMENTOS</button>
+          </div>
+          <div class="campus-weekly-pill">
+            <span>ASISTENCIAS DE ESTA SEMANA</span>
+            <strong id="campusAsistenciasSemana">—</strong>
+          </div>
+          <div class="campus-overview-grid">
+            <div class="campus-chart-wrap">
+              <div class="campus-chart-heading">
+                <h3 style="margin:0;color:#20242a;font-size:19px">MÉTRICAS</h3>
+                <span class="campus-season-total">Temporada: <strong id="campusTotalAsistencias">—</strong></span>
+              </div>
+              <p id="campusGraficaDescripcion" class="portal-muted" style="margin:8px 0 10px">Asistencias de Hombría al Máximo durante toda la temporada.</p>
+              <div id="campusGraficaAsistencias"><p class="portal-muted">Cargando gráfica…</p></div>
+            </div>
+            <div class="campus-group-kpi">
+              <strong id="campusTotalGrupos">—</strong>
+              <span>GRUPOS</span>
+              <small>Grupos activos de Hombría</small>
+            </div>
+          </div>
+
+          <div id="campusCoordinadoresSection" class="campus-section">
+            <h3>COORDINADORES</h3>
+            <div id="listaCoordinadores" class="portal-coordinator-list"><p class="portal-muted">Cargando coordinadores…</p></div>
+            <div id="msgCoordinadores" class="portal-status"></div>
+            <div id="crearGrupoTrigger" class="portal-create-group-wrap oculto">
+              <button type="button" class="portal-create-group-button" onclick="toggleCrearGrupoUI()">＋ Crear grupo</button>
+            </div>
+            <div id="formCrearGrupo" class="portal-grid oculto" style="margin-top:18px">
+              <div class="portal-field"><label for="grupoLiderRegistro"># de Registro del líder</label><input id="grupoLiderRegistro" inputmode="numeric" placeholder="Número de registro" autocomplete="off"></div>
+              <div class="portal-field"><label for="grupoNivel">Nivel</label><select id="grupoNivel"><option>Nivel 1: Hombría al Máximo</option><option>Nivel 2: Valor</option><option>Nivel 3: Integridad Sexual</option><option>Nivel 4: El Principio del Potencial</option><option>Nivel 5: Nunca Te Rindas</option><option>Nivel 6: Comunicación, Sexo y Dinero</option><option>Nivel 7: Un Hombre de Verdad I</option><option>Nivel 8: Un Hombre de Verdad II</option><option>Nivel 9: Hombres Fuertes</option><option>Nivel 10: Mujer Única</option></select></div>
+              <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap"><button class="portal-primary" onclick="crearGrupoDesdeUI()">Continuar</button><button class="portal-secondary" type="button" onclick="cancelarCrearGrupoUI()">Cancelar</button><div id="msgCrearGrupo" class="portal-status" style="width:100%"></div></div>
+            </div>
+          </div>
         </div>
-        <div class="campus-chart-wrap"><h3 style="margin:0 0 6px;color:#18232d;font-size:15px">Asistencias por fecha</h3><p class="portal-muted" style="margin:0 0 8px">Asistencias registradas en Hombría al Máximo durante la temporada.</p><div id="campusGraficaAsistencias"><p class="portal-muted">Cargando gráfica…</p></div></div>
+
+        <div id="campusMisGruposSection" class="campus-section oculto">
+          <h3 id="campusMisGruposTitulo">Mis grupos</h3>
+          <p class="portal-muted" id="campusMisGruposDescripcion">Consulta y administra los grupos que tienes asignados.</p>
+          <div id="listaGrupos" class="portal-group-list"><p class="portal-muted">Cargando grupos…</p></div>
+          <div id="miGrupoContenido" class="portal-group-list oculto"></div>
+          <div id="msgGrupos" class="portal-status"></div>
+          <div id="campusCrearGrupoCoordinador" class="oculto">
+            <div id="crearGrupoTriggerCoordinador" class="portal-create-group-wrap">
+              <button type="button" class="portal-create-group-button" onclick="toggleCrearGrupoUI()">＋ Crear grupo</button>
+            </div>
+            <div id="formCrearGrupoCoordinador" class="portal-grid oculto" style="margin-top:18px">
+              <div class="portal-field"><label for="grupoLiderRegistroCoordinador"># de Registro del líder</label><input id="grupoLiderRegistroCoordinador" inputmode="numeric" placeholder="Número de registro" autocomplete="off"></div>
+              <div class="portal-field"><label for="grupoNivelCoordinador">Nivel</label><select id="grupoNivelCoordinador"><option>Nivel 1: Hombría al Máximo</option><option>Nivel 2: Valor</option><option>Nivel 3: Integridad Sexual</option><option>Nivel 4: El Principio del Potencial</option><option>Nivel 5: Nunca Te Rindas</option><option>Nivel 6: Comunicación, Sexo y Dinero</option><option>Nivel 7: Un Hombre de Verdad I</option><option>Nivel 8: Un Hombre de Verdad II</option><option>Nivel 9: Hombres Fuertes</option><option>Nivel 10: Mujer Única</option></select></div>
+              <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap"><button class="portal-primary" onclick="crearGrupoDesdeUI(true)">Continuar</button><button class="portal-secondary" type="button" onclick="cancelarCrearGrupoUI(true)">Cancelar</button><div id="msgCrearGrupoCoordinador" class="portal-status" style="width:100%"></div></div>
+            </div>
+          </div>
+        </div>
+
         <div id="campusResultadosBusqueda" class="campus-search-results"></div>
         <div id="campusDetallePersona" class="campus-person-detail oculto"></div>
         <div id="campusPanelMensaje" class="portal-status"></div>
@@ -1261,32 +1341,6 @@
       </div>
     </section>
 
-
-    <section id="vistaGrupos" class="oculto">
-      <div class="portal-admin-card">
-        <h2 id="tituloVistaGrupos" style="margin-top:0;color:#005b92">Grupos de Hombría</h2>
-        <p class="portal-muted">Consulta y administra los grupos según los permisos de tu rol y campus.</p>
-        <div id="listaGrupos" class="portal-group-list"><p class="portal-muted">Cargando grupos…</p></div>
-        <div id="msgGrupos" class="portal-status"></div>
-        <div id="crearGrupoTrigger" class="portal-create-group-wrap oculto">
-          <button type="button" class="portal-create-group-button" onclick="toggleCrearGrupoUI()">＋ Crear grupo</button>
-        </div>
-        <div id="formCrearGrupo" class="portal-grid oculto" style="margin-top:18px">
-          <div class="portal-field"><label for="grupoLiderRegistro"># de Registro del líder</label><input id="grupoLiderRegistro" inputmode="numeric" placeholder="Número de registro" autocomplete="off"></div>
-          <div class="portal-field"><label for="grupoNivel">Nivel</label><select id="grupoNivel"><option>Nivel 1: Hombría al Máximo</option><option>Nivel 2: Valor</option><option>Nivel 3: Integridad Sexual</option><option>Nivel 4: El Principio del Potencial</option><option>Nivel 5: Nunca Te Rindas</option><option>Nivel 6: Comunicación, Sexo y Dinero</option><option>Nivel 7: Un Hombre de Verdad I</option><option>Nivel 8: Un Hombre de Verdad II</option><option>Nivel 9: Hombres Fuertes</option><option>Nivel 10: Mujer Única</option></select></div>
-          <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap"><button class="portal-primary" onclick="crearGrupoDesdeUI()">Continuar</button><button class="portal-secondary" type="button" onclick="cancelarCrearGrupoUI()">Cancelar</button><div id="msgCrearGrupo" class="portal-status" style="width:100%"></div></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="vistaCoordinadores" class="oculto">
-      <div class="portal-admin-card">
-        <h2 style="margin-top:0;color:#005b92">Coordinadores</h2>
-        <p class="portal-muted">Consulta a los coordinadores de tu campus y revisa los grupos que tiene asignados cada uno. Los grupos nuevos creados por un coordinador se relacionan automáticamente con su cuenta.</p>
-        <div id="listaCoordinadores" class="portal-coordinator-list"><p class="portal-muted">Cargando coordinadores…</p></div>
-        <div id="msgCoordinadores" class="portal-status"></div>
-      </div>
-    </section>
 
     <section id="vistaDetalleGrupo" class="oculto">
       <div class="portal-admin-card">
@@ -1357,13 +1411,7 @@
         </div>
       </div>
     </div>
-
-    <section id="vistaMiGrupo" class="oculto">
-      <div class="portal-admin-card"><h2 style="margin-top:0;color:#005b92">Mi grupo</h2><p class="portal-muted">Acceso al grupo asignado a tu registro de líder.</p><div id="miGrupoContenido" class="portal-group-list"></div></div>
-    </section>
-
-
-  </div>
+</div>
 </main>
 
 <nav class="bottom-nav mobile-only oculto" id="bottomNav">
@@ -1405,11 +1453,15 @@
   let gruposUIPromise = null;
   let coordinadoresUICache = null;
   let coordinadoresUICacheAt = 0;
+  let coordinadoresUICacheKey = '';
   let coordinadoresUIPromise = null;
   const PORTAL_LISTAS_CACHE_MS = 20000;
   let campusEscanerActual = 'NACIONAL';
   let campusPanelCache = null;
   let campusPanelCacheAt = 0;
+  let campusPanelCacheKey = '';
+  let campusSeleccionadoActual = '';
+  let campusProgramaActual = 'HOMBRIA';
   let escaneoEnProceso = false;
   let ultimoCodigoEscaneado = '';
   let ultimoTiempoEscaneo = 0;
@@ -2232,7 +2284,9 @@
 
   function navegarA(vista) {
     if (vista !== 'escaner') detenerEscaner();
-    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaCampus','vistaEscaner','vistaGrupos','vistaCoordinadores','vistaMiGrupo','vistaDetalleGrupo'].forEach(id => {
+    // Las antiguas rutas de gestión se concentran dentro de Campus.
+    if (['grupos','coordinadores','miGrupo'].includes(vista)) vista = 'campus';
+    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaCampus','vistaEscaner','vistaDetalleGrupo'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.add('oculto');
     });
@@ -2252,48 +2306,102 @@
       mostrar('vistaCuentaMain'); activar('navBtnCuenta'); activar('bnavCuenta');
     } else if (vista === 'campus') {
       const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
-      if (!['ADMIN_GLOBAL','ADMIN_CAMPUS','PASTOR'].includes(rol)) return navegarA('inicio');
+      if (!['ADMIN_GLOBAL','ADMIN_CAMPUS','PASTOR','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rol)) return navegarA('inicio');
       mostrar('vistaCampus'); activar('navBtnCampus'); cargarCampusPanelUI();
     } else if (vista === 'escaner') {
       const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
       if (!['REGISTRO','ADMIN_GLOBAL'].includes(rol)) return navegarA('inicio');
       mostrar('vistaEscaner'); activar('navBtnRegistro'); seleccionarCampusEscaner(campusEscanerActual || 'NACIONAL');
-    } else if (vista === 'grupos') {
-      if (!tienePermisoGruposUI()) return navegarA('inicio');
-      mostrar('vistaGrupos'); activar('navBtnGrupos'); cargarGruposUI();
-    } else if (vista === 'coordinadores') {
-      const rol = String(usuarioSesion?.rol || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      if (!['PASTOR','ADMIN_CAMPUS','ADMIN_GLOBAL'].includes(rol)) return navegarA('inicio');
-      mostrar('vistaCoordinadores'); activar('navBtnCoordinadores'); cargarCoordinadoresUI();
-    } else if (vista === 'miGrupo') {
-      const rol = String(usuarioSesion?.rol || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      if (!['LIDER_HOMBRIA','ADMIN_GLOBAL'].includes(rol)) return navegarA('inicio');
-      grupoOrigenVista = 'miGrupo';
-      mostrar('vistaMiGrupo'); activar('navBtnMiGrupo'); cargarGruposUI(true);
     } else if (vista === 'detalleGrupo') {
-      if (!grupoSeleccionado) {
-        const origen = grupoOrigenVista || '';
-        if (origen === 'coordinadores') return navegarA('coordinadores');
-        if (origen === 'miGrupo' || String(usuarioSesion?.rol || '').toUpperCase() === 'LIDER_HOMBRIA') return navegarA('miGrupo');
-        return navegarA('grupos');
-      }
+      if (!grupoSeleccionado) return navegarA('campus');
       mostrar('vistaDetalleGrupo');
       cargarIntegrantesGrupoUI();
     }
   }
 
+  function normalizarCampusPanelCliente_(valor) {
+    return String(valor || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+  }
+
+  function prepararSelectorCampusPanel_() {
+    const sel = document.getElementById('campusSelectorPanel');
+    const rol = String(usuarioSesion?.rol || '').toUpperCase();
+    const campusUsuario = normalizarCampusPanelCliente_(usuarioSesion?.campus || '');
+    const campusPair = ['11 SUR','NACIONAL'].includes(campusUsuario);
+    const nombres = [['NACIONAL','Nacional'],['11 SUR','11 Sur'],['HUEJOTZINGO','Huejotzingo'],['JUAN BAUTISTA','Juan Bautista']];
+    let opciones = [];
+    if (rol === 'ADMIN_GLOBAL') {
+      opciones = [['TODOS','Todos los campus'], ...nombres];
+      if (!campusSeleccionadoActual) campusSeleccionadoActual = 'TODOS';
+      sel?.classList.remove('oculto');
+    } else if (rol === 'ADMIN_CAMPUS' && campusPair) {
+      opciones = [['NACIONAL','Nacional'],['11 SUR','11 Sur']];
+      if (!['NACIONAL','11 SUR'].includes(campusSeleccionadoActual)) campusSeleccionadoActual = campusUsuario || 'NACIONAL';
+      sel?.classList.remove('oculto');
+    } else {
+      const campus = campusUsuario || 'NACIONAL';
+      opciones = [[campus, nombres.find(x=>x[0]===campus)?.[1] || campus]];
+      campusSeleccionadoActual = campus;
+      sel?.classList.add('oculto');
+    }
+    if (sel) {
+      sel.innerHTML = opciones.map(([v,t])=>`<option value="${escaparHTML(v)}">${escaparHTML(t)}</option>`).join('');
+      sel.value = campusSeleccionadoActual;
+    }
+  }
+
+  function prepararVistaCampusPorRol_() {
+    const rol = String(usuarioSesion?.rol || '').toUpperCase();
+    const adminCampus = ['ADMIN_GLOBAL','ADMIN_CAMPUS','PASTOR'].includes(rol);
+    document.getElementById('campusDashboardMetricas')?.classList.toggle('oculto', !adminCampus);
+    document.getElementById('campusSearchWrap')?.classList.toggle('oculto', !adminCampus);
+    document.getElementById('campusMisGruposSection')?.classList.toggle('oculto', adminCampus);
+    document.getElementById('campusCoordinadoresSection')?.classList.toggle('oculto', !['ADMIN_GLOBAL','ADMIN_CAMPUS','PASTOR'].includes(rol));
+    document.getElementById('campusCrearGrupoCoordinador')?.classList.toggle('oculto', rol !== 'COORDINADOR_HOMBRIA');
+    if (rol === 'COORDINADOR_HOMBRIA') {
+      document.getElementById('campusMisGruposTitulo').textContent = 'Mis grupos';
+      document.getElementById('campusMisGruposDescripcion').textContent = 'Consulta y administra los grupos que tienes asignados.';
+      document.getElementById('listaGrupos')?.classList.remove('oculto');
+      document.getElementById('miGrupoContenido')?.classList.add('oculto');
+    } else if (rol === 'LIDER_HOMBRIA') {
+      document.getElementById('campusMisGruposTitulo').textContent = 'Mi grupo';
+      document.getElementById('campusMisGruposDescripcion').textContent = 'Consulta la información de tu grupo y sus integrantes.';
+      document.getElementById('listaGrupos')?.classList.add('oculto');
+      document.getElementById('miGrupoContenido')?.classList.remove('oculto');
+    }
+    const canCreate = ['ADMIN_GLOBAL','ADMIN_CAMPUS'].includes(rol);
+    document.getElementById('crearGrupoTrigger')?.classList.toggle('oculto', !canCreate);
+    if (rol === 'PASTOR') document.querySelector('.portal-add-members')?.classList.add('oculto');
+  }
+
   function cargarCampusPanelUI(forzar = false) {
+    const rol = String(usuarioSesion?.rol || '').toUpperCase();
+    prepararSelectorCampusPanel_();
+    prepararVistaCampusPorRol_();
+    const adminCampus = ['ADMIN_GLOBAL','ADMIN_CAMPUS','PASTOR'].includes(rol);
+    if (!adminCampus) {
+      const titulo = document.getElementById('campusPanelNombre');
+      if (titulo) titulo.textContent = rol === 'COORDINADOR_HOMBRIA' ? 'HOMBRÍA AL MÁXIMO' : 'MI GRUPO';
+      grupoOrigenVista = rol === 'LIDER_HOMBRIA' ? 'campusMiGrupo' : 'campusMisGrupos';
+      return cargarGruposUI(rol === 'LIDER_HOMBRIA', forzar);
+    }
+
     const mensaje = document.getElementById('campusPanelMensaje');
     if (mensaje) mensaje.textContent = '';
-    if (!forzar && campusPanelCache && Date.now() - campusPanelCacheAt < PORTAL_LISTAS_CACHE_MS) {
+    const key = `${campusSeleccionadoActual}|${campusProgramaActual}`;
+    if (!forzar && campusPanelCache && campusPanelCacheKey === key && Date.now() - campusPanelCacheAt < PORTAL_LISTAS_CACHE_MS) {
       renderizarCampusPanelUI(campusPanelCache);
+      cargarCoordinadoresUI(false);
       return Promise.resolve(campusPanelCache);
     }
     document.getElementById('campusPanelNombre').textContent = 'Consultando campus…';
     document.getElementById('campusGraficaAsistencias').innerHTML = '<p class="portal-muted">Cargando gráfica…</p>';
-    return apiPortal('obtenerPanelCampusHombria').then(data => {
+    const panel = apiPortal('obtenerPanelCampusHombria', { campus:campusSeleccionadoActual, programa:campusProgramaActual });
+    const coordinadores = cargarCoordinadoresUI(false);
+    return Promise.all([panel, coordinadores]).then(([data]) => {
+      if (key !== `${campusSeleccionadoActual}|${campusProgramaActual}`) return null;
       if (!data || !data.exito) throw new Error(data?.mensaje || 'No se pudo consultar el panel.');
-      campusPanelCache = data; campusPanelCacheAt = Date.now();
+      campusPanelCache = data; campusPanelCacheAt = Date.now(); campusPanelCacheKey = key;
       renderizarCampusPanelUI(data);
       return data;
     }).catch(err => {
@@ -2303,10 +2411,32 @@
     });
   }
 
+  function cambiarCampusPanelUI() {
+    const sel = document.getElementById('campusSelectorPanel');
+    if (sel) campusSeleccionadoActual = sel.value;
+    campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
+    coordinadoresUICache = null; coordinadoresUICacheAt = 0; coordinadoresUICacheKey = ''; coordinadoresUIPromise = null;
+    document.getElementById('campusResultadosBusqueda').innerHTML = '';
+    document.getElementById('campusDetallePersona').classList.add('oculto');
+    cargarCampusPanelUI(true);
+  }
+
+  function cambiarProgramaCampusUI(programa) {
+    campusProgramaActual = programa === 'FUNDAMENTOS' ? 'FUNDAMENTOS' : 'HOMBRIA';
+    document.getElementById('campusTabHombria')?.classList.toggle('active', campusProgramaActual === 'HOMBRIA');
+    document.getElementById('campusTabFundamentos')?.classList.toggle('active', campusProgramaActual === 'FUNDAMENTOS');
+    campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
+    cargarCampusPanelUI(true);
+  }
+
   function renderizarCampusPanelUI(data) {
     document.getElementById('campusPanelNombre').textContent = data.campus || 'Campus';
     document.getElementById('campusTotalAsistencias').textContent = Number(data.totalAsistencias || 0).toLocaleString('es-MX');
+    document.getElementById('campusAsistenciasSemana').textContent = Number(data.asistenciasSemana || 0).toLocaleString('es-MX');
     document.getElementById('campusTotalGrupos').textContent = Number(data.totalGrupos || 0).toLocaleString('es-MX');
+    document.getElementById('campusGraficaDescripcion').textContent = data.programa === 'FUNDAMENTOS'
+      ? 'Asistencias de Fundamentos durante toda la temporada.'
+      : 'Asistencias de Hombría al Máximo durante toda la temporada.';
     renderizarGraficaCampus_(Array.isArray(data.serie) ? data.serie : []);
   }
 
@@ -2321,8 +2451,8 @@
     const grid=[0,.25,.5,.75,1].map(t=>{const yy=y(max*t);return `<line x1="${left}" y1="${yy}" x2="${w-right}" y2="${yy}" stroke="#e8edf2" stroke-width="1"/><text x="${left-10}" y="${yy+4}" text-anchor="end" font-size="11" fill="#71808e">${Math.round(max*t)}</text>`}).join('');
     const step=Math.max(1,Math.ceil(serie.length/8));
     const labels=serie.map((p,i)=>i%step===0||i===serie.length-1?`<text x="${x(i)}" y="${h-16}" text-anchor="middle" font-size="11" fill="#71808e">${escaparHTML(p.etiqueta||p.fecha)}</text>`:'').join('');
-    const dots=serie.map((p,i)=>`<circle cx="${x(i)}" cy="${y(p.total)}" r="3.5" fill="#075b91"><title>${escaparHTML(p.fecha)}: ${Number(p.total)||0} asistencias</title></circle>`).join('');
-    cont.innerHTML=`<svg class="campus-chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Asistencias por fecha"><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="#cbd5df"/>${grid}<polyline points="${points}" fill="none" stroke="#075b91" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+    const dots=serie.map((p,i)=>`<circle cx="${x(i)}" cy="${y(p.total)}" r="3.5" fill="#c8102e"><title>${escaparHTML(p.fecha)}: ${Number(p.total)||0} asistencias</title></circle>`).join('');
+    cont.innerHTML=`<svg class="campus-chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Asistencias por fecha"><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="#111827"/>${grid}<polyline points="${points}" fill="none" stroke="#c8102e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
   }
 
   function buscarPersonasCampusUI() {
@@ -2332,7 +2462,9 @@
     detail.classList.add('oculto'); detail.innerHTML='';
     if(q.length<2){cont.innerHTML='<p class="portal-muted">Escribe al menos dos caracteres o números para buscar.</p>';return;}
     cont.innerHTML='<p class="portal-muted">Buscando personas…</p>';
-    apiPortal('buscarPersonasCampus',{termino:q}).then(data=>{
+    const campusBusqueda = campusSeleccionadoActual;
+    apiPortal('buscarPersonasCampus',{termino:q,campus:campusBusqueda}).then(data=>{
+      if(campusBusqueda !== campusSeleccionadoActual) return;
       if(!data.exito)throw new Error(data.mensaje||'No se pudo buscar.');
       const personas=data.personas||[];
       if(!personas.length){cont.innerHTML='<p class="portal-muted">No se encontraron personas de tu campus.</p>';return;}
@@ -2345,7 +2477,9 @@
   function cargarDetallePersonaCampus(registro) {
     const cont=document.getElementById('campusDetallePersona');
     cont.classList.remove('oculto'); cont.innerHTML='<p class="portal-muted">Cargando historial y progreso…</p>';
-    apiPortal('detallePersonaCampus',{registro}).then(data=>{
+    const campusDetalle = campusSeleccionadoActual;
+    apiPortal('detallePersonaCampus',{registro,campus:campusDetalle}).then(data=>{
+      if(campusDetalle !== campusSeleccionadoActual) return;
       if(!data.exito)throw new Error(data.mensaje||'No se pudo cargar la ficha.');
       renderizarDetallePersonaCampus(data);
     }).catch(err=>{cont.innerHTML=`<p class="portal-muted">${escaparHTML(err.message)}</p>`;});
@@ -2379,7 +2513,7 @@
     const programa=document.getElementById('campusProgramaAsistencia')?.value||'HOMBRIA';
     const msg=document.getElementById('campusPanelMensaje');
     msg.textContent='Registrando asistencia…'; msg.style.color='#075b91';
-    apiPortal('registrarAsistenciaCampus',{registro,programa}).then(data=>{
+    apiPortal('registrarAsistenciaCampus',{registro,programa,campus:campusSeleccionadoActual}).then(data=>{
       msg.textContent=data.mensaje||''; msg.style.color=data.exito?'#176b3a':'#a52828';
       if(data.exito){campusPanelCache=null;campusPanelCacheAt=0;cargarCampusPanelUI(true);cargarDetallePersonaCampus(registro);}
     }).catch(err=>{msg.textContent=err.message;msg.style.color='#a52828';});
@@ -2439,6 +2573,12 @@
     datosOfertaCargada = null;
     idOfertaSeleccionada = null;
     ultimoRegistroCreado = null;
+    // Limpia datos de panel y grupos al cerrar sesión para no reutilizarlos
+    // si otra cuenta inicia sesión en el mismo navegador.
+    gruposUICache = null; gruposUICacheAt = 0; gruposUIPromise = null;
+    coordinadoresUICache = null; coordinadoresUICacheAt = 0; coordinadoresUICacheKey = ''; coordinadoresUIPromise = null;
+    campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
+    campusSeleccionadoActual = ''; campusProgramaActual = 'HOMBRIA';
 
     detenerEscaner();
 
@@ -2610,28 +2750,16 @@
     const rol = String(usuarioSesion && usuarioSesion.rol || '').trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const mostrar = (id, visible) => { const el = document.getElementById(id); if (el) el.classList.toggle('oculto', !visible); };
     const global = rol === 'ADMIN_GLOBAL';
-    const campus = ['ADMIN_CAMPUS','PASTOR'].includes(rol) || global;
-    const coordinadores = ['ADMIN_CAMPUS','PASTOR'].includes(rol) || global;
-    const grupos = ['ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol) || global;
-    const miGrupo = rol === 'LIDER_HOMBRIA' || global;
-    const registro = rol === 'REGISTRO' || global;
+    const campus = ['ADMIN_GLOBAL','ADMIN_CAMPUS','PASTOR','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rol);
+    const registro = ['REGISTRO','ADMIN_GLOBAL'].includes(rol);
     mostrar('navBtnCampus', campus); mostrar('drawerCampus', campus);
-    mostrar('navBtnGrupos', grupos); mostrar('drawerGrupos', grupos);
-    mostrar('navBtnCoordinadores', coordinadores); mostrar('drawerCoordinadores', coordinadores);
-    mostrar('navBtnMiGrupo', miGrupo); mostrar('drawerMiGrupo', miGrupo);
+    // Grupos, Coordinadores y Mi grupo dejan de ser pestañas independientes.
+    mostrar('navBtnGrupos', false); mostrar('drawerGrupos', false);
+    mostrar('navBtnCoordinadores', false); mostrar('drawerCoordinadores', false);
+    mostrar('navBtnMiGrupo', false); mostrar('drawerMiGrupo', false);
     mostrar('navBtnRegistro', registro); mostrar('itemRegistro', registro);
-    const bGrupos = document.getElementById('navBtnGrupos');
-    const dGrupos = document.getElementById('drawerGrupos');
-    if (bGrupos) bGrupos.textContent = rol === 'COORDINADOR_HOMBRIA' ? 'Mis grupos' : 'Grupos';
-    if (dGrupos) dGrupos.textContent = rol === 'COORDINADOR_HOMBRIA' ? 'MIS GRUPOS' : 'GRUPOS';
-    const tituloGrupos = document.getElementById('tituloVistaGrupos');
-    if (tituloGrupos) tituloGrupos.textContent = rol === 'COORDINADOR_HOMBRIA' ? 'Mis grupos' : 'Grupos de Hombría';
-    const bMi = document.getElementById('navBtnMiGrupo');
-    if (bMi) bMi.textContent = 'Mi grupo';
-    mostrar('crearGrupoTrigger', ['ADMIN_GLOBAL','ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol));
-    mostrar('formCrearGrupo', false);
-    // La administración del campus busca y registra asistencia; el pastor solo consulta.
-    if (rol === 'PASTOR') document.querySelector('.portal-add-members')?.classList.add('oculto');
+    prepararSelectorCampusPanel_();
+    prepararVistaCampusPorRol_();
   }
 
   function invalidarCacheGruposUI() {
@@ -2645,7 +2773,8 @@
   function cargarGruposUI(paraMiGrupo = false, forzar = false) {
     const cont = paraMiGrupo ? document.getElementById('miGrupoContenido') : document.getElementById('listaGrupos');
     if (!cont) return Promise.resolve(null);
-    grupoOrigenVista = paraMiGrupo ? 'miGrupo' : 'grupos';
+    const rolVistaGrupos = String(usuarioSesion?.rol || '').toUpperCase();
+    grupoOrigenVista = paraMiGrupo ? 'campusMiGrupo' : (rolVistaGrupos === 'COORDINADOR_HOMBRIA' ? 'campusMisGrupos' : 'campus');
     if (!usuarioSesion || !tienePermisoGruposUI()) {
       cont.innerHTML = '<p class="portal-muted">Tu cuenta no tiene permiso para consultar grupos.</p>';
       return Promise.resolve(null);
@@ -2701,26 +2830,30 @@
   }
 
   function toggleCrearGrupoUI() {
-    const form = document.getElementById('formCrearGrupo');
+    const esCoordinador = String(usuarioSesion?.rol || '').toUpperCase() === 'COORDINADOR_HOMBRIA';
+    const sufijo = esCoordinador ? 'Coordinador' : '';
+    const form = document.getElementById('formCrearGrupo' + sufijo);
     if (!form) return;
     const abrir = form.classList.contains('oculto');
     form.classList.toggle('oculto', !abrir);
-    if (abrir) document.getElementById('grupoLiderRegistro')?.focus();
+    if (abrir) document.getElementById('grupoLiderRegistro' + sufijo)?.focus();
   }
 
-  function cancelarCrearGrupoUI() {
-    const form = document.getElementById('formCrearGrupo');
-    if (form) form.classList.add('oculto');
-    document.getElementById('grupoLiderRegistro').value = '';
-    document.getElementById('msgCrearGrupo').textContent = '';
+  function cancelarCrearGrupoUI(desdeCoordinador = false) {
+    const sufijo = desdeCoordinador ? 'Coordinador' : '';
+    document.getElementById('formCrearGrupo' + sufijo)?.classList.add('oculto');
+    const input = document.getElementById('grupoLiderRegistro' + sufijo); if (input) input.value = '';
+    const msg = document.getElementById('msgCrearGrupo' + sufijo); if (msg) msg.textContent = '';
   }
 
   function cargarCoordinadoresUI(forzar = false) {
     const cont = document.getElementById('listaCoordinadores');
     const msg = document.getElementById('msgCoordinadores');
     if (!cont) return Promise.resolve(null);
+    const filtroCampus = campusSeleccionadoActual;
     if (msg) msg.textContent = '';
     const renderizar = data => {
+      if (filtroCampus !== campusSeleccionadoActual) return data;
       if (!data || !data.exito) throw new Error((data && data.mensaje) || 'No fue posible consultar a los coordinadores.');
       const coordinadores = Array.isArray(data.coordinadores) ? data.coordinadores : [];
       if (!coordinadores.length) {
@@ -2739,8 +2872,8 @@
       return data;
     };
 
-    if (forzar) { coordinadoresUICache = null; coordinadoresUICacheAt = 0; }
-    if (coordinadoresUICache && (Date.now() - coordinadoresUICacheAt) < PORTAL_LISTAS_CACHE_MS) {
+    if (forzar) { coordinadoresUICache = null; coordinadoresUICacheAt = 0; coordinadoresUICacheKey = ''; }
+    if (coordinadoresUICache && coordinadoresUICacheKey === filtroCampus && (Date.now() - coordinadoresUICacheAt) < PORTAL_LISTAS_CACHE_MS) {
       try { return Promise.resolve(renderizar(coordinadoresUICache)); }
       catch (err) { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; return Promise.resolve(null); }
     }
@@ -2751,9 +2884,9 @@
 
     cont.innerHTML = '<p class="portal-muted">Cargando coordinadores…</p>';
     let solicitud;
-    solicitud = apiPortal('listarCoordinadoresHombria')
+    solicitud = apiPortal('listarCoordinadoresHombria',{campus:filtroCampus})
       .then(data => {
-        if (data && data.exito) { coordinadoresUICache = data; coordinadoresUICacheAt = Date.now(); }
+        if (data && data.exito && filtroCampus === campusSeleccionadoActual) { coordinadoresUICache = data; coordinadoresUICacheAt = Date.now(); coordinadoresUICacheKey = filtroCampus; }
         return data;
       })
       .finally(() => { if (coordinadoresUIPromise === solicitud) coordinadoresUIPromise = null; });
@@ -2774,14 +2907,15 @@
   }
 
   function abrirGrupoDeCoordinadorDesdeBoton(boton) {
-    grupoOrigenVista = 'coordinadores';
+    grupoOrigenVista = 'campus';
     abrirGestionGrupoDesdeBoton(boton);
   }
 
-  function crearGrupoDesdeUI() {
-    const msg = document.getElementById('msgCrearGrupo');
-    const liderRegistro = document.getElementById('grupoLiderRegistro').value.trim();
-    const nivel = document.getElementById('grupoNivel').value;
+  function crearGrupoDesdeUI(desdeCoordinador = false) {
+    const sufijo = desdeCoordinador ? 'Coordinador' : '';
+    const msg = document.getElementById('msgCrearGrupo' + sufijo);
+    const liderRegistro = document.getElementById('grupoLiderRegistro' + sufijo).value.trim();
+    const nivel = document.getElementById('grupoNivel' + sufijo).value;
     if (!liderRegistro) { msg.textContent = 'Ingresa el número de registro del líder.'; msg.style.color = '#a52828'; return; }
     msg.textContent = 'Verificando líder…'; msg.style.color = '#005b92';
     apiPortal('buscarLiderGrupoHombria', { registro: liderRegistro }).then(data => {
@@ -2809,7 +2943,9 @@
   async function confirmarCrearGrupoDesdeModal() {
     if (!grupoPendienteConfirmacion) return;
     const btn = document.getElementById('btnConfirmarCrearGrupo');
-    const msg = document.getElementById('msgCrearGrupo');
+    const desdeCoordinador = String(usuarioSesion?.rol || '').toUpperCase() === 'COORDINADOR_HOMBRIA';
+    const sufijo = desdeCoordinador ? 'Coordinador' : '';
+    const msg = document.getElementById('msgCrearGrupo' + sufijo);
     btn.disabled = true;
     btn.textContent = 'Creando grupo…';
     msg.textContent = 'Registrando al líder y creando el grupo…';
@@ -2821,11 +2957,12 @@
       });
       if (!resultado || !resultado.exito) throw new Error((resultado && resultado.mensaje) || 'No se pudo crear el grupo.');
       cerrarModalConfirmarGrupo();
-      document.getElementById('formCrearGrupo')?.classList.add('oculto');
-      document.getElementById('grupoLiderRegistro').value = '';
+      document.getElementById('formCrearGrupo' + sufijo)?.classList.add('oculto');
+      document.getElementById('formCrearGrupoCoordinador')?.classList.add('oculto');
+      const inputLider = document.getElementById('grupoLiderRegistro' + sufijo); if (inputLider) inputLider.value = '';
       msg.textContent = resultado.mensaje || 'Grupo creado correctamente.';
       msg.style.color = '#176b3a';
-      grupoOrigenVista = 'grupos';
+      grupoOrigenVista = 'campus';
       invalidarCacheGruposUI();
       coordinadoresUICache = null; coordinadoresUICacheAt = 0;
       campusPanelCache = null; campusPanelCacheAt = 0;
@@ -2837,8 +2974,8 @@
         document.getElementById('msgGestionGrupo').style.color = '#176b3a';
       } else {
         const info = listado && listado.diagnostico ? listado.diagnostico : {};
-        document.getElementById('msgGrupos').textContent = `El grupo se creó (ID ${resultado.grupoId || 'sin ID'}), pero no apareció en el listado. Archivo: ${info.archivo || 'no identificado'}. Hoja: ${info.hoja || 'no identificada'}. Revisa el campus del coordinador y la publicación de Apps Script.`;
-        document.getElementById('msgGrupos').style.color = '#a52828';
+        const aviso = document.getElementById('msgGrupos') || document.getElementById('msgCoordinadores');
+        if (aviso) { aviso.textContent = `El grupo se creó (ID ${resultado.grupoId || 'sin ID'}), pero no apareció en el listado. Archivo: ${info.archivo || 'no identificado'}. Hoja: ${info.hoja || 'no identificada'}.`; aviso.style.color = '#a52828'; }
       }
     } catch (err) {
       msg.textContent = err.message || 'Ocurrió un error al crear el grupo.';
@@ -2869,7 +3006,7 @@
       liderRegistro: String(grupo.liderRegistro || ''),
       totalIntegrantes: Number(grupo.totalIntegrantes) || 0
     };
-    document.getElementById('btnVolverDetalleGrupo').textContent = grupoOrigenVista === 'miGrupo' ? '← Volver a mi grupo' : (grupoOrigenVista === 'coordinadores' ? '← Volver a coordinadores' : '← Volver a grupos');
+    document.getElementById('btnVolverDetalleGrupo').textContent = '← Volver a Campus';
     document.getElementById('tituloGestionGrupo').textContent = grupoSeleccionado.nombre;
     document.getElementById('subtituloGestionGrupo').textContent = puedeEditar ? 'Información y administración de este grupo.' : 'Consulta la información de este grupo.';
     document.getElementById('detalleGrupoCampus').textContent = grupoSeleccionado.campus;
@@ -2885,7 +3022,7 @@
   }
 
   function volverDesdeDetalleGrupo() {
-    navegarA(grupoOrigenVista || (String(usuarioSesion?.rol || '').toUpperCase() === 'LIDER_HOMBRIA' ? 'miGrupo' : 'grupos'));
+    navegarA('campus');
   }
 
   function toggleFormularioAgregarMiembros() {
@@ -2931,6 +3068,7 @@
       if (data.exito) {
         invalidarCacheGruposUI();
         coordinadoresUICache = null; coordinadoresUICacheAt = 0;
+        campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
         cargarIntegrantesGrupoUI();
       }
     }).catch(err => { document.getElementById('msgGestionGrupo').textContent = err.message; });
@@ -2988,6 +3126,7 @@
       cerrarModalConfirmarIntegrante();
       invalidarCacheGruposUI();
       coordinadoresUICache = null; coordinadoresUICacheAt = 0;
+      campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
       personaPendienteAgregar = null;
       document.getElementById('resultadoBusquedaIntegrante').textContent = '';
       document.getElementById('integranteRegistro').value = '';
