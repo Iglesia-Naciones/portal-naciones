@@ -502,8 +502,17 @@
   .portal-badge{display:inline-block;border-radius:999px;background:#eaf4fa;color:#005b92;padding:4px 8px;font-size:11px;font-weight:800;margin:3px 4px 3px 0}
   .portal-member-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #edf0f3}
   .portal-member-row:last-child{border-bottom:0}
-  .portal-status{font-size:13px;font-weight:700;margin-top:10px;min-height:18px}
-  @media(max-width:700px){.portal-grid{grid-template-columns:1fr}.portal-admin-card{padding:16px}.portal-member-row{align-items:flex-start;flex-direction:column}}
+  .portal-group-detail-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0 24px}
+  .portal-group-detail-meta>div{background:#f6f8fa;border:1px solid #e8edf2;border-radius:13px;padding:13px 14px;min-width:0}
+  .portal-group-detail-meta span{display:block;color:#71808e;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+  .portal-group-detail-meta strong{display:block;color:#18232d;font-size:14px;overflow-wrap:anywhere}
+  .portal-detail-section-title{font-size:16px;font-weight:850;color:#18232d;margin:22px 0 8px}
+  .portal-add-members{border-top:1px solid #e8edf2;margin-top:20px;padding-top:18px}
+  .portal-add-members-button{width:100%;border:1px dashed #8ba8bd;background:#f7fafc;color:#075b91;border-radius:12px;padding:14px 16px;font-size:14px;font-weight:800;cursor:pointer;text-align:center}
+  .portal-add-members-button:hover{background:#edf5fa}
+  .portal-add-members-panel{margin-top:16px;padding:16px;background:#f8fafc;border:1px solid #e8edf2;border-radius:14px}
+  @media(max-width:700px){.portal-grid{grid-template-columns:1fr}.portal-admin-card{padding:16px}.portal-member-row{align-items:flex-start;flex-direction:column}.portal-group-detail-meta{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.portal-group-detail-meta>div{padding:11px}}
+  @media(max-width:380px){.portal-group-detail-meta{grid-template-columns:1fr 1fr}}
 
   /* Confirmación integrada para crear grupos */
   .grupo-confirm-overlay{position:fixed;inset:0;background:rgba(15,23,42,.58);backdrop-filter:blur(5px);z-index:5000;display:none;align-items:center;justify-content:center;padding:18px;box-sizing:border-box}
@@ -1190,17 +1199,54 @@
         <div id="listaGrupos" class="portal-group-list"><p class="portal-muted">Cargando grupos…</p></div>
         <div id="msgGrupos" class="portal-status"></div>
       </div>
-      <div class="portal-admin-card oculto" id="panelGestionGrupo">
-        <h2 id="tituloGestionGrupo" style="margin-top:0;color:#005b92">Integrantes del grupo</h2>
-        <div class="portal-grid">
-          <div class="portal-field"><label for="integranteRegistro">Buscar por número de registro</label><input id="integranteRegistro" inputmode="numeric" placeholder="Escribe el número exacto"></div>
-          <div style="align-self:end"><button class="portal-primary" onclick="buscarIntegranteDesdeUI()">Buscar integrante</button></div>
+    </section>
+
+    <section id="vistaDetalleGrupo" class="oculto">
+      <div class="portal-admin-card">
+        <button id="btnVolverDetalleGrupo" class="portal-secondary" type="button" onclick="volverDesdeDetalleGrupo()">← Volver</button>
+        <h2 id="tituloGestionGrupo" style="margin:18px 0 6px;color:#005b92">Información del grupo</h2>
+        <p id="subtituloGestionGrupo" class="portal-muted" style="margin-top:0">Información general del grupo.</p>
+        <div class="portal-group-detail-meta">
+          <div><span>Campus</span><strong id="detalleGrupoCampus">—</strong></div>
+          <div><span>Nivel</span><strong id="detalleGrupoNivel">—</strong></div>
+          <div><span>Líder</span><strong id="detalleGrupoLider">—</strong></div>
+          <div><span>Integrantes</span><strong id="detalleGrupoTotal">0</strong></div>
         </div>
-        <div id="resultadoBusquedaIntegrante" class="portal-muted"></div>
-        <div id="listaIntegrantesGrupo"></div>
+        <div class="portal-detail-section-title">Personas del grupo</div>
+        <div id="listaIntegrantesGrupo"><p class="portal-muted">Cargando integrantes…</p></div>
+        <div class="portal-add-members">
+          <button class="portal-add-members-button" type="button" onclick="toggleFormularioAgregarMiembros()">＋ Agregar miembros</button>
+          <div id="panelAgregarIntegrante" class="portal-add-members-panel oculto">
+            <p class="portal-muted">Busca a la persona por su número de registro. Verifica sus datos antes de agregarla.</p>
+            <div class="portal-grid">
+              <div class="portal-field"><label for="integranteRegistro">Número de registro</label><input id="integranteRegistro" inputmode="numeric" placeholder="Escribe el número exacto" autocomplete="off"></div>
+              <div style="align-self:end"><button class="portal-primary" onclick="buscarIntegranteDesdeUI()">Buscar persona</button></div>
+            </div>
+            <div id="resultadoBusquedaIntegrante" class="portal-muted"></div>
+          </div>
+        </div>
         <div id="msgGestionGrupo" class="portal-status"></div>
       </div>
     </section>
+
+    <div id="modalConfirmarIntegrante" class="grupo-confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmarIntegrante" onclick="if(event.target===this) cerrarModalConfirmarIntegrante()">
+      <div class="grupo-confirm-card">
+        <div class="grupo-confirm-head"><div class="grupo-confirm-kicker">Grupos de Hombría</div><h3 id="tituloConfirmarIntegrante">Confirmar integrante</h3></div>
+        <div class="grupo-confirm-body">
+          <p class="grupo-confirm-intro">Confirma que esta es la persona correcta y que deseas agregarla al grupo.</p>
+          <div class="grupo-confirm-datos">
+            <div class="grupo-confirm-dato"><span>Persona</span><strong id="confirmIntegranteNombre">—</strong></div>
+            <div class="grupo-confirm-dato"><span>Número de registro</span><strong id="confirmIntegranteRegistro">—</strong></div>
+            <div class="grupo-confirm-dato"><span>Campus</span><strong id="confirmIntegranteCampus">—</strong></div>
+            <div class="grupo-confirm-dato"><span>Grupo</span><strong id="confirmIntegranteGrupo">—</strong></div>
+          </div>
+        </div>
+        <div class="grupo-confirm-actions">
+          <button type="button" class="grupo-confirm-cancel" onclick="cerrarModalConfirmarIntegrante()">Cancelar</button>
+          <button type="button" id="btnConfirmarAgregarIntegrante" class="grupo-confirm-accept" onclick="confirmarAgregarIntegranteDesdeModal()">Confirmar y agregar</button>
+        </div>
+      </div>
+    </div>
 
     <div id="modalConfirmarGrupo" class="grupo-confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="tituloConfirmarGrupo" onclick="if(event.target===this) cerrarModalConfirmarGrupo()">
       <div class="grupo-confirm-card">
@@ -1264,6 +1310,7 @@
   let ultimoRegistroCreado = null;
   let html5QrcodeScanner = null;
   let grupoSeleccionado = null;
+  let grupoOrigenVista = 'grupos';
   let grupoPendienteConfirmacion = null;
   let personaPendienteAgregar = null;
   let escaneoEnProceso = false;
@@ -2087,7 +2134,7 @@
 
   function navegarA(vista) {
     if (vista !== 'escaner') detenerEscaner();
-    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaEscaner','vistaGrupos','vistaMiGrupo'].forEach(id => {
+    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaEscaner','vistaGrupos','vistaMiGrupo','vistaDetalleGrupo'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.add('oculto');
     });
@@ -2112,7 +2159,12 @@
       mostrar('vistaGrupos'); activar('navBtnGrupos'); cargarGruposUI();
     } else if (vista === 'miGrupo') {
       if (String(usuarioSesion?.rol || '').toUpperCase() !== 'LIDER_HOMBRIA') return navegarA('inicio');
+      grupoOrigenVista = 'miGrupo';
       mostrar('vistaMiGrupo'); activar('navBtnMiGrupo'); cargarGruposUI(true);
+    } else if (vista === 'detalleGrupo') {
+      if (!grupoSeleccionado) return navegarA(String(usuarioSesion?.rol || '').toUpperCase() === 'LIDER_HOMBRIA' ? 'miGrupo' : 'grupos');
+      mostrar('vistaDetalleGrupo');
+      cargarIntegrantesGrupoUI();
     }
   }
 
@@ -2328,8 +2380,8 @@
   function configurarPermisosUI() {
     const rol = String(usuarioSesion && usuarioSesion.rol || '').toUpperCase();
     const mostrar = (id, visible) => { const el = document.getElementById(id); if (el) el.classList.toggle('oculto', !visible); };
-    const grupos = ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rol);
-    const puedeCrear = ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol);
+    const grupos = ['ADMIN_GLOBAL','PASTOR','ADMIN_CAMPUS','COORDINADOR_HOMBRIA'].includes(rol);
+    const puedeCrear = grupos;
     mostrar('navBtnGrupos', grupos); mostrar('drawerGrupos', grupos);
     mostrar('navBtnMiGrupo', rol === 'LIDER_HOMBRIA'); mostrar('drawerMiGrupo', rol === 'LIDER_HOMBRIA');
     mostrar('itemRegistro', ['REGISTRO','ADMIN_CAMPUS','ADMIN_GLOBAL','PASTOR'].includes(rol));
@@ -2339,6 +2391,7 @@
   function cargarGruposUI(paraMiGrupo = false) {
     const cont = paraMiGrupo ? document.getElementById('miGrupoContenido') : document.getElementById('listaGrupos');
     if (!cont) return Promise.resolve(null);
+    grupoOrigenVista = paraMiGrupo ? 'miGrupo' : 'grupos';
     if (!usuarioSesion || !tienePermisoGruposUI()) {
       cont.innerHTML = '<p class="portal-muted">Tu cuenta no tiene permiso para consultar grupos.</p>';
       return Promise.resolve(null);
@@ -2355,12 +2408,15 @@
         if (!grupos.length) {
           const d = data.diagnostico || {};
           const detalle = d.totalActivos > 0
-            ? ` Se encontraron ${d.totalActivos} grupo(s) activo(s) en “${escaparHTML(d.archivo || 'el archivo consultado')}”, pero ninguno coincide con los permisos de tu cuenta. Rol: ${escaparHTML(d.rol || usuarioSesion.rol || 'No identificado')}. Campus de tu cuenta: ${escaparHTML(d.campusUsuario || 'No identificado')}.`
-            : ` La hoja consultada es “${escaparHTML(d.hoja || 'GRUPOS_HOMBRIA')}” en el archivo “${escaparHTML(d.archivo || 'principal del portal')}” y contiene ${Number(d.totalRegistros)||0} registro(s), de los cuales ${Number(d.totalActivos)||0} están activos.`;
-          cont.innerHTML = `<p class="portal-muted">No hay grupos para mostrar.${detalle}</p>`;
+            ? ` Se encontraron ${d.totalActivos} grupo(s) activo(s), pero ninguno coincide con los permisos de tu cuenta. Rol: ${escaparHTML(d.rol || usuarioSesion.rol || 'No identificado')}. Campus: ${escaparHTML(d.campusUsuario || 'No identificado')}.`
+            : ` La hoja consultada es “${escaparHTML(d.hoja || 'GRUPOS_HOMBRIA')}” en “${escaparHTML(d.archivo || 'el archivo de grupos')}” y contiene ${Number(d.totalRegistros)||0} registro(s) activo(s): ${Number(d.totalActivos)||0}.`;
+          cont.innerHTML = `<p class="portal-muted">${paraMiGrupo ? 'Todavía no tienes un grupo asignado.' : 'No hay grupos para mostrar.'}${detalle}</p>`;
           return data;
         }
-        cont.innerHTML = grupos.map(g => `<article class="portal-group"><h3>${escaparHTML(g.nombre)}</h3><span class="portal-badge">${escaparHTML(g.campus)}</span><span class="portal-badge">${escaparHTML(g.nivel)}</span><p class="portal-muted">Líder: ${escaparHTML(g.liderNombre || g.liderRegistro)} · ${Number(g.totalIntegrantes)||0} integrantes</p><button class="portal-primary" onclick="abrirGestionGrupo('${escaparHTML(g.id)}','${escaparHTML(g.nombre)}')">Ver grupo</button></article>`).join('');
+        cont.innerHTML = grupos.map(g => {
+          const grupoJson = encodeURIComponent(JSON.stringify(g));
+          return `<article class="portal-group"><h3>${escaparHTML(g.nombre)}</h3><span class="portal-badge">${escaparHTML(g.campus)}</span> <span class="portal-badge">${escaparHTML(g.nivel)}</span><p class="portal-muted">Líder: ${escaparHTML(g.liderNombre || g.liderRegistro)} · ${Number(g.totalIntegrantes)||0} integrantes</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGestionGrupoDesdeBoton(this)">Ver grupo</button></article>`;
+        }).join('');
         return data;
       })
       .catch(err => {
@@ -2375,7 +2431,7 @@
     const nivel = document.getElementById('grupoNivel').value;
     if (!liderRegistro) { msg.textContent = 'Ingresa el número de registro del líder.'; msg.style.color = '#a52828'; return; }
     msg.textContent = 'Verificando líder…'; msg.style.color = '#005b92';
-    apiPortal('buscarIntegranteHombria', { registro: liderRegistro }).then(data => {
+    apiPortal('buscarLiderGrupoHombria', { registro: liderRegistro }).then(data => {
       if (!data.exito || !data.persona) throw new Error(data.mensaje || 'No se encontró al líder.');
       grupoPendienteConfirmacion = { persona: data.persona, nivel: nivel };
       document.getElementById('confirmGrupoLider').textContent = data.persona.nombre || '—';
@@ -2415,15 +2471,17 @@
       document.getElementById('grupoLiderRegistro').value = '';
       msg.textContent = resultado.mensaje || 'Grupo creado correctamente.';
       msg.style.color = '#176b3a';
+      grupoOrigenVista = 'grupos';
       const listado = await cargarGruposUI(false);
-      const aparece = listado && Array.isArray(listado.grupos) && listado.grupos.some(g => String(g.id) === String(resultado.grupoId));
-      if (!aparece) {
-        const info = listado && listado.diagnostico ? listado.diagnostico : {};
-        document.getElementById('msgGrupos').textContent = `El servidor confirmó la creación (ID ${resultado.grupoId || 'sin ID'}), pero el grupo no aparece en la lista. Archivo consultado: ${info.archivo || 'no identificado'}. Hoja: ${info.hoja || 'no identificada'}. Grupos activos encontrados: ${info.totalActivos == null ? 'sin dato' : info.totalActivos}. Revisa la publicación de Apps Script y los permisos de campus.`;
-        document.getElementById('msgGrupos').style.color = '#a52828';
+      const grupoNuevo = listado && Array.isArray(listado.grupos) ? listado.grupos.find(g => String(g.id) === String(resultado.grupoId)) : null;
+      if (grupoNuevo) {
+        abrirGestionGrupo(grupoNuevo);
+        document.getElementById('msgGestionGrupo').textContent = 'Grupo creado correctamente. Desde aquí puedes agregar a sus integrantes.';
+        document.getElementById('msgGestionGrupo').style.color = '#176b3a';
       } else {
-        document.getElementById('msgGrupos').textContent = 'El grupo ya está disponible en la lista.';
-        document.getElementById('msgGrupos').style.color = '#176b3a';
+        const info = listado && listado.diagnostico ? listado.diagnostico : {};
+        document.getElementById('msgGrupos').textContent = `El grupo se creó (ID ${resultado.grupoId || 'sin ID'}), pero no apareció en el listado. Archivo: ${info.archivo || 'no identificado'}. Hoja: ${info.hoja || 'no identificada'}. Revisa el campus del coordinador y la publicación de Apps Script.`;
+        document.getElementById('msgGrupos').style.color = '#a52828';
       }
     } catch (err) {
       msg.textContent = err.message || 'Ocurrió un error al crear el grupo.';
@@ -2433,25 +2491,67 @@
     }
   }
 
-  function abrirGestionGrupo(id, nombre) {
-    grupoSeleccionado = { id, nombre };
-    document.getElementById('panelGestionGrupo').classList.remove('oculto');
-    document.getElementById('tituloGestionGrupo').textContent = nombre;
+  function abrirGestionGrupoDesdeBoton(boton) {
+    try {
+      abrirGestionGrupo(JSON.parse(decodeURIComponent(boton.dataset.grupo || '%7B%7D')));
+    } catch (e) {
+      const msg = document.getElementById('msgGrupos');
+      if (msg) { msg.textContent = 'No se pudo abrir la información de este grupo. Actualiza la página e inténtalo nuevamente.'; msg.style.color = '#a52828'; }
+    }
+  }
+
+  function abrirGestionGrupo(grupo) {
+    if (!grupo || !grupo.id) return;
+    grupoSeleccionado = {
+      id: String(grupo.id), nombre: String(grupo.nombre || 'Grupo de Hombría'),
+      campus: String(grupo.campus || '—'), nivel: String(grupo.nivel || '—'),
+      liderNombre: String(grupo.liderNombre || grupo.liderRegistro || '—'),
+      liderRegistro: String(grupo.liderRegistro || ''),
+      totalIntegrantes: Number(grupo.totalIntegrantes) || 0
+    };
+    document.getElementById('btnVolverDetalleGrupo').textContent = grupoOrigenVista === 'miGrupo' ? '← Volver a mi grupo' : '← Volver a grupos';
+    document.getElementById('tituloGestionGrupo').textContent = grupoSeleccionado.nombre;
+    document.getElementById('subtituloGestionGrupo').textContent = 'Información y administración de este grupo.';
+    document.getElementById('detalleGrupoCampus').textContent = grupoSeleccionado.campus;
+    document.getElementById('detalleGrupoNivel').textContent = grupoSeleccionado.nivel;
+    document.getElementById('detalleGrupoLider').textContent = grupoSeleccionado.liderNombre;
+    document.getElementById('detalleGrupoTotal').textContent = String(grupoSeleccionado.totalIntegrantes);
     document.getElementById('resultadoBusquedaIntegrante').textContent = '';
     document.getElementById('integranteRegistro').value = '';
-    cargarIntegrantesGrupoUI();
-    document.getElementById('panelGestionGrupo').scrollIntoView({ behavior:'smooth', block:'start' });
+    document.getElementById('panelAgregarIntegrante').classList.add('oculto');
+    document.getElementById('msgGestionGrupo').textContent = '';
+    personaPendienteAgregar = null;
+    navegarA('detalleGrupo');
+  }
+
+  function volverDesdeDetalleGrupo() {
+    navegarA(grupoOrigenVista || (String(usuarioSesion?.rol || '').toUpperCase() === 'LIDER_HOMBRIA' ? 'miGrupo' : 'grupos'));
+  }
+
+  function toggleFormularioAgregarMiembros() {
+    const panel = document.getElementById('panelAgregarIntegrante');
+    if (!panel) return;
+    const abrir = panel.classList.contains('oculto');
+    panel.classList.toggle('oculto', !abrir);
+    if (abrir) document.getElementById('integranteRegistro')?.focus();
+    else {
+      document.getElementById('resultadoBusquedaIntegrante').textContent = '';
+      document.getElementById('integranteRegistro').value = '';
+      personaPendienteAgregar = null;
+    }
   }
 
   function cargarIntegrantesGrupoUI() {
     const cont = document.getElementById('listaIntegrantesGrupo');
-    if (!grupoSeleccionado) { cont.innerHTML = ''; return; }
+    if (!cont || !grupoSeleccionado) { if (cont) cont.innerHTML = ''; return; }
     cont.innerHTML = '<p class="portal-muted">Cargando integrantes…</p>';
     apiPortal('listarIntegrantesGrupoHombria', { grupoId: grupoSeleccionado.id }).then(data => {
       if (!data.exito) { cont.innerHTML = `<p class="portal-muted">${escaparHTML(data.mensaje || 'No se pudo cargar la lista.')}</p>`; return; }
       const items = data.integrantes || [];
-      if (!items.length) { cont.innerHTML = '<p class="portal-muted">Este grupo todavía no tiene integrantes activos.</p>'; return; }
-      cont.innerHTML = '<h3 style="color:#18232d;font-size:15px;margin:18px 0 8px">Integrantes y asistencia de hoy</h3>' + items.map(p => `<div class="portal-member-row"><div><strong>${escaparHTML(p.nombre)}</strong><br><span class="portal-muted">Registro ${escaparHTML(p.registro)} · Hoy: ${escaparHTML(p.asistenciaHoy || 'Sin registrar')}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','PRESENTE')">Presente</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','FALTA')">Falta</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','JUSTIFICADA')">Justificada</button><button class="portal-secondary" onclick="quitarIntegranteGrupo('${escaparHTML(p.registro)}')">Retirar</button></div></div>`).join('');
+      grupoSeleccionado.totalIntegrantes = items.length;
+      document.getElementById('detalleGrupoTotal').textContent = String(items.length);
+      if (!items.length) { cont.innerHTML = '<p class="portal-muted">Este grupo todavía no tiene integrantes. Puedes agregarlos con el botón de abajo.</p>'; return; }
+      cont.innerHTML = '<h3 style="color:#18232d;font-size:15px;margin:0 0 8px">Integrantes y asistencia de hoy</h3>' + items.map(p => `<div class="portal-member-row"><div><strong>${escaparHTML(p.nombre)}</strong><br><span class="portal-muted">Registro ${escaparHTML(p.registro)} · Hoy: ${escaparHTML(p.asistenciaHoy || 'Sin registrar')}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','PRESENTE')">Presente</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','FALTA')">Falta</button><button class="portal-secondary" onclick="marcarAsistenciaGrupo('${escaparHTML(p.registro)}','JUSTIFICADA')">Justificada</button><button class="portal-secondary" onclick="quitarIntegranteGrupo('${escaparHTML(p.registro)}')">Retirar</button></div></div>`).join('');
     }).catch(err => { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; });
   }
 
@@ -2467,7 +2567,7 @@
     if (!grupoSeleccionado || !confirm('¿Retirar a esta persona del grupo? El historial de asistencia se conservará.')) return;
     apiPortal('quitarIntegranteHombria', { grupoId: grupoSeleccionado.id, registro }).then(data => {
       const msg = document.getElementById('msgGestionGrupo'); msg.textContent = data.mensaje || ''; msg.style.color = data.exito ? '#176b3a' : '#a52828';
-      if (data.exito) { cargarIntegrantesGrupoUI(); cargarGruposUI(); }
+      if (data.exito) { cargarIntegrantesGrupoUI(); }
     }).catch(err => { document.getElementById('msgGestionGrupo').textContent = err.message; });
   }
 
@@ -2475,23 +2575,64 @@
     const registro = document.getElementById('integranteRegistro').value.trim();
     const box = document.getElementById('resultadoBusquedaIntegrante');
     if (!grupoSeleccionado) { box.textContent = 'Selecciona primero un grupo.'; return; }
-    box.textContent = 'Buscando por número de registro…';
+    if (!registro) { box.textContent = 'Escribe el número de registro de la persona.'; box.style.color = '#a52828'; return; }
+    box.textContent = 'Buscando persona…';
+    box.style.color = '#71808e';
     apiPortal('buscarIntegranteHombria', { registro }).then(data => {
-      if (!data.exito) { box.textContent = data.mensaje || 'No se encontró la persona.'; box.style.color='#a52828'; return; }
+      if (!data.exito || !data.persona) { box.textContent = data.mensaje || 'No se encontró la persona.'; box.style.color='#a52828'; return; }
       const p = data.persona;
       personaPendienteAgregar = p;
       box.style.color='#18232d';
-      box.innerHTML = `<div class="portal-member-row"><div><strong>${escaparHTML(p.nombre)}</strong><br><span class="portal-muted">Registro ${escaparHTML(p.registro)} · ${escaparHTML(p.campus)}</span></div><button class="portal-primary" onclick="agregarIntegrantePendiente()">Agregar al grupo</button></div>`;
+      box.innerHTML = `<div class="portal-member-row"><div><strong>${escaparHTML(p.nombre)}</strong><br><span class="portal-muted">Registro ${escaparHTML(p.registro)} · ${escaparHTML(p.campus)}</span></div><button class="portal-primary" onclick="abrirModalConfirmarIntegrante()">Continuar</button></div>`;
     }).catch(err => { box.textContent = err.message; box.style.color='#a52828'; });
   }
 
-  function agregarIntegrantePendiente() {
+  function abrirModalConfirmarIntegrante() {
     if (!grupoSeleccionado || !personaPendienteAgregar) return;
-    apiPortal('agregarIntegranteHombria', { grupoId: grupoSeleccionado.id, registro: personaPendienteAgregar.registro }).then(data => {
+    document.getElementById('confirmIntegranteNombre').textContent = personaPendienteAgregar.nombre || '—';
+    document.getElementById('confirmIntegranteRegistro').textContent = personaPendienteAgregar.registro || '—';
+    document.getElementById('confirmIntegranteCampus').textContent = personaPendienteAgregar.campus || '—';
+    document.getElementById('confirmIntegranteGrupo').textContent = grupoSeleccionado.nombre;
+    const btn = document.getElementById('btnConfirmarAgregarIntegrante');
+    btn.disabled = false;
+    btn.textContent = 'Confirmar y agregar';
+    document.getElementById('modalConfirmarIntegrante').classList.add('activo');
+  }
+
+  function cerrarModalConfirmarIntegrante() {
+    document.getElementById('modalConfirmarIntegrante')?.classList.remove('activo');
+    const btn = document.getElementById('btnConfirmarAgregarIntegrante');
+    if (btn) { btn.disabled = false; btn.textContent = 'Confirmar y agregar'; }
+  }
+
+  async function confirmarAgregarIntegranteDesdeModal() {
+    if (!grupoSeleccionado || !personaPendienteAgregar) return;
+    const btn = document.getElementById('btnConfirmarAgregarIntegrante');
+    btn.disabled = true;
+    btn.textContent = 'Agregando…';
+    try {
+      const data = await apiPortal('agregarIntegranteHombria', { grupoId: grupoSeleccionado.id, registro: personaPendienteAgregar.registro });
       const box = document.getElementById('msgGestionGrupo');
-      box.textContent = data.mensaje || ''; box.style.color = data.exito ? '#176b3a' : '#a52828';
-      if (data.exito) { personaPendienteAgregar = null; document.getElementById('resultadoBusquedaIntegrante').textContent = ''; document.getElementById('integranteRegistro').value=''; cargarGruposUI(); }
-    }).catch(err => { document.getElementById('msgGestionGrupo').textContent = err.message; });
+      box.textContent = data.mensaje || '';
+      box.style.color = data.exito ? '#176b3a' : '#a52828';
+      if (!data.exito) {
+        btn.disabled = false;
+        btn.textContent = 'Reintentar';
+        return;
+      }
+      cerrarModalConfirmarIntegrante();
+      personaPendienteAgregar = null;
+      document.getElementById('resultadoBusquedaIntegrante').textContent = '';
+      document.getElementById('integranteRegistro').value = '';
+      document.getElementById('panelAgregarIntegrante').classList.add('oculto');
+      await cargarIntegrantesGrupoUI();
+    } catch (err) {
+      const box = document.getElementById('msgGestionGrupo');
+      box.textContent = err.message || 'No se pudo agregar a la persona.';
+      box.style.color = '#a52828';
+      btn.disabled = false;
+      btn.textContent = 'Reintentar';
+    }
   }
 
   function asignarRolDesdeUI() {
