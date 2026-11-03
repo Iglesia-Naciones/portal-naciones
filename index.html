@@ -199,7 +199,6 @@
     .img-logo-naciones-header { height: 28px; width: auto; display: block; object-fit: contain; }
 
     .nav-desktop { display: flex; align-items: center; justify-content: flex-end; gap: 6px; height: 100%; min-width: 0; flex: 1 1 auto; }
-    .nav-btn#navBtnCuenta { margin-left: auto; }
     .nav-btn {
       padding: 16px 9px; border: 0; background: transparent; font-size: 12.5px; font-weight: 600; white-space: nowrap;
       color: #64748b; cursor: pointer; position: relative; transition: all 0.2s ease;
@@ -556,7 +555,8 @@
 
   /* Panel centralizado por campus */
   .campus-topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px}
-  .campus-search{display:flex;align-items:center;gap:8px;width:min(100%,360px);margin-left:auto}
+  .campus-search-wrap{width:min(100%,380px);margin-left:auto}
+  .campus-search{display:flex;align-items:center;gap:8px;width:100%;margin:0}
   .campus-search input{flex:1;min-width:150px;border:1px solid #d7e0e8;border-radius:11px;padding:10px 12px;font:inherit;font-size:13px;background:#fff}
   .campus-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
   .campus-metric{background:#f7f9fb;border:1px solid #e7edf2;border-radius:15px;padding:18px}
@@ -585,9 +585,25 @@
   .campus-scanner-tabs{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:12px 0 18px}
   .campus-scanner-tabs button{border:1px solid #cdd9e2;background:#fff;color:#31536b;border-radius:999px;padding:10px 16px;font-weight:800;cursor:pointer}
   .campus-scanner-tabs button.active{background:#075b91;color:#fff;border-color:#075b91}
-  @media(max-width:700px){.campus-progress-grid{grid-template-columns:1fr}.campus-topbar{display:block}.campus-search{margin:14px 0 0;width:100%}.campus-metric{padding:14px}.campus-metric strong{font-size:26px}}
+  @media(max-width:700px){.campus-progress-grid{grid-template-columns:1fr}.campus-topbar{display:block}.campus-search-wrap{margin:14px 0 0;width:100%}.campus-metric{padding:14px}.campus-metric strong{font-size:26px}}
   .campus-heading-wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .campus-selector{border:0;background:#e9edf0;color:#20242a;border-radius:999px;padding:11px 38px 11px 16px;font:inherit;font-weight:750;min-width:170px;cursor:pointer}
+  .campus-multiselect{position:relative;min-width:220px;z-index:30}
+  .campus-selector-trigger{display:flex;align-items:center;justify-content:space-between;gap:18px;width:100%;border:1px solid #dce4ea;background:#fff;color:#20242a;border-radius:12px;padding:11px 14px;font:inherit;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 2px 5px rgba(24,35,45,.05)}
+  .campus-selector-trigger:hover{border-color:#9db7ca}
+  .campus-selector-options{position:absolute;top:calc(100% + 8px);left:0;min-width:245px;max-height:320px;overflow:auto;background:#fff;border:1px solid #dfe7ed;border-radius:14px;padding:9px;box-shadow:0 14px 35px rgba(24,35,45,.16);z-index:100}
+  .campus-check-option{display:flex;align-items:center;gap:10px;padding:11px 10px;border-radius:9px;color:#263541;font-size:13px;font-weight:650;cursor:pointer}
+  .campus-check-option:hover{background:#f4f7f9}
+  .campus-check-option input{width:17px;height:17px;margin:0;accent-color:#075b91;flex:0 0 auto}
+  .campus-check-all{font-weight:850;color:#075b91}
+  .campus-selector-divider{height:1px;background:#edf1f4;margin:5px 4px}
+  .campus-weekly-person-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:10px 0 18px}
+  .campus-weekly-person-card{border:1px solid #e4eaf0;border-radius:13px;background:#f8fafc;padding:14px}
+  .campus-weekly-person-card h4{margin:0 0 7px;color:#075b91;font-size:13px}
+  .campus-weekly-person-card strong{display:block;font-size:25px;color:#18232d;line-height:1.1}
+  .campus-weekly-person-card small{display:block;color:#71808e;margin-top:5px;font-size:11px}
+  .campus-search-help{font-size:12px;color:#71808e;margin:7px 0 0;line-height:1.45}
+  @media(max-width:700px){.campus-multiselect{width:100%;min-width:0}.campus-selector-options{width:100%;box-sizing:border-box}.campus-weekly-person-grid{grid-template-columns:1fr}}
   .campus-program-tabs{display:flex;gap:44px;align-items:center;margin:24px 0 20px;padding-left:10px;border-bottom:1px solid #e8edf2}
   .campus-program-tabs button{background:transparent;border:0;border-bottom:3px solid transparent;padding:0 0 12px;color:#9aa0a6;font-weight:650;font-size:16px;cursor:pointer}
   .campus-program-tabs button.active{color:#075b91;border-color:#075b91}
@@ -1253,11 +1269,19 @@
         <div class="campus-topbar">
           <div class="campus-heading-wrap">
             <h2 id="campusPanelNombre" style="margin:0;color:#20242a">Campus</h2>
-            <select id="campusSelectorPanel" class="campus-selector oculto" onchange="cambiarCampusPanelUI()" aria-label="Seleccionar campus"></select>
+            <div id="campusSelectorPanel" class="campus-multiselect oculto" aria-label="Seleccionar campus">
+              <button id="campusSelectorTrigger" class="campus-selector-trigger" type="button" onclick="toggleCampusSelectorPanelUI()" aria-expanded="false" aria-controls="campusSelectorOpciones">
+                <span id="campusSelectorEtiqueta">Seleccionar campus</span><span aria-hidden="true">⌄</span>
+              </button>
+              <div id="campusSelectorOpciones" class="campus-selector-options oculto" onclick="event.stopPropagation()"></div>
+            </div>
           </div>
-          <div class="campus-search" id="campusSearchWrap">
-            <input id="buscarPersonaCampusInput" type="search" placeholder="Buscar por nombre o # de registro" autocomplete="off" onkeydown="if(event.key==='Enter')buscarPersonasCampusUI()">
-            <button class="portal-primary" onclick="buscarPersonasCampusUI()" type="button">Buscar</button>
+          <div class="campus-search-wrap" id="campusSearchWrap">
+            <div class="campus-search">
+              <input id="buscarPersonaCampusInput" type="search" placeholder="Nombre, registro, teléfono o correo" autocomplete="off" onkeydown="if(event.key==='Enter')buscarPersonasCampusUI()">
+              <button class="portal-primary" onclick="buscarPersonasCampusUI()" type="button">Buscar</button>
+            </div>
+            <p class="campus-search-help" id="campusSearchHelp">Busca por nombre, registro o datos de contacto en todos tus campus autorizados.</p>
           </div>
         </div>
 
@@ -2336,46 +2360,125 @@
     return String(valor || '').toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
   }
 
-  function prepararSelectorCampusPanel_() {
-    const sel = document.getElementById('campusSelectorPanel');
-    const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
-    const campusUsuario = normalizarCampusPanelCliente_(usuarioSesion?.campus || '');
-    const campusPair = ['11 SUR','NACIONAL'].includes(campusUsuario);
-    const nombres = [
+  function campusCatalogoCliente_() {
+    return [
       ['11 SUR','11 Sur'],
       ['NACIONAL','Nacional'],
       ['HUEJOTZINGO','Huejotzingo'],
       ['JUAN BAUTISTA','Juan Bautista']
     ];
+  }
+
+  function campusSeleccionadosCliente_() {
+    return String(campusSeleccionadoActual || '').split('|').map(x => x.trim()).filter(Boolean);
+  }
+
+  function campusEtiquetaSeleccionCliente_(permitidos) {
+    const seleccionados = campusSeleccionadosCliente_();
+    const catalogo = campusCatalogoCliente_();
+    if (seleccionados.length === permitidos.length && permitidos.every(c => seleccionados.includes(c))) {
+      return String(usuarioSesion?.rol || '').toUpperCase() === 'ADMIN_GLOBAL' ? 'Todos los campus' : 'Todos mis campus';
+    }
+    return seleccionados.map(c => catalogo.find(x => x[0] === c)?.[1] || c).join(' + ') || 'Selecciona campus';
+  }
+
+  function toggleCampusSelectorPanelUI() {
+    const panel = document.getElementById('campusSelectorOpciones');
+    const trigger = document.getElementById('campusSelectorTrigger');
+    if (!panel || !trigger) return;
+    const abrir = panel.classList.contains('oculto');
+    panel.classList.toggle('oculto', !abrir);
+    trigger.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+  }
+
+  document.addEventListener('click', function(event) {
+    const wrapper = document.getElementById('campusSelectorPanel');
+    if (!wrapper || wrapper.contains(event.target)) return;
+    const panel = document.getElementById('campusSelectorOpciones');
+    const trigger = document.getElementById('campusSelectorTrigger');
+    panel?.classList.add('oculto');
+    trigger?.setAttribute('aria-expanded', 'false');
+  });
+
+  function actualizarEtiquetaCampusSelector_(permitidos) {
+    const etiqueta = document.getElementById('campusSelectorEtiqueta');
+    if (etiqueta) etiqueta.textContent = campusEtiquetaSeleccionCliente_(permitidos);
+    const seleccionados = campusSeleccionadosCliente_();
+    const todos = document.getElementById('campusCheckTodos');
+    if (todos) todos.checked = seleccionados.length === permitidos.length && permitidos.every(c => seleccionados.includes(c));
+    document.querySelectorAll('#campusSelectorOpciones input[data-campus]').forEach(chk => {
+      chk.checked = seleccionados.includes(chk.dataset.campus);
+    });
+  }
+
+  function prepararSelectorCampusPanel_() {
+    const panel = document.getElementById('campusSelectorPanel');
+    const opcionesPanel = document.getElementById('campusSelectorOpciones');
+    const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
+    const campusUsuario = normalizarCampusPanelCliente_(usuarioSesion?.campus || '');
+    const campusPair = ['11 SUR','NACIONAL'].includes(campusUsuario);
+    const catalogo = campusCatalogoCliente_();
     let opciones = [];
+    let mostrarSelector = false;
 
     if (rol === 'ADMIN_GLOBAL') {
-      // Admin Global puede consultar el consolidado y cada campus por separado.
-      opciones = [['TODOS','Todos los campus'], ...nombres];
-      if (!opciones.some(([valor]) => valor === campusSeleccionadoActual)) {
-        campusSeleccionadoActual = 'TODOS';
-      }
-      sel?.classList.remove('oculto');
+      opciones = catalogo;
+      mostrarSelector = true;
     } else if (rol === 'ADMIN_CAMPUS' && campusPair) {
-      // La cuenta compartida de 11 Sur/Nacional conserva únicamente esos dos campus.
-      opciones = [['NACIONAL','Nacional'],['11 SUR','11 Sur']];
-      if (!opciones.some(([valor]) => valor === campusSeleccionadoActual)) {
-        campusSeleccionadoActual = campusUsuario || 'NACIONAL';
-      }
-      sel?.classList.remove('oculto');
+      // La administración compartida puede consultar 11 Sur y Nacional juntos o por separado.
+      opciones = catalogo.filter(([valor]) => ['11 SUR','NACIONAL'].includes(valor));
+      mostrarSelector = true;
     } else {
       const campus = campusUsuario || 'NACIONAL';
-      opciones = [[campus, nombres.find(x => x[0] === campus)?.[1] || campus]];
-      campusSeleccionadoActual = campus;
-      sel?.classList.add('oculto');
+      opciones = [[campus, catalogo.find(x => x[0] === campus)?.[1] || campus]];
     }
 
-    if (sel) {
-      sel.innerHTML = opciones.map(([valor, texto]) =>
-        `<option value="${escaparHTML(valor)}">${escaparHTML(texto)}</option>`
-      ).join('');
-      sel.value = campusSeleccionadoActual;
+    const permitidos = opciones.map(x => x[0]);
+    let seleccionados = campusSeleccionadosCliente_().filter(c => permitidos.includes(c));
+    if (!seleccionados.length || (campusSeleccionadoActual === 'TODOS' && rol === 'ADMIN_GLOBAL')) {
+      seleccionados = permitidos.slice();
     }
+    campusSeleccionadoActual = seleccionados.join('|');
+
+    if (panel) panel.classList.toggle('oculto', !mostrarSelector);
+    if (opcionesPanel) {
+      const esGlobal = rol === 'ADMIN_GLOBAL';
+      opcionesPanel.innerHTML = (esGlobal ? `
+        <label class="campus-check-option campus-check-all" for="campusCheckTodos">
+          <input id="campusCheckTodos" type="checkbox" value="TODOS" onchange="cambiarCampusSeleccionCheckboxUI(this)">
+          <span>Todos los campus</span>
+        </label>
+        <div class="campus-selector-divider"></div>` : '') +
+        opciones.map(([valor, texto]) => `
+          <label class="campus-check-option" for="campusCheck_${escaparHTML(valor.replace(/[^A-Z0-9]/g,''))}">
+            <input id="campusCheck_${escaparHTML(valor.replace(/[^A-Z0-9]/g,''))}" type="checkbox" data-campus="${escaparHTML(valor)}" value="${escaparHTML(valor)}" onchange="cambiarCampusSeleccionCheckboxUI(this)">
+            <span>${escaparHTML(texto)}</span>
+          </label>`).join('');
+    }
+    actualizarEtiquetaCampusSelector_(permitidos);
+
+    // Los roles sin selector mantienen fijo el único campus autorizado.
+    if (!mostrarSelector) campusSeleccionadoActual = permitidos[0] || campusUsuario || 'NACIONAL';
+  }
+
+  function cambiarCampusSeleccionCheckboxUI(input) {
+    const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
+    const campusChecks = Array.from(document.querySelectorAll('#campusSelectorOpciones input[data-campus]'));
+    const permitidos = campusChecks.map(chk => chk.dataset.campus);
+    let seleccionados;
+    if (input?.value === 'TODOS') {
+      seleccionados = input.checked ? permitidos.slice() : [];
+    } else {
+      seleccionados = campusChecks.filter(chk => chk.checked).map(chk => chk.dataset.campus);
+    }
+    if (!seleccionados.length) {
+      // Siempre debe existir al menos un campus seleccionado.
+      if (input && input.dataset.campus) input.checked = true;
+      seleccionados = input?.dataset?.campus ? [input.dataset.campus] : permitidos.slice(0,1);
+    }
+    campusSeleccionadoActual = permitidos.filter(c => seleccionados.includes(c)).join('|');
+    actualizarEtiquetaCampusSelector_(permitidos);
+    cambiarCampusPanelUI();
   }
 
   function prepararVistaCampusPorRol_() {
@@ -2440,13 +2543,12 @@
   }
 
   function cambiarCampusPanelUI() {
-    const sel = document.getElementById('campusSelectorPanel');
-    if (sel) campusSeleccionadoActual = sel.value;
     campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
     coordinadoresUICache = null; coordinadoresUICacheAt = 0; coordinadoresUICacheKey = ''; coordinadoresUIPromise = null;
     invalidarCacheListasPortal_();
     document.getElementById('campusResultadosBusqueda').innerHTML = '';
     document.getElementById('campusDetallePersona').classList.add('oculto');
+    document.getElementById('buscarPersonaCampusInput').value = '';
     cargarCampusPanelUI(true);
   }
 
@@ -2508,20 +2610,32 @@
   }
 
   function buscarPersonasCampusUI() {
-    const q=document.getElementById('buscarPersonaCampusInput').value.trim();
-    const cont=document.getElementById('campusResultadosBusqueda');
-    const detail=document.getElementById('campusDetallePersona');
-    detail.classList.add('oculto'); detail.innerHTML='';
-    if(q.length<2){cont.innerHTML='<p class="portal-muted">Escribe al menos dos caracteres o números para buscar.</p>';return;}
-    cont.innerHTML='<p class="portal-muted">Buscando personas…</p>';
+    const q = document.getElementById('buscarPersonaCampusInput').value.trim();
+    const cont = document.getElementById('campusResultadosBusqueda');
+    const detail = document.getElementById('campusDetallePersona');
+    detail.classList.add('oculto'); detail.innerHTML = '';
+    if (q.length < 2) {
+      cont.innerHTML = '<p class="portal-muted">Escribe al menos dos caracteres o números para buscar.</p>';
+      return;
+    }
+    cont.innerHTML = '<p class="portal-muted">Buscando en los campus seleccionados…</p>';
     const campusBusqueda = campusSeleccionadoActual;
-    apiPortal('buscarPersonasCampus',{termino:q,campus:campusBusqueda}).then(data=>{
-      if(campusBusqueda !== campusSeleccionadoActual) return;
-      if(!data.exito)throw new Error(data.mensaje||'No se pudo buscar.');
-      const personas=data.personas||[];
-      if(!personas.length){cont.innerHTML='<p class="portal-muted">No se encontraron personas de tu campus.</p>';return;}
-      cont.innerHTML=personas.map(p=>`<button class="campus-search-result" type="button" data-registro="${escaparHTML(p.registro)}" onclick="seleccionarPersonaCampus(this)"><span><strong>${escaparHTML(p.nombre)}</strong><br><small class="portal-muted">${escaparHTML(p.campus)} · Registro ${escaparHTML(p.registro)}</small></span><span style="color:#075b91;font-weight:800">Ver ficha →</span></button>`).join('');
-    }).catch(err=>{cont.innerHTML=`<p class="portal-muted">${escaparHTML(err.message)}</p>`;});
+    apiPortal('buscarPersonasCampus', { termino:q, campus:campusBusqueda }).then(data => {
+      if (campusBusqueda !== campusSeleccionadoActual) return;
+      if (!data.exito) throw new Error(data.mensaje || 'No se pudo buscar.');
+      const personas = data.personas || [];
+      if (!personas.length) {
+        cont.innerHTML = '<p class="portal-muted">No encontramos coincidencias. Revisa el nombre, los apellidos o el número de registro e inténtalo nuevamente.</p>';
+        return;
+      }
+      const totalCoincidencias = Number(data.total) || personas.length;
+      const leyendaResultados = totalCoincidencias > personas.length ? `Mostrando ${personas.length} de ${totalCoincidencias} coincidencias.` : `${totalCoincidencias} resultado(s).`;
+      cont.innerHTML = `<p class="campus-search-help">${leyendaResultados} Selecciona una persona para consultar su ficha académica y asistencias.</p>` + personas.map(p => `
+        <button class="campus-search-result" type="button" data-registro="${escaparHTML(p.registro)}" onclick="seleccionarPersonaCampus(this)">
+          <span><strong>${escaparHTML(p.nombre)}</strong><br><small class="portal-muted">${escaparHTML(p.campus)} · Registro ${escaparHTML(p.registro)}</small></span>
+          <span style="color:#075b91;font-weight:800;white-space:nowrap">Ver ficha →</span>
+        </button>`).join('');
+    }).catch(err => { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; });
   }
 
   function seleccionarPersonaCampus(btn) { cargarDetallePersonaCampus(btn?.dataset?.registro || ''); }
@@ -2539,7 +2653,11 @@
 
   function renderizarProgresoCampus_(programa, bloques) {
     if(!Array.isArray(bloques)||!bloques.length)return '<p class="portal-muted">Sin información académica disponible.</p>';
-    return `<div class="campus-progress-grid">${bloques.map(b=>`<div class="campus-progress-block"><h4>${escaparHTML(b.bloque||'Progreso')}</h4>${(b.items||[]).map(it=>`<div class="campus-progress-item"><span>${escaparHTML(it.nombre)}</span><span class="campus-mini-status ${it.completado?'ok':''}">${it.completado?'Completado':'Pendiente'}</span></div>`).join('')}</div>`).join('')}</div>`;
+    const items = bloques.flatMap(b => Array.isArray(b.items) ? b.items : []);
+    const completados = items.filter(it => Boolean(it.completado)).length;
+    const total = items.length;
+    const porcentaje = total ? Math.round(completados / total * 100) : 0;
+    return `<div class="campus-progress-summary" style="margin:0 0 12px;padding:12px 14px;background:#f7fafc;border:1px solid #e7edf2;border-radius:12px"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:12px"><strong>${completados} de ${total} actividades completadas</strong><strong style="color:#075b91">${porcentaje}%</strong></div><div style="height:7px;background:#e6edf2;border-radius:99px;overflow:hidden;margin-top:9px"><div style="height:100%;width:${porcentaje}%;background:#0b6aa5;border-radius:99px"></div></div></div><div class="campus-progress-grid">${bloques.map(b=>`<div class="campus-progress-block"><h4>${escaparHTML(b.bloque||'Progreso')}</h4>${(b.items||[]).map(it=>`<div class="campus-progress-item"><span>${escaparHTML(it.nombre)}</span><span class="campus-mini-status ${it.completado?'ok':''}">${it.completado?'Completado':'Pendiente'}</span></div>`).join('')}</div>`).join('')}</div>`;
   }
 
   function renderizarHistorialCampus_(lista) {
@@ -2547,15 +2665,40 @@
     return `<div class="campus-attendance-list">${lista.map(a=>`<div class="campus-attendance-item"><span><strong>${escaparHTML(a.fecha||'—')}</strong><br><small class="portal-muted">${escaparHTML(a.sesion||'')} · ${escaparHTML(a.leccion||a.curso||'')}</small></span><span class="portal-mini-status ${['PRESENTE','RETARDO'].includes(String(a.estado||'').toUpperCase())?'ok':''}">${escaparHTML(a.estado||'—')}</span></div>`).join('')}</div>`;
   }
 
+  function contarAsistenciasSemanaCampus_(lista) {
+    const filas = Array.isArray(lista) ? lista : [];
+    const presentes = filas.filter(x => ['PRESENTE','RETARDO','ASISTIO','ASISTIÓ'].includes(String(x.estado || '').toUpperCase())).length;
+    const faltas = filas.filter(x => ['FALTA','AUSENTE','NO ASISTIO','NO ASISTIÓ'].includes(String(x.estado || '').toUpperCase())).length;
+    return { total:filas.length, presentes, faltas };
+  }
+
+  function renderizarAsistenciasSemanaCampus_(lista) {
+    if (!Array.isArray(lista) || !lista.length) return '<p class="portal-muted">No hay sesiones registradas o transcurridas esta semana.</p>';
+    return renderizarHistorialCampus_(lista);
+  }
+
   function renderizarDetallePersonaCampus(data) {
-    const p=data.persona||{}; const a=data.asistencias||{}; const prog=data.progreso||{}; const ins=data.inscripciones||{};
+    const p=data.persona||{}; const a=data.asistencias||{}; const semana=data.semanaActual||{}; const prog=data.progreso||{}; const ins=data.inscripciones||{};
     const rol=String(usuarioSesion?.rol||'').toUpperCase();
     const puedeRegistrar=['ADMIN_CAMPUS','ADMIN_GLOBAL'].includes(rol);
     const cont=document.getElementById('campusDetallePersona');
+    const semanaH=Array.isArray(semana.HOMBRIA)?semana.HOMBRIA:[];
+    const semanaF=Array.isArray(semana.FUNDAMENTOS)?semana.FUNDAMENTOS:[];
+    const resumenH=contarAsistenciasSemanaCampus_(semanaH);
+    const resumenF=contarAsistenciasSemanaCampus_(semanaF);
+    const rangoSemana=semana.desde&&semana.hasta?`Del ${escaparHTML(semana.desde)} al ${escaparHTML(semana.hasta)}`:'Semana actual';
     cont.innerHTML=`<div class="campus-person-head"><div><h3>${escaparHTML(p.nombre||'Persona')}</h3><p class="portal-muted" style="margin:6px 0 0">Registro ${escaparHTML(p.registro||'—')} · ${escaparHTML(p.campus||'—')}</p></div><span class="portal-badge">Ficha de participante</span></div>
       <div class="portal-detail-section-title">Inscripciones activas</div><div class="portal-group-detail-meta" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div><span>Hombría al Máximo</span><strong>${ins.HOMBRIA?escaparHTML(ins.cursoHombria||'Inscrito'):'No inscrito'}</strong></div><div><span>Fundamentos</span><strong>${ins.FUNDAMENTOS?escaparHTML(ins.cursoFundamentos||'Inscrito'):'No inscrito'}</strong></div></div>
-      <div class="portal-detail-section-title">Historial de asistencias · Hombría al Máximo</div>${renderizarHistorialCampus_(a.HOMBRIA||[])}
-      <div class="portal-detail-section-title">Historial de asistencias · Fundamentos</div>${renderizarHistorialCampus_(a.FUNDAMENTOS||[])}
+      <div class="portal-detail-section-title">Asistencias de esta semana <small style="font-size:11px;font-weight:600;color:#71808e">${rangoSemana}</small></div>
+      <div class="campus-weekly-person-grid">
+        <div class="campus-weekly-person-card"><h4>Hombría al Máximo</h4><strong>${resumenH.presentes}</strong><small>Asistencias · ${resumenH.faltas} falta(s) · ${resumenH.total} sesión(es) evaluada(s)</small></div>
+        <div class="campus-weekly-person-card"><h4>Fundamentos</h4><strong>${resumenF.presentes}</strong><small>Asistencias · ${resumenF.faltas} falta(s) · ${resumenF.total} sesión(es) evaluada(s)</small></div>
+      </div>
+      <div class="portal-detail-section-title">Detalle de la semana · Hombría al Máximo</div>${renderizarAsistenciasSemanaCampus_(semanaH)}
+      <div class="portal-detail-section-title">Detalle de la semana · Fundamentos</div>${renderizarAsistenciasSemanaCampus_(semanaF)}
+      <details style="margin-top:18px"><summary style="cursor:pointer;font-weight:800;color:#075b91;padding:10px 0">Consultar historial completo de asistencias</summary>
+        <div class="portal-detail-section-title">Historial · Hombría al Máximo</div>${renderizarHistorialCampus_(a.HOMBRIA||[])}
+        <div class="portal-detail-section-title">Historial · Fundamentos</div>${renderizarHistorialCampus_(a.FUNDAMENTOS||[])}</details>
       <div class="portal-detail-section-title">Progreso académico · Hombría al Máximo</div>${renderizarProgresoCampus_('HOMBRIA',prog.HOMBRIA||[])}
       <div class="portal-detail-section-title">Progreso académico · Fundamentos</div>${renderizarProgresoCampus_('FUNDAMENTOS',prog.FUNDAMENTOS||[])}
       ${puedeRegistrar?`<div class="campus-registration-tools"><div class="portal-field"><label for="campusProgramaAsistencia">Registrar asistencia de hoy</label><select id="campusProgramaAsistencia"><option value="HOMBRIA">Hombría al Máximo</option><option value="FUNDAMENTOS">Fundamentos</option></select></div><button class="portal-primary" type="button" onclick="registrarAsistenciaPersonaCampus('${escaparHTML(p.registro)}')">Registrar asistencia</button></div>`:''}`;
