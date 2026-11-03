@@ -198,7 +198,8 @@
     .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .img-logo-naciones-header { height: 28px; width: auto; display: block; object-fit: contain; }
 
-    .nav-desktop { display: flex; align-items: center; gap: 6px; height: 100%; min-width: 0; }
+    .nav-desktop { display: flex; align-items: center; justify-content: flex-end; gap: 6px; height: 100%; min-width: 0; flex: 1 1 auto; }
+    .nav-btn#navBtnCuenta { margin-left: auto; }
     .nav-btn {
       padding: 16px 9px; border: 0; background: transparent; font-size: 12.5px; font-weight: 600; white-space: nowrap;
       color: #64748b; cursor: pointer; position: relative; transition: all 0.2s ease;
@@ -393,6 +394,7 @@
     .contact-footer-item:hover { color: #0b4d82; text-decoration: underline; }
 
     .bottom-nav {
+      display: flex; flex-direction: row; align-items: center; justify-content: space-around;
       position: fixed; bottom: 0; left: 0; right: 0; width: 100%; height: 64px;
       background: #ffffff; border-top: 1px solid #e0e6ed; z-index: 1000;
       box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08); padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -406,6 +408,7 @@
     .bottom-nav-item svg { width: 22px; height: 22px; fill: currentColor; margin-bottom: 2px; display: block; flex-shrink: 0; }
     .bottom-nav-item span { font-size: 10px; font-weight: 700; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: center; display: block; }
     .bottom-nav-item.active { color: #0b4d82 !important; }
+    #bnavCuenta { order: 99; }
 
     .btn-submit { width: 100%; margin-top: 22px; background: #0b4d82; color: white; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 800; border: 0; cursor: pointer; }
     .btn-secondary { width: 100%; margin-top: 10px; background: #eef2f5; color: #0b4d82; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 800; border: 0; cursor: pointer; }
@@ -516,11 +519,13 @@
   .portal-create-group-button:hover{background:#eaf4fa}
   .portal-coordinator-list{display:grid;gap:12px;margin-top:16px}
   .portal-coordinator-card{border:1px solid #e1e7ed;border-radius:14px;background:#fff;overflow:hidden}
-  .portal-coordinator-toggle{width:100%;border:0;background:#fff;padding:17px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;cursor:pointer;color:#18232d}
+  .portal-coordinator-toggle{width:100%;min-height:78px;border:0;background:#fff;padding:17px 18px;display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:14px;text-align:left;cursor:pointer;color:#18232d}
   .portal-coordinator-toggle:hover{background:#f8fafc}
-  .portal-coordinator-name{font-size:16px;font-weight:800;display:block}
-  .portal-coordinator-meta{font-size:12px;color:#71808e;display:block;margin-top:5px}
-  .portal-coordinator-count{white-space:nowrap;font-size:13px;font-weight:800;color:#075b91;background:#eef6fb;border-radius:999px;padding:7px 11px}
+  .portal-coordinator-info{display:flex;flex:1 1 auto;min-width:0;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px}
+  .portal-coordinator-name{font-size:16px;font-weight:800;display:block;line-height:1.25;overflow-wrap:anywhere}
+  .portal-coordinator-meta{font-size:12px;color:#71808e;display:block;margin:0;line-height:1.25}
+  .portal-coordinator-count{display:flex;flex:0 0 auto;align-items:center;justify-content:center;align-self:center;white-space:nowrap;font-size:13px;font-weight:800;color:#075b91;background:#eef6fb;border-radius:999px;padding:7px 11px}
+  .portal-coordinator-chevron{display:flex;flex:0 0 22px;width:22px;height:34px;align-items:center;justify-content:center;align-self:center;margin:0;color:#89939b;font-size:30px;line-height:1;font-weight:400}
   .portal-coordinator-groups{padding:0 16px 16px;border-top:1px solid #edf1f4}
   .portal-coordinator-groups .portal-group-list{margin-top:14px}
   @media(max-width:700px){.portal-grid{grid-template-columns:1fr}.portal-admin-card{padding:16px}.portal-member-row{align-items:flex-start;flex-direction:column}.portal-group-detail-meta{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.portal-group-detail-meta>div{padding:11px}}
@@ -558,7 +563,7 @@
   .campus-metric span{display:block;color:#71808e;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.45px}
   .campus-metric strong{display:block;color:#075b91;font-size:30px;line-height:1.15;margin-top:7px}
   .campus-chart-wrap{background:#fff;border:1px solid #e7edf2;border-radius:15px;padding:16px;margin:14px 0 20px;overflow:hidden}
-  .campus-chart{width:100%;height:auto;display:block;min-height:190px}
+  .campus-chart{width:100%;height:320px;min-height:320px;display:block}
   .campus-search-results{display:grid;gap:8px;margin-top:10px}
   .campus-search-result{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;border:1px solid #e1e8ee;background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;color:#18232d}
   .campus-search-result:hover{background:#f7fafc;border-color:#b9d0df}
@@ -589,7 +594,7 @@
   .campus-weekly-pill{display:flex;align-items:center;justify-content:space-between;gap:20px;max-width:560px;background:#fff;border-radius:999px;padding:18px 28px;margin:18px 0 24px;box-shadow:0 5px 9px rgba(24,35,45,.16);font-size:16px;font-weight:850;color:#20242a}
   .campus-weekly-pill strong{font-size:24px}
   .campus-overview-grid{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:18px;align-items:stretch;margin-bottom:38px}
-  .campus-chart-wrap{margin:0;min-height:310px;border:0;border-radius:28px;padding:26px 30px;box-shadow:0 7px 11px rgba(24,35,45,.15)}
+  .campus-chart-wrap{margin:0;min-height:390px;border:0;border-radius:28px;padding:26px 30px;box-shadow:0 7px 11px rgba(24,35,45,.15)}
   .campus-chart-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
   .campus-season-total{color:#7a8792;font-size:12px}.campus-season-total strong{color:#20242a;font-size:16px}
   .campus-group-kpi{background:#fff;border-radius:28px;box-shadow:0 7px 11px rgba(24,35,45,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:310px;padding:22px}
@@ -603,10 +608,10 @@
   #campusPanelNombre{text-transform:uppercase;font-size:29px;font-weight:850;letter-spacing:-.5px}
   .campus-coordinator-card{border:0;border-radius:23px;box-shadow:0 7px 12px rgba(17,24,39,.13)}
   .portal-coordinator-toggle{min-height:82px;padding:20px 24px}
-  .portal-coordinator-toggle:after{content:'›';font-size:30px;line-height:1;color:#89939b;margin-left:8px}
   .portal-coordinator-count{font-size:15px;background:transparent;color:#20242a;padding:5px 4px}
+  .portal-coordinator-chevron{font-size:32px;color:#89939b}
   @media(max-width:900px){.campus-overview-grid{grid-template-columns:minmax(0,1fr) 180px}.campus-group-kpi{min-height:270px}.campus-chart-wrap{min-height:270px}}
-  @media(max-width:700px){.campus-main-card{padding:14px}.campus-overview-grid{grid-template-columns:1fr}.campus-chart-wrap{min-height:240px;padding:18px}.campus-group-kpi{min-height:145px;border-radius:20px}.campus-weekly-pill{max-width:none;padding:14px 20px;font-size:13px}.campus-weekly-pill strong{font-size:21px}.campus-program-tabs{gap:20px;padding-left:4px}.campus-program-tabs button{font-size:13px}.campus-selector{min-width:150px}}
+  @media(max-width:700px){.campus-main-card{padding:14px}.campus-overview-grid{grid-template-columns:1fr}.campus-chart-wrap{min-height:390px;padding:18px}.campus-chart{height:320px;min-height:320px}.campus-group-kpi{min-height:145px;border-radius:20px}.campus-weekly-pill{max-width:none;padding:14px 20px;font-size:13px}.campus-weekly-pill strong{font-size:21px}.campus-program-tabs{gap:20px;padding-left:4px}.campus-program-tabs button{font-size:13px}.campus-selector{min-width:150px}.portal-coordinator-toggle{gap:9px;padding:17px 14px}.portal-coordinator-count{font-size:13px}.portal-coordinator-name{font-size:14px}}
 
 </style>
 </head>
@@ -864,9 +869,9 @@
       <button class="nav-btn" id="navBtnFundamentos" onclick="navegarA('fundamentos')">Fundamentos</button>
       <button class="nav-btn" id="navBtnHombria" onclick="navegarA('hombria')">Hombría al Máximo</button>
       <button class="nav-btn" id="navBtnRecursos" onclick="navegarA('recursos')">Recursos</button>
-      <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
       <button class="nav-btn oculto" id="navBtnCampus" onclick="navegarA('campus')">Campus</button>
       <button class="nav-btn oculto" id="navBtnRegistro" onclick="navegarA('escaner')">Registro</button>
+      <button class="nav-btn" id="navBtnCuenta" onclick="navegarA('cuenta')">Mi cuenta</button>
     </nav>
   </div>
 </header>
@@ -1456,6 +1461,14 @@
   let coordinadoresUICacheKey = '';
   let coordinadoresUIPromise = null;
   const PORTAL_LISTAS_CACHE_MS = 20000;
+  const PORTAL_LISTAS_ACCIONES_CACHEABLES = new Set([
+    'listarGruposHombria',
+    'listarCoordinadoresHombria',
+    'obtenerPanelCampusHombria'
+  ]);
+  const PORTAL_LISTAS_CACHE = new Map();
+  const PORTAL_LISTAS_PETICIONES = new Map();
+  let PORTAL_LISTAS_CACHE_GENERACION = 0;
   let campusEscanerActual = 'NACIONAL';
   let campusPanelCache = null;
   let campusPanelCacheAt = 0;
@@ -2325,27 +2338,42 @@
 
   function prepararSelectorCampusPanel_() {
     const sel = document.getElementById('campusSelectorPanel');
-    const rol = String(usuarioSesion?.rol || '').toUpperCase();
+    const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
     const campusUsuario = normalizarCampusPanelCliente_(usuarioSesion?.campus || '');
     const campusPair = ['11 SUR','NACIONAL'].includes(campusUsuario);
-    const nombres = [['NACIONAL','Nacional'],['11 SUR','11 Sur'],['HUEJOTZINGO','Huejotzingo'],['JUAN BAUTISTA','Juan Bautista']];
+    const nombres = [
+      ['11 SUR','11 Sur'],
+      ['NACIONAL','Nacional'],
+      ['HUEJOTZINGO','Huejotzingo'],
+      ['JUAN BAUTISTA','Juan Bautista']
+    ];
     let opciones = [];
+
     if (rol === 'ADMIN_GLOBAL') {
+      // Admin Global puede consultar el consolidado y cada campus por separado.
       opciones = [['TODOS','Todos los campus'], ...nombres];
-      if (!campusSeleccionadoActual) campusSeleccionadoActual = 'TODOS';
+      if (!opciones.some(([valor]) => valor === campusSeleccionadoActual)) {
+        campusSeleccionadoActual = 'TODOS';
+      }
       sel?.classList.remove('oculto');
     } else if (rol === 'ADMIN_CAMPUS' && campusPair) {
+      // La cuenta compartida de 11 Sur/Nacional conserva únicamente esos dos campus.
       opciones = [['NACIONAL','Nacional'],['11 SUR','11 Sur']];
-      if (!['NACIONAL','11 SUR'].includes(campusSeleccionadoActual)) campusSeleccionadoActual = campusUsuario || 'NACIONAL';
+      if (!opciones.some(([valor]) => valor === campusSeleccionadoActual)) {
+        campusSeleccionadoActual = campusUsuario || 'NACIONAL';
+      }
       sel?.classList.remove('oculto');
     } else {
       const campus = campusUsuario || 'NACIONAL';
-      opciones = [[campus, nombres.find(x=>x[0]===campus)?.[1] || campus]];
+      opciones = [[campus, nombres.find(x => x[0] === campus)?.[1] || campus]];
       campusSeleccionadoActual = campus;
       sel?.classList.add('oculto');
     }
+
     if (sel) {
-      sel.innerHTML = opciones.map(([v,t])=>`<option value="${escaparHTML(v)}">${escaparHTML(t)}</option>`).join('');
+      sel.innerHTML = opciones.map(([valor, texto]) =>
+        `<option value="${escaparHTML(valor)}">${escaparHTML(texto)}</option>`
+      ).join('');
       sel.value = campusSeleccionadoActual;
     }
   }
@@ -2396,7 +2424,7 @@
     }
     document.getElementById('campusPanelNombre').textContent = 'Consultando campus…';
     document.getElementById('campusGraficaAsistencias').innerHTML = '<p class="portal-muted">Cargando gráfica…</p>';
-    const panel = apiPortal('obtenerPanelCampusHombria', { campus:campusSeleccionadoActual, programa:campusProgramaActual });
+    const panel = apiPortal('obtenerPanelCampusHombria', { campus:campusSeleccionadoActual, programa:campusProgramaActual }, { force:forzar });
     const coordinadores = cargarCoordinadoresUI(false);
     return Promise.all([panel, coordinadores]).then(([data]) => {
       if (key !== `${campusSeleccionadoActual}|${campusProgramaActual}`) return null;
@@ -2416,6 +2444,7 @@
     if (sel) campusSeleccionadoActual = sel.value;
     campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
     coordinadoresUICache = null; coordinadoresUICacheAt = 0; coordinadoresUICacheKey = ''; coordinadoresUIPromise = null;
+    invalidarCacheListasPortal_();
     document.getElementById('campusResultadosBusqueda').innerHTML = '';
     document.getElementById('campusDetallePersona').classList.add('oculto');
     cargarCampusPanelUI(true);
@@ -2426,6 +2455,7 @@
     document.getElementById('campusTabHombria')?.classList.toggle('active', campusProgramaActual === 'HOMBRIA');
     document.getElementById('campusTabFundamentos')?.classList.toggle('active', campusProgramaActual === 'FUNDAMENTOS');
     campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
+    invalidarCacheListasPortal_();
     cargarCampusPanelUI(true);
   }
 
@@ -2442,17 +2472,39 @@
 
   function renderizarGraficaCampus_(serie) {
     const cont = document.getElementById('campusGraficaAsistencias');
-    if (!serie.length) { cont.innerHTML = '<p class="portal-muted">No hay fechas de temporada registradas en el calendario.</p>'; return; }
-    const w=900,h=260,left=48,right=20,top=18,bottom=46;
-    const max=Math.max(1,...serie.map(x=>Number(x.total)||0));
-    const x=i=>serie.length===1?(left+right+w-left-right)/2:left+i*(w-left-right)/(serie.length-1);
-    const y=v=>h-bottom-(Number(v)||0)/max*(h-top-bottom);
-    const points=serie.map((p,i)=>`${x(i).toFixed(1)},${y(p.total).toFixed(1)}`).join(' ');
-    const grid=[0,.25,.5,.75,1].map(t=>{const yy=y(max*t);return `<line x1="${left}" y1="${yy}" x2="${w-right}" y2="${yy}" stroke="#e8edf2" stroke-width="1"/><text x="${left-10}" y="${yy+4}" text-anchor="end" font-size="11" fill="#71808e">${Math.round(max*t)}</text>`}).join('');
-    const step=Math.max(1,Math.ceil(serie.length/8));
-    const labels=serie.map((p,i)=>i%step===0||i===serie.length-1?`<text x="${x(i)}" y="${h-16}" text-anchor="middle" font-size="11" fill="#71808e">${escaparHTML(p.etiqueta||p.fecha)}</text>`:'').join('');
-    const dots=serie.map((p,i)=>`<circle cx="${x(i)}" cy="${y(p.total)}" r="3.5" fill="#c8102e"><title>${escaparHTML(p.fecha)}: ${Number(p.total)||0} asistencias</title></circle>`).join('');
-    cont.innerHTML=`<svg class="campus-chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Asistencias por fecha"><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="#111827"/>${grid}<polyline points="${points}" fill="none" stroke="#c8102e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+    if (!serie.length) {
+      cont.innerHTML = '<p class="portal-muted">No hay semanas históricas registradas hasta hoy.</p>';
+      return;
+    }
+
+    const w = Math.max(320, Math.round(cont.clientWidth || 900));
+    const h = 340;
+    const left = 54;
+    const right = 22;
+    const top = 24;
+    const bottom = 62;
+    const max = Math.max(1, ...serie.map(x => Number(x.total) || 0));
+    const x = i => serie.length === 1
+      ? (left + (w - right)) / 2
+      : left + i * (w - left - right) / (serie.length - 1);
+    const y = v => h - bottom - (Number(v) || 0) / max * (h - top - bottom);
+    const points = serie.map((p, i) => `${x(i).toFixed(1)},${y(p.total).toFixed(1)}`).join(' ');
+    const grid = [0, .25, .5, .75, 1].map(t => {
+      const yy = y(max * t);
+      return `<line x1="${left}" y1="${yy}" x2="${w-right}" y2="${yy}" stroke="#e8edf2" stroke-width="1"/>` +
+        `<text x="${left-11}" y="${yy+4}" text-anchor="end" font-size="12" fill="#71808e">${Math.round(max*t)}</text>`;
+    }).join('');
+    const step = Math.max(1, Math.ceil(serie.length / 8));
+    const labels = serie.map((p, i) => {
+      if (i % step !== 0 && i !== serie.length - 1) return '';
+      const etiqueta = escaparHTML(p.etiqueta || p.fecha || '');
+      return `<text x="${x(i)}" y="${h-24}" text-anchor="middle" font-size="13" fill="#64748b">${etiqueta}</text>`;
+    }).join('');
+    const dots = serie.map((p, i) =>
+      `<circle cx="${x(i)}" cy="${y(p.total)}" r="4" fill="#c8102e"><title>${escaparHTML(p.fecha || p.etiqueta)}: ${Number(p.total)||0} asistencias</title></circle>`
+    ).join('');
+
+    cont.innerHTML = `<svg class="campus-chart" viewBox="0 0 ${w} ${h}" width="100%" height="320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Asistencias por semanas históricas hasta hoy"><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="#111827" stroke-width="1.2"/>${grid}<polyline points="${points}" fill="none" stroke="#c8102e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
   }
 
   function buscarPersonasCampusUI() {
@@ -2515,7 +2567,7 @@
     msg.textContent='Registrando asistencia…'; msg.style.color='#075b91';
     apiPortal('registrarAsistenciaCampus',{registro,programa,campus:campusSeleccionadoActual}).then(data=>{
       msg.textContent=data.mensaje||''; msg.style.color=data.exito?'#176b3a':'#a52828';
-      if(data.exito){campusPanelCache=null;campusPanelCacheAt=0;cargarCampusPanelUI(true);cargarDetallePersonaCampus(registro);}
+      if(data.exito){campusPanelCache=null;campusPanelCacheAt=0;invalidarCacheListasPortal_();cargarCampusPanelUI(true);cargarDetallePersonaCampus(registro);}
     }).catch(err=>{msg.textContent=err.message;msg.style.color='#a52828';});
   }
 
@@ -2578,6 +2630,7 @@
     gruposUICache = null; gruposUICacheAt = 0; gruposUIPromise = null;
     coordinadoresUICache = null; coordinadoresUICacheAt = 0; coordinadoresUICacheKey = ''; coordinadoresUIPromise = null;
     campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
+    invalidarCacheListasPortal_();
     campusSeleccionadoActual = ''; campusProgramaActual = 'HOMBRIA';
 
     detenerEscaner();
@@ -2732,17 +2785,75 @@
     return ['ADMIN_GLOBAL','ADMIN_CAMPUS','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rol);
   }
 
-  function apiPortal(action, params = {}) {
+  function invalidarCacheListasPortal_() {
+    PORTAL_LISTAS_CACHE_GENERACION += 1;
+    PORTAL_LISTAS_CACHE.clear();
+    PORTAL_LISTAS_PETICIONES.clear();
+    gruposUICache = null;
+    gruposUICacheAt = 0;
+    gruposUIPromise = null;
+    coordinadoresUICache = null;
+    coordinadoresUICacheAt = 0;
+    coordinadoresUICacheKey = '';
+    coordinadoresUIPromise = null;
+    campusPanelCache = null;
+    campusPanelCacheAt = 0;
+    campusPanelCacheKey = '';
+  }
+
+  function portalClaveCacheLista_(action, params, token) {
+    const parametrosOrdenados = Object.keys(params || {}).sort().map(k => [k, String(params[k] ?? '')]);
+    return `${token}|${action}|${JSON.stringify(parametrosOrdenados)}`;
+  }
+
+  function apiPortal(action, params = {}, opciones = {}) {
     if (!usuarioSesion || !usuarioSesion.sessionToken) {
       return Promise.reject(new Error('Tu sesión expiró. Cierra sesión e inicia nuevamente.'));
     }
-    // Evita que el navegador reutilice una respuesta anterior al actualizar los grupos.
-    const q = new URLSearchParams({ action, token: usuarioSesion.sessionToken, _nocache: String(Date.now()), ...params });
-    return fetch(`${WEB_APP_URL}?${q.toString()}`, { cache: 'no-store' }).then(async r => {
+
+    const token = usuarioSesion.sessionToken;
+    const cacheable = PORTAL_LISTAS_ACCIONES_CACHEABLES.has(action);
+    const cacheKey = cacheable ? portalClaveCacheLista_(action, params, token) : '';
+    const forzar = Boolean(opciones && opciones.force);
+    if (cacheable && forzar) {
+      // Una recarga explícita invalida también solicitudes anteriores de la misma lista.
+      PORTAL_LISTAS_CACHE_GENERACION += 1;
+      PORTAL_LISTAS_CACHE.delete(cacheKey);
+      PORTAL_LISTAS_PETICIONES.delete(cacheKey);
+    }
+
+    if (cacheable && !forzar) {
+      const guardado = PORTAL_LISTAS_CACHE.get(cacheKey);
+      if (guardado && Date.now() - guardado.timestamp < PORTAL_LISTAS_CACHE_MS) {
+        return Promise.resolve(guardado.data);
+      }
+      const pendiente = PORTAL_LISTAS_PETICIONES.get(cacheKey);
+      if (pendiente) return pendiente;
+    }
+
+    // _nocache evita que el navegador o un proxy reutilice una respuesta HTTP antigua.
+    const q = new URLSearchParams({ action, token, _nocache: String(Date.now()), ...params });
+    const generacion = PORTAL_LISTAS_CACHE_GENERACION;
+    const solicitud = fetch(`${WEB_APP_URL}?${q.toString()}`, { cache: 'no-store' }).then(async r => {
       if (!r.ok) throw new Error('El servidor respondió con error HTTP ' + r.status + '.');
       const texto = await r.text();
       try { return JSON.parse(texto); }
       catch (e) { throw new Error('El servidor no devolvió JSON. Verifica que hayas actualizado la implementación de Apps Script.'); }
+    });
+
+    if (!cacheable) return solicitud;
+
+    PORTAL_LISTAS_PETICIONES.set(cacheKey, solicitud);
+    return solicitud.then(data => {
+      // No permitir que una petición antigua repueble la caché después de invalidarla.
+      if (generacion === PORTAL_LISTAS_CACHE_GENERACION && data && data.exito) {
+        PORTAL_LISTAS_CACHE.set(cacheKey, { data, timestamp: Date.now() });
+      }
+      return data;
+    }).finally(() => {
+      if (PORTAL_LISTAS_PETICIONES.get(cacheKey) === solicitud) {
+        PORTAL_LISTAS_PETICIONES.delete(cacheKey);
+      }
     });
   }
 
@@ -2811,7 +2922,7 @@
 
     cont.innerHTML = '<p class="portal-muted">Cargando grupos…</p>';
     let solicitud;
-    solicitud = apiPortal('listarGruposHombria')
+    solicitud = apiPortal('listarGruposHombria', {}, { force:forzar })
       .then(data => {
         if (data && data.exito) {
           gruposUICache = data;
@@ -2867,12 +2978,17 @@
           const grupoJson = encodeURIComponent(JSON.stringify(g));
           return `<article class="portal-group"><h3>${escaparHTML(g.liderNombre || g.liderRegistro || 'Grupo de Hombría')}</h3><p class="portal-muted" style="margin:4px 0 8px">${escaparHTML(g.campus)} · ${escaparHTML(g.nivel)}</p><p class="portal-muted" style="margin:0 0 14px">${Number(g.totalIntegrantes)||0} integrantes</p><button class="portal-primary" data-grupo="${grupoJson}" onclick="abrirGrupoDeCoordinadorDesdeBoton(this)">Ver Grupo</button></article>`;
         }).join('')}</div>` : '<p class="portal-muted" style="margin:14px 0 0">Este coordinador todavía no tiene grupos asignados.</p>';
-        return `<article class="portal-coordinator-card"><button type="button" class="portal-coordinator-toggle" data-coordinador="${encodeURIComponent(JSON.stringify(c))}" onclick="toggleCoordinadorDesdeBoton(this)"><span><strong class="portal-coordinator-name">${escaparHTML(c.nombre)}</strong><span class="portal-coordinator-meta">${escaparHTML(c.campus)}</span></span><span class="portal-coordinator-count">${Number(c.totalGrupos)||0} ${Number(c.totalGrupos)===1?'grupo':'grupos'}</span></button><div class="portal-coordinator-groups oculto">${gruposHtml}</div></article>`;
+        return `<article class="portal-coordinator-card"><button type="button" class="portal-coordinator-toggle" data-coordinador="${encodeURIComponent(JSON.stringify(c))}" onclick="toggleCoordinadorDesdeBoton(this)"><span class="portal-coordinator-info"><strong class="portal-coordinator-name">${escaparHTML(c.nombre)}</strong><span class="portal-coordinator-meta">${escaparHTML(c.campus)}</span></span><span class="portal-coordinator-count">${Number(c.totalGrupos)||0} ${Number(c.totalGrupos)===1?'grupo':'grupos'}</span><span class="portal-coordinator-chevron" aria-hidden="true">›</span></button><div class="portal-coordinator-groups oculto">${gruposHtml}</div></article>`;
       }).join('');
       return data;
     };
 
-    if (forzar) { coordinadoresUICache = null; coordinadoresUICacheAt = 0; coordinadoresUICacheKey = ''; }
+    if (forzar) {
+      coordinadoresUICache = null;
+      coordinadoresUICacheAt = 0;
+      coordinadoresUICacheKey = '';
+      coordinadoresUIPromise = null;
+    }
     if (coordinadoresUICache && coordinadoresUICacheKey === filtroCampus && (Date.now() - coordinadoresUICacheAt) < PORTAL_LISTAS_CACHE_MS) {
       try { return Promise.resolve(renderizar(coordinadoresUICache)); }
       catch (err) { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; return Promise.resolve(null); }
@@ -2884,7 +3000,7 @@
 
     cont.innerHTML = '<p class="portal-muted">Cargando coordinadores…</p>';
     let solicitud;
-    solicitud = apiPortal('listarCoordinadoresHombria',{campus:filtroCampus})
+    solicitud = apiPortal('listarCoordinadoresHombria',{campus:filtroCampus},{force:forzar})
       .then(data => {
         if (data && data.exito && filtroCampus === campusSeleccionadoActual) { coordinadoresUICache = data; coordinadoresUICacheAt = Date.now(); coordinadoresUICacheKey = filtroCampus; }
         return data;
@@ -2964,8 +3080,7 @@
       msg.style.color = '#176b3a';
       grupoOrigenVista = 'campus';
       invalidarCacheGruposUI();
-      coordinadoresUICache = null; coordinadoresUICacheAt = 0;
-      campusPanelCache = null; campusPanelCacheAt = 0;
+      invalidarCacheListasPortal_();
       const listado = await cargarGruposUI(false);
       const grupoNuevo = listado && Array.isArray(listado.grupos) ? listado.grupos.find(g => String(g.id) === String(resultado.grupoId)) : null;
       if (grupoNuevo) {
@@ -3069,6 +3184,7 @@
         invalidarCacheGruposUI();
         coordinadoresUICache = null; coordinadoresUICacheAt = 0;
         campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
+        invalidarCacheListasPortal_();
         cargarIntegrantesGrupoUI();
       }
     }).catch(err => { document.getElementById('msgGestionGrupo').textContent = err.message; });
@@ -3127,6 +3243,7 @@
       invalidarCacheGruposUI();
       coordinadoresUICache = null; coordinadoresUICacheAt = 0;
       campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
+      invalidarCacheListasPortal_();
       personaPendienteAgregar = null;
       document.getElementById('resultadoBusquedaIntegrante').textContent = '';
       document.getElementById('integranteRegistro').value = '';
