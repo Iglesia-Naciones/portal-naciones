@@ -192,7 +192,9 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
     .header-inner {
-      max-width: 1320px; margin: 0 auto; padding: 0 16px;
+      /* El logotipo conserva el margen visual del diseño anterior; el menú usa todo el ancho restante. */
+      width: 100%; max-width: none; margin: 0; box-sizing: border-box;
+      padding-left: max(16px, calc((100% - 1320px) / 2)); padding-right: 12px;
       display: flex; justify-content: space-between; align-items: center; height: 56px; gap: 12px;
     }
     .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; }
@@ -554,20 +556,25 @@
 
 
   /* Panel centralizado por campus */
-  .campus-topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px}
-  .campus-search-wrap{width:min(100%,380px);margin-left:auto}
-  .campus-search{display:flex;align-items:center;gap:8px;width:100%;margin:0}
-  .campus-search input{flex:1;min-width:150px;border:1px solid #d7e0e8;border-radius:11px;padding:10px 12px;font:inherit;font-size:13px;background:#fff}
+  .campus-topbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,420px);align-items:start;gap:14px 22px;margin-bottom:18px}
+  .campus-search-wrap{width:100%;max-width:420px;margin-left:auto;position:relative;z-index:40}
+  .campus-search{display:flex;align-items:center;gap:8px;width:100%;margin:0;position:relative}
+  .campus-search input{flex:1;min-width:0;border:1px solid #d7e0e8;border-radius:11px;padding:10px 12px;font:inherit;font-size:13px;background:#fff}
+  .campus-search input:focus{outline:none;border-color:#0b659b;box-shadow:0 0 0 3px rgba(11,101,155,.12)}
   .campus-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
   .campus-metric{background:#f7f9fb;border:1px solid #e7edf2;border-radius:15px;padding:18px}
   .campus-metric span{display:block;color:#71808e;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.45px}
   .campus-metric strong{display:block;color:#075b91;font-size:30px;line-height:1.15;margin-top:7px}
   .campus-chart-wrap{background:#fff;border:1px solid #e7edf2;border-radius:15px;padding:16px;margin:14px 0 20px;overflow:hidden}
   .campus-chart{width:100%;height:320px;min-height:320px;display:block}
-  .campus-search-results{display:grid;gap:8px;margin-top:10px}
-  .campus-search-result{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;border:1px solid #e1e8ee;background:#fff;border-radius:12px;padding:12px 14px;cursor:pointer;color:#18232d}
-  .campus-search-result:hover{background:#f7fafc;border-color:#b9d0df}
-  .campus-person-detail{margin-top:16px;border-top:1px solid #e7edf2;padding-top:18px}
+  .campus-search-results{position:absolute;top:calc(100% + 8px);left:0;right:0;display:grid;gap:7px;margin:0;padding:8px;max-height:min(55vh,420px);overflow-y:auto;background:#fff;border:1px solid #dfe7ed;border-radius:14px;box-shadow:0 14px 35px rgba(24,35,45,.18);z-index:130;box-sizing:border-box}
+  .campus-search-results.oculto{display:none!important}
+  .campus-search-result{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;border:1px solid #e1e8ee;background:#fff;border-radius:11px;padding:12px 13px;cursor:pointer;color:#18232d;min-height:56px}
+  .campus-search-result:hover,.campus-search-result:focus-visible{background:#f7fafc;border-color:#9dbdd1;outline:none}
+  .campus-search-result strong{display:block;font-size:13px;color:#18232d}
+  .campus-search-result small{display:block;margin-top:3px;font-size:11px}
+  .campus-search-empty{padding:10px 11px;color:#71808e;font-size:12px;line-height:1.5}
+  .campus-person-detail{grid-column:1/-1;margin-top:4px;border-top:1px solid #e7edf2;padding-top:18px;scroll-margin-top:76px}
   .campus-person-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
   .campus-person-head h3{margin:0;color:#17232d;font-size:19px}
   .campus-progress-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -585,7 +592,7 @@
   .campus-scanner-tabs{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:12px 0 18px}
   .campus-scanner-tabs button{border:1px solid #cdd9e2;background:#fff;color:#31536b;border-radius:999px;padding:10px 16px;font-weight:800;cursor:pointer}
   .campus-scanner-tabs button.active{background:#075b91;color:#fff;border-color:#075b91}
-  @media(max-width:700px){.campus-progress-grid{grid-template-columns:1fr}.campus-topbar{display:block}.campus-search-wrap{margin:14px 0 0;width:100%}.campus-metric{padding:14px}.campus-metric strong{font-size:26px}}
+  @media(max-width:700px){.campus-progress-grid{grid-template-columns:1fr}.campus-topbar{display:block}.campus-search-wrap{margin:14px 0 0;width:100%;max-width:none}.campus-person-detail{margin-top:18px}.campus-metric{padding:14px}.campus-metric strong{font-size:26px}}
   .campus-heading-wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .campus-selector{border:0;background:#e9edf0;color:#20242a;border-radius:999px;padding:11px 38px 11px 16px;font:inherit;font-weight:750;min-width:170px;cursor:pointer}
   .campus-multiselect{position:relative;min-width:220px;z-index:30}
@@ -1278,11 +1285,13 @@
           </div>
           <div class="campus-search-wrap" id="campusSearchWrap">
             <div class="campus-search">
-              <input id="buscarPersonaCampusInput" type="search" placeholder="Nombre, registro, teléfono o correo" autocomplete="off" onkeydown="if(event.key==='Enter')buscarPersonasCampusUI()">
+              <input id="buscarPersonaCampusInput" type="search" placeholder="Nombre, registro, teléfono o correo" autocomplete="off" aria-label="Buscar persona" aria-controls="campusResultadosBusqueda" aria-autocomplete="list" oninput="programarBusquedaPersonasCampusUI()" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarPersonasCampusUI()} if(event.key==='Escape')cerrarResultadosBusquedaCampusUI()">
               <button class="portal-primary" onclick="buscarPersonasCampusUI()" type="button">Buscar</button>
+              <div id="campusResultadosBusqueda" class="campus-search-results oculto" role="listbox" aria-label="Resultados de búsqueda" aria-live="polite"></div>
             </div>
-            <p class="campus-search-help" id="campusSearchHelp">Busca por nombre, registro o datos de contacto en todos tus campus autorizados.</p>
+            <p class="campus-search-help" id="campusSearchHelp">Busca por nombre, registro o datos de contacto en todos tus campus autorizados. Selecciona un resultado para abrir su ficha.</p>
           </div>
+          <div id="campusDetallePersona" class="campus-person-detail oculto"></div>
         </div>
 
         <div id="campusDashboardMetricas">
@@ -1343,8 +1352,6 @@
           </div>
         </div>
 
-        <div id="campusResultadosBusqueda" class="campus-search-results"></div>
-        <div id="campusDetallePersona" class="campus-person-detail oculto"></div>
         <div id="campusPanelMensaje" class="portal-status"></div>
       </div>
     </section>
@@ -1499,6 +1506,10 @@
   let campusPanelCacheKey = '';
   let campusSeleccionadoActual = '';
   let campusProgramaActual = 'HOMBRIA';
+  let campusBusquedaTimer = null;
+  let campusBusquedaSolicitudId = 0;
+  let campusDetalleSolicitudId = 0;
+  let portalRenovacionSesionPromise = null;
   let escaneoEnProceso = false;
   let ultimoCodigoEscaneado = '';
   let ultimoTiempoEscaneo = 0;
@@ -2400,6 +2411,11 @@
     trigger?.setAttribute('aria-expanded', 'false');
   });
 
+  document.addEventListener('click', function(event) {
+    const search = document.getElementById('campusSearchWrap');
+    if (search && !search.contains(event.target)) cerrarResultadosBusquedaCampusUI();
+  });
+
   function actualizarEtiquetaCampusSelector_(permitidos) {
     const etiqueta = document.getElementById('campusSelectorEtiqueta');
     if (etiqueta) etiqueta.textContent = campusEtiquetaSeleccionCliente_(permitidos);
@@ -2537,7 +2553,7 @@
       return data;
     }).catch(err => {
       document.getElementById('campusPanelNombre').textContent = 'No fue posible cargar el campus.';
-      document.getElementById('campusGraficaAsistencias').innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`;
+      document.getElementById('campusGraficaAsistencias').innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}${/sesion|sesión/i.test(err.message) ? ' Actualiza la página y, si el problema continúa, cierra sesión e inicia nuevamente.' : ''}</p>`;
       return null;
     });
   }
@@ -2546,8 +2562,12 @@
     campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
     coordinadoresUICache = null; coordinadoresUICacheAt = 0; coordinadoresUICacheKey = ''; coordinadoresUIPromise = null;
     invalidarCacheListasPortal_();
-    document.getElementById('campusResultadosBusqueda').innerHTML = '';
+    campusBusquedaSolicitudId += 1;
+    campusDetalleSolicitudId += 1;
+    if (campusBusquedaTimer) { clearTimeout(campusBusquedaTimer); campusBusquedaTimer = null; }
+    cerrarResultadosBusquedaCampusUI();
     document.getElementById('campusDetallePersona').classList.add('oculto');
+    document.getElementById('campusDetallePersona').innerHTML = '';
     document.getElementById('buscarPersonaCampusInput').value = '';
     cargarCampusPanelUI(true);
   }
@@ -2609,46 +2629,112 @@
     cont.innerHTML = `<svg class="campus-chart" viewBox="0 0 ${w} ${h}" width="100%" height="320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Asistencias por semanas históricas hasta hoy"><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="#111827" stroke-width="1.2"/>${grid}<polyline points="${points}" fill="none" stroke="#c8102e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
   }
 
-  function buscarPersonasCampusUI() {
-    const q = document.getElementById('buscarPersonaCampusInput').value.trim();
+  function cerrarResultadosBusquedaCampusUI() {
     const cont = document.getElementById('campusResultadosBusqueda');
-    const detail = document.getElementById('campusDetallePersona');
-    detail.classList.add('oculto'); detail.innerHTML = '';
-    if (q.length < 2) {
-      cont.innerHTML = '<p class="portal-muted">Escribe al menos dos caracteres o números para buscar.</p>';
-      return;
+    if (cont) {
+      cont.classList.add('oculto');
+      cont.innerHTML = '';
     }
-    cont.innerHTML = '<p class="portal-muted">Buscando en los campus seleccionados…</p>';
-    const campusBusqueda = campusSeleccionadoActual;
-    apiPortal('buscarPersonasCampus', { termino:q, campus:campusBusqueda }).then(data => {
-      if (campusBusqueda !== campusSeleccionadoActual) return;
-      if (!data.exito) throw new Error(data.mensaje || 'No se pudo buscar.');
-      const personas = data.personas || [];
-      if (!personas.length) {
-        cont.innerHTML = '<p class="portal-muted">No encontramos coincidencias. Revisa el nombre, los apellidos o el número de registro e inténtalo nuevamente.</p>';
-        return;
-      }
-      const totalCoincidencias = Number(data.total) || personas.length;
-      const leyendaResultados = totalCoincidencias > personas.length ? `Mostrando ${personas.length} de ${totalCoincidencias} coincidencias.` : `${totalCoincidencias} resultado(s).`;
-      cont.innerHTML = `<p class="campus-search-help">${leyendaResultados} Selecciona una persona para consultar su ficha académica y asistencias.</p>` + personas.map(p => `
-        <button class="campus-search-result" type="button" data-registro="${escaparHTML(p.registro)}" onclick="seleccionarPersonaCampus(this)">
-          <span><strong>${escaparHTML(p.nombre)}</strong><br><small class="portal-muted">${escaparHTML(p.campus)} · Registro ${escaparHTML(p.registro)}</small></span>
-          <span style="color:#075b91;font-weight:800;white-space:nowrap">Ver ficha →</span>
-        </button>`).join('');
-    }).catch(err => { cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message)}</p>`; });
   }
 
-  function seleccionarPersonaCampus(btn) { cargarDetallePersonaCampus(btn?.dataset?.registro || ''); }
+  function programarBusquedaPersonasCampusUI() {
+    if (campusBusquedaTimer) clearTimeout(campusBusquedaTimer);
+    // Invalida de inmediato cualquier búsqueda anterior mientras se escribe.
+    campusBusquedaSolicitudId += 1;
+    const input = document.getElementById('buscarPersonaCampusInput');
+    const cont = document.getElementById('campusResultadosBusqueda');
+    const q = String(input?.value || '').trim();
+    if (q.length < 2) {
+      campusBusquedaSolicitudId += 1;
+      cerrarResultadosBusquedaCampusUI();
+      return;
+    }
+    cont?.classList.remove('oculto');
+    if (cont) cont.innerHTML = '<div class="campus-search-empty">Buscando coincidencias…</div>';
+    campusBusquedaTimer = setTimeout(() => buscarPersonasCampusUI(), 320);
+  }
+
+  function buscarPersonasCampusUI() {
+    if (campusBusquedaTimer) {
+      clearTimeout(campusBusquedaTimer);
+      campusBusquedaTimer = null;
+    }
+    const input = document.getElementById('buscarPersonaCampusInput');
+    const q = String(input?.value || '').trim();
+    const cont = document.getElementById('campusResultadosBusqueda');
+    const detail = document.getElementById('campusDetallePersona');
+    if (detail) {
+      detail.classList.add('oculto');
+      detail.innerHTML = '';
+    }
+    if (q.length < 2) {
+      cerrarResultadosBusquedaCampusUI();
+      if (cont) {
+        cont.classList.remove('oculto');
+        cont.innerHTML = '<div class="campus-search-empty">Escribe al menos dos caracteres o números para buscar.</div>';
+      }
+      return Promise.resolve(null);
+    }
+
+    const solicitudId = ++campusBusquedaSolicitudId;
+    cont.classList.remove('oculto');
+    cont.innerHTML = '<div class="campus-search-empty">Buscando en todos tus campus autorizados…</div>';
+
+    // No se limita la búsqueda al filtro de métricas: el servidor consulta todos
+    // los campus que el rol del usuario tiene autorizados y vuelve a validar el permiso.
+    return apiPortal('buscarPersonasCampus', { termino:q }).then(data => {
+      if (solicitudId !== campusBusquedaSolicitudId) return null;
+      if (!data || !data.exito) throw new Error(data?.mensaje || 'No se pudo buscar.');
+      const personas = Array.isArray(data.personas) ? data.personas : [];
+      if (!personas.length) {
+        cont.innerHTML = '<div class="campus-search-empty">No encontramos coincidencias. Revisa el nombre, los apellidos o el número de registro.</div>';
+        cont.classList.remove('oculto');
+        return data;
+      }
+      const totalCoincidencias = Number(data.total) || personas.length;
+      const leyenda = totalCoincidencias > personas.length
+        ? `Mostrando ${personas.length} de ${totalCoincidencias} coincidencias.`
+        : `${totalCoincidencias} resultado(s).`;
+      cont.innerHTML = `<div class="campus-search-empty">${leyenda} Selecciona una persona para abrir su información.</div>` + personas.map(p => `
+        <button class="campus-search-result" type="button" role="option" data-registro="${escaparHTML(p.registro)}" onclick="seleccionarPersonaCampus(this)">
+          <span><strong>${escaparHTML(p.nombre || 'Persona sin nombre')}</strong><small class="portal-muted">${escaparHTML(p.campus || 'Campus no indicado')} · Registro ${escaparHTML(p.registro || '')}</small></span>
+          <span style="color:#075b91;font-weight:800;white-space:nowrap;font-size:12px">Ver ficha →</span>
+        </button>`).join('');
+      cont.classList.remove('oculto');
+      return data;
+    }).catch(err => {
+      if (solicitudId !== campusBusquedaSolicitudId) return null;
+      cont.classList.remove('oculto');
+      cont.innerHTML = `<div class="campus-search-empty">${escaparHTML(err.message || 'No se pudo completar la búsqueda.')}</div>`;
+      return null;
+    });
+  }
+
+  function seleccionarPersonaCampus(btn) {
+    const registro = String(btn?.dataset?.registro || '').trim();
+    if (!registro) return;
+    cerrarResultadosBusquedaCampusUI();
+    cargarDetallePersonaCampus(registro);
+  }
 
   function cargarDetallePersonaCampus(registro) {
-    const cont=document.getElementById('campusDetallePersona');
-    cont.classList.remove('oculto'); cont.innerHTML='<p class="portal-muted">Cargando historial y progreso…</p>';
-    const campusDetalle = campusSeleccionadoActual;
-    apiPortal('detallePersonaCampus',{registro,campus:campusDetalle}).then(data=>{
-      if(campusDetalle !== campusSeleccionadoActual) return;
-      if(!data.exito)throw new Error(data.mensaje||'No se pudo cargar la ficha.');
+    const cont = document.getElementById('campusDetallePersona');
+    if (!cont) return Promise.resolve(null);
+    const solicitudId = ++campusDetalleSolicitudId;
+    cont.classList.remove('oculto');
+    cont.innerHTML = '<p class="portal-muted">Cargando ficha, inscripciones, progreso y asistencias…</p>';
+    return apiPortal('detallePersonaCampus', { registro:String(registro) }).then(data => {
+      if (solicitudId !== campusDetalleSolicitudId) return null;
+      if (!data || !data.exito) throw new Error(data?.mensaje || 'No se pudo cargar la ficha.');
       renderizarDetallePersonaCampus(data);
-    }).catch(err=>{cont.innerHTML=`<p class="portal-muted">${escaparHTML(err.message)}</p>`;});
+      cont.scrollIntoView({ behavior:'smooth', block:'start' });
+      return data;
+    }).catch(err => {
+      if (solicitudId !== campusDetalleSolicitudId) return null;
+      cont.classList.remove('oculto');
+      cont.innerHTML = `<p class="portal-muted">${escaparHTML(err.message || 'No se pudo cargar la ficha.')}</p>`;
+      return null;
+    });
   }
 
   function renderizarProgresoCampus_(programa, bloques) {
@@ -2949,9 +3035,61 @@
     return `${token}|${action}|${JSON.stringify(parametrosOrdenados)}`;
   }
 
+  function renovarSesionPortal_() {
+    if (portalRenovacionSesionPromise) return portalRenovacionSesionPromise;
+    const sesionActual = usuarioSesion;
+    const registro = String(sesionActual?.registro || '').trim();
+    const nacimiento = normalizarFechaInputCliente(sesionActual?.nacimientoTexto || '');
+    if (!registro || !nacimiento) {
+      return Promise.reject(new Error('Tu sesión necesita validarse nuevamente. Cierra sesión e inicia con tu número de registro y fecha de nacimiento.'));
+    }
+
+    const q = new URLSearchParams({
+      action:'buscarParticipante',
+      registro:registro,
+      nacimiento:nacimiento,
+      _nocache:String(Date.now())
+    });
+
+    portalRenovacionSesionPromise = fetch(`${WEB_APP_URL}?${q.toString()}`, { cache:'no-store' })
+      .then(async response => {
+        if (!response.ok) throw new Error('No se pudo validar nuevamente la sesión (HTTP ' + response.status + ').');
+        const raw = await response.text();
+        try { return JSON.parse(raw); }
+        catch (e) { throw new Error('El servidor no devolvió una respuesta válida al renovar la sesión.'); }
+      })
+      .then(data => {
+        if (!data || !data.encontrado || !data.sessionToken) {
+          throw new Error('No fue posible renovar tu sesión. Cierra sesión e inicia nuevamente.');
+        }
+        // Evita que una respuesta tardía reemplace otra cuenta o una sesión ya cerrada.
+        if (!usuarioSesion || String(usuarioSesion.registro || '') !== registro) {
+          throw new Error('La sesión cambió mientras se validaba. Inicia sesión nuevamente.');
+        }
+        const rolAnterior = String(usuarioSesion.rol || '').toUpperCase();
+        usuarioSesion = { ...usuarioSesion, ...data };
+        localStorage.setItem('naciones_sesion', JSON.stringify(usuarioSesion));
+        if (String(usuarioSesion.rol || '').toUpperCase() !== rolAnterior) {
+          campusPanelCache = null; campusPanelCacheAt = 0; campusPanelCacheKey = '';
+          coordinadoresUICache = null; coordinadoresUICacheAt = 0; coordinadoresUICacheKey = '';
+          invalidarCacheListasPortal_();
+          configurarPermisosUI();
+        }
+        return usuarioSesion.sessionToken;
+      })
+      .finally(() => { portalRenovacionSesionPromise = null; });
+
+    return portalRenovacionSesionPromise;
+  }
+
   function apiPortal(action, params = {}, opciones = {}) {
-    if (!usuarioSesion || !usuarioSesion.sessionToken) {
-      return Promise.reject(new Error('Tu sesión expiró. Cierra sesión e inicia nuevamente.'));
+    if (!usuarioSesion) {
+      return Promise.reject(new Error('No hay una sesión activa. Inicia sesión nuevamente.'));
+    }
+    const reintentoSesion = Boolean(opciones && opciones._sessionRetry);
+    if (!usuarioSesion.sessionToken) {
+      if (reintentoSesion) return Promise.reject(new Error('No fue posible validar tu sesión. Cierra sesión e inicia nuevamente.'));
+      return renovarSesionPortal_().then(() => apiPortal(action, params, { ...opciones, force:true, _sessionRetry:true }));
     }
 
     const token = usuarioSesion.sessionToken;
@@ -2975,22 +3113,32 @@
     }
 
     // _nocache evita que el navegador o un proxy reutilice una respuesta HTTP antigua.
-    const q = new URLSearchParams({ action, token, _nocache: String(Date.now()), ...params });
+    const q = new URLSearchParams({ action, token, _nocache:String(Date.now()), ...params });
     const generacion = PORTAL_LISTAS_CACHE_GENERACION;
-    const solicitud = fetch(`${WEB_APP_URL}?${q.toString()}`, { cache: 'no-store' }).then(async r => {
-      if (!r.ok) throw new Error('El servidor respondió con error HTTP ' + r.status + '.');
-      const texto = await r.text();
-      try { return JSON.parse(texto); }
+    const solicitud = fetch(`${WEB_APP_URL}?${q.toString()}`, { cache:'no-store' }).then(async response => {
+      if (!response.ok) throw new Error('El servidor respondió con error HTTP ' + response.status + '.');
+      const raw = await response.text();
+      try { return JSON.parse(raw); }
       catch (e) { throw new Error('El servidor no devolvió JSON. Verifica que hayas actualizado la implementación de Apps Script.'); }
+    }).then(data => {
+      const mensaje = String(data?.mensaje || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      const sesionRechazada = data && data.exito === false && /(sesion no valida|sesion no valida o expirada|sesion expirada|sesion invalida)/.test(mensaje);
+      if (sesionRechazada && !reintentoSesion) {
+        // Los tokens duran 8 horas. Revalida con los datos guardados y vuelve a
+        // intentar esta llamada una sola vez para no provocar ciclos infinitos.
+        return renovarSesionPortal_().then(() => apiPortal(action, params, { ...opciones, force:true, _sessionRetry:true }));
+      }
+      return data;
     });
 
     if (!cacheable) return solicitud;
 
     PORTAL_LISTAS_PETICIONES.set(cacheKey, solicitud);
     return solicitud.then(data => {
-      // No permitir que una petición antigua repueble la caché después de invalidarla.
-      if (generacion === PORTAL_LISTAS_CACHE_GENERACION && data && data.exito) {
-        PORTAL_LISTAS_CACHE.set(cacheKey, { data, timestamp: Date.now() });
+      // No permitir que una petición antigua repueble la caché después de invalidarla
+      // o que una sesión renovada guarde la respuesta bajo el token anterior.
+      if (generacion === PORTAL_LISTAS_CACHE_GENERACION && usuarioSesion?.sessionToken === token && data && data.exito) {
+        PORTAL_LISTAS_CACHE.set(cacheKey, { data, timestamp:Date.now() });
       }
       return data;
     }).finally(() => {
