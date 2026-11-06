@@ -194,7 +194,7 @@
     .header-inner {
       /* El logotipo conserva el margen visual del diseño anterior; el menú usa todo el ancho restante. */
       width: 100%; max-width: none; margin: 0; box-sizing: border-box;
-      padding-left: max(16px, calc((100% - 1320px) / 2)); padding-right: max(28px, calc((100% - 1320px) / 2));
+      padding-left: max(16px, calc((100% - 1320px) / 2)); padding-right: 12px;
       display: flex; justify-content: space-between; align-items: center; height: 56px; gap: 12px;
     }
     .brand-box { display: flex; align-items: center; gap: 10px; cursor: pointer; }
@@ -1162,6 +1162,19 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#a52828"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
       </div>
 
+      <div class="contact-footer-box">
+        <div class="contact-footer-title">CONTÁCTANOS</div>
+        <div>
+          <a href="https://wa.me/5212228419648" target="_blank" class="contact-footer-item">
+            💬 +52 1 222 841 9648
+          </a>
+        </div>
+        <div>
+          <a href="mailto:discipulado@naciones.org.mx" class="contact-footer-item">
+            ✉️ discipulado@naciones.org.mx
+          </a>
+        </div>
+      </div>
     </section>
 
     <!-- SUBVISTA INFORMACIÓN PERSONAL DE MI CUENTA -->
@@ -1343,13 +1356,6 @@
       </div>
     </section>
 
-    <section id="vistaFichaCampus" class="oculto">
-      <div class="portal-admin-card campus-main-card">
-        <button class="campus-ficha-back" type="button" onclick="regresarAMiCampusUI()"><span aria-hidden="true">←</span> Regresar a Mi Campus</button>
-        <div id="campusFichaContenedor"></div>
-      </div>
-    </section>
-
     <section id="vistaEscaner" class="oculto">
       <div class="card-rounded-gray" style="background: #ffffff; text-align: center;">
         <h2 style="margin-top: 0; color: #0b4d82;">Registro de asistencia</h2>
@@ -1441,11 +1447,6 @@
         </div>
       </div>
     </div>
-    <footer class="portal-global-footer">
-      <strong>CONTÁCTANOS</strong>
-      <a href="https://wa.me/5212228419648" target="_blank" rel="noopener">WhatsApp · +52 1 222 841 9648</a>
-      <a href="mailto:discipulado@naciones.org.mx">discipulado@naciones.org.mx</a>
-    </footer>
 </div>
 </main>
 
@@ -1759,20 +1760,6 @@
     }
 
     navegarA('inicio');
-    precalentarCampusEnSegundoPlano_();
-  }
-
-  function precalentarCampusEnSegundoPlano_() {
-    const rol=String(usuarioSesion?.rol||'').toUpperCase();
-    if(!['ADMIN_GLOBAL','ADMIN_CAMPUS','PASTOR'].includes(rol)) return;
-    const campus=campusSeleccionadoActual || normalizarCampusPanelCliente_(usuarioSesion?.campus||'NACIONAL');
-    const cargar=programa=>{
-      const key='naciones_campus_cache_v1_'+String(usuarioSesion?.registro||'')+'_'+rol+'_'+campus+'|'+programa;
-      try { const old=JSON.parse(localStorage.getItem(key)||'null'); if(old && Date.now()-Number(old.savedAt||0)<60000) return; } catch(e){}
-      apiPortal('obtenerPanelCampusHombria',{campus,programa},{force:true}).then(data=>{if(data?.exito){try{localStorage.setItem(key,JSON.stringify({savedAt:Date.now(),data}));}catch(e){}}}).catch(()=>{});
-    };
-    const lanzar=()=>{cargar('HOMBRIA');cargar('FUNDAMENTOS');};
-    if('requestIdleCallback' in window) window.requestIdleCallback(lanzar,{timeout:2500}); else setTimeout(lanzar,900);
   }
 
   function cargarOfertaInscripciones() {
@@ -2281,19 +2268,19 @@
     const pct = Math.min(Math.round((presentesCount / Math.max(lista.length, 1)) * 100), 100);
     
     if (programa === 'HOMBRIA') {
-      document.getElementById('lblHombriaConteoDesktop').textContent = `${presentesCount} de ${programa === 'HOMBRIA' ? 10 : 10} asistencias`;
+      document.getElementById('lblHombriaConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias completadas`;
       document.getElementById('fillHombriaProgBar').style.width = pct + '%';
       document.getElementById('sumHombriaFillDesktop').style.width = pct + '%';
       document.getElementById('sumHombriaFillMobile').style.width = pct + '%';
-      document.getElementById('sumHombriaPorcentajeDesktop').textContent = `${presentesCount} de 10 asistencias`;
-      document.getElementById('sumHombriaPorcentajeMobile').textContent = `${presentesCount} de 10 asistencias`;
+      document.getElementById('sumHombriaPorcentajeDesktop').textContent = `Asistencia ${pct}%`;
+      document.getElementById('sumHombriaPorcentajeMobile').textContent = `Asistencia ${pct}%`;
     } else {
-      document.getElementById('lblFundConteoDesktop').textContent = `${presentesCount} de ${programa === 'HOMBRIA' ? 10 : 10} asistencias`;
+      document.getElementById('lblFundConteoDesktop').textContent = `${presentesCount} de ${lista.length} asistencias completadas`;
       document.getElementById('fillFundProgBar').style.width = pct + '%';
       document.getElementById('sumFundamentosFillDesktop').style.width = pct + '%';
       document.getElementById('sumFundamentosFillMobile').style.width = pct + '%';
-      document.getElementById('sumFundamentosPorcentajeDesktop').textContent = `${presentesCount} de 10 asistencias`;
-      document.getElementById('sumFundamentosPorcentajeMobile').textContent = `${presentesCount} de 10 asistencias`;
+      document.getElementById('sumFundamentosPorcentajeDesktop').textContent = `Asistencia ${pct}%`;
+      document.getElementById('sumFundamentosPorcentajeMobile').textContent = `Asistencia ${pct}%`;
     }
   }
 
@@ -2347,7 +2334,7 @@
     if (vista !== 'escaner') detenerEscaner();
     // Las antiguas rutas de gestión se concentran dentro de Campus.
     if (['grupos','coordinadores','miGrupo'].includes(vista)) vista = 'campus';
-    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaCampus','vistaFichaCampus','vistaEscaner','vistaDetalleGrupo'].forEach(id => {
+    ['vistaInicio','vistaFundamentos','vistaHombria','vistaRecursos','vistaCuentaMain','vistaCuentaInfo','vistaCampus','vistaEscaner','vistaDetalleGrupo'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.add('oculto');
     });
@@ -2369,8 +2356,6 @@
       const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
       if (!['ADMIN_GLOBAL','ADMIN_CAMPUS','PASTOR','COORDINADOR_HOMBRIA','LIDER_HOMBRIA'].includes(rol)) return navegarA('inicio');
       mostrar('vistaCampus'); activar('navBtnCampus'); cargarCampusPanelUI();
-    } else if (vista === 'fichaCampus') {
-      mostrar('vistaFichaCampus');
     } else if (vista === 'escaner') {
       const rol = String(usuarioSesion?.rol || '').trim().toUpperCase();
       if (!['REGISTRO','ADMIN_GLOBAL'].includes(rol)) return navegarA('inicio');
@@ -2551,22 +2536,19 @@
     const mensaje = document.getElementById('campusPanelMensaje');
     if (mensaje) mensaje.textContent = '';
     const key = `${campusSeleccionadoActual}|${campusProgramaActual}`;
-    const localKey = 'naciones_campus_cache_v1_' + String(usuarioSesion?.registro||'') + '_' + rol + '_' + key;
-    if (!forzar && !campusPanelCache) { try { const saved=JSON.parse(localStorage.getItem(localKey)||'null'); if(saved && saved.data){ campusPanelCache=saved.data; campusPanelCacheAt=Number(saved.savedAt||0); campusPanelCacheKey=key; renderizarCampusPanelUI(saved.data); } } catch(e){} }
     if (!forzar && campusPanelCache && campusPanelCacheKey === key && Date.now() - campusPanelCacheAt < PORTAL_LISTAS_CACHE_MS) {
       renderizarCampusPanelUI(campusPanelCache);
       cargarCoordinadoresUI(false);
       return Promise.resolve(campusPanelCache);
     }
-    const yaHayCacheLocal = Boolean(campusPanelCache && campusPanelCacheKey === key);
-    if (!yaHayCacheLocal) { document.getElementById('campusPanelNombre').textContent = 'Consultando campus…'; document.getElementById('campusGraficaAsistencias').innerHTML = '<p class="portal-muted">Cargando gráfica…</p>'; }
+    document.getElementById('campusPanelNombre').textContent = 'Consultando campus…';
+    document.getElementById('campusGraficaAsistencias').innerHTML = '<p class="portal-muted">Cargando gráfica…</p>';
     const panel = apiPortal('obtenerPanelCampusHombria', { campus:campusSeleccionadoActual, programa:campusProgramaActual }, { force:forzar });
     const coordinadores = cargarCoordinadoresUI(false);
     return Promise.all([panel, coordinadores]).then(([data]) => {
       if (key !== `${campusSeleccionadoActual}|${campusProgramaActual}`) return null;
       if (!data || !data.exito) throw new Error(data?.mensaje || 'No se pudo consultar el panel.');
       campusPanelCache = data; campusPanelCacheAt = Date.now(); campusPanelCacheKey = key;
-      try { localStorage.setItem(localKey,JSON.stringify({savedAt:Date.now(),data:data})); } catch(e){}
       renderizarCampusPanelUI(data);
       return data;
     }).catch(err => {
@@ -2617,8 +2599,6 @@
       return;
     }
 
-    const colorGrafica = campusProgramaActual === 'FUNDAMENTOS' ? '#1970b8' : '#c8102e';
-    const claseGrafica = campusProgramaActual === 'FUNDAMENTOS' ? 'campus-chart-fundamentos' : 'campus-chart-hombria';
     const w = Math.max(320, Math.round(cont.clientWidth || 900));
     const h = 340;
     const left = 54;
@@ -2643,10 +2623,10 @@
       return `<text x="${x(i)}" y="${h-24}" text-anchor="middle" font-size="13" fill="#64748b">${etiqueta}</text>`;
     }).join('');
     const dots = serie.map((p, i) =>
-      `<circle cx="${x(i)}" cy="${y(p.total)}" r="4" fill="${colorGrafica}"><title>${escaparHTML(p.fecha || p.etiqueta)}: ${Number(p.total)||0} asistencias</title></circle>`
+      `<circle cx="${x(i)}" cy="${y(p.total)}" r="4" fill="#c8102e"><title>${escaparHTML(p.fecha || p.etiqueta)}: ${Number(p.total)||0} asistencias</title></circle>`
     ).join('');
 
-    cont.innerHTML = `<svg class="campus-chart ${claseGrafica}" viewBox="0 0 ${w} ${h}" width="100%" height="320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Asistencias por semanas históricas hasta hoy"><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="#111827" stroke-width="1.2"/>${grid}<polyline points="${points}" fill="none" stroke="${colorGrafica}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+    cont.innerHTML = `<svg class="campus-chart" viewBox="0 0 ${w} ${h}" width="100%" height="320" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Asistencias por semanas históricas hasta hoy"><line x1="${left}" y1="${h-bottom}" x2="${w-right}" y2="${h-bottom}" stroke="#111827" stroke-width="1.2"/>${grid}<polyline points="${points}" fill="none" stroke="#c8102e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
   }
 
   function cerrarResultadosBusquedaCampusUI() {
@@ -2739,9 +2719,7 @@
 
   function cargarDetallePersonaCampus(registro) {
     const cont = document.getElementById('campusDetallePersona');
-    const destinoFicha = document.getElementById('campusFichaContenedor');
-    if (!cont || !destinoFicha) return Promise.resolve(null);
-    if (cont.parentElement !== destinoFicha) destinoFicha.appendChild(cont);
+    if (!cont) return Promise.resolve(null);
     const solicitudId = ++campusDetalleSolicitudId;
     cont.classList.remove('oculto');
     cont.innerHTML = '<p class="portal-muted">Cargando ficha, inscripciones, progreso y asistencias…</p>';
@@ -2749,8 +2727,7 @@
       if (solicitudId !== campusDetalleSolicitudId) return null;
       if (!data || !data.exito) throw new Error(data?.mensaje || 'No se pudo cargar la ficha.');
       renderizarDetallePersonaCampus(data);
-      navegarA('fichaCampus');
-      window.scrollTo({top:0,behavior:'smooth'});
+      cont.scrollIntoView({ behavior:'smooth', block:'start' });
       return data;
     }).catch(err => {
       if (solicitudId !== campusDetalleSolicitudId) return null;
@@ -2760,15 +2737,13 @@
     });
   }
 
-  function regresarAMiCampusUI() { navegarA('campus'); window.scrollTo({top:0,behavior:'smooth'}); }
-
   function renderizarProgresoCampus_(programa, bloques) {
     if(!Array.isArray(bloques)||!bloques.length)return '<p class="portal-muted">Sin información académica disponible.</p>';
     const items = bloques.flatMap(b => Array.isArray(b.items) ? b.items : []);
     const completados = items.filter(it => Boolean(it.completado)).length;
     const total = items.length;
     const porcentaje = total ? Math.round(completados / total * 100) : 0;
-    return `<div class="campus-progress-summary" style="margin:0 0 12px;padding:12px 14px;background:#f7fafc;border:1px solid #e7edf2;border-radius:12px"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:12px"><strong>${completados} de ${total} ${programa === 'HOMBRIA' ? 'niveles' : 'cursos'} completados</strong><strong style="color:#075b91">${porcentaje}%</strong></div><div style="height:7px;background:#e6edf2;border-radius:99px;overflow:hidden;margin-top:9px"><div style="height:100%;width:${porcentaje}%;background:#0b6aa5;border-radius:99px"></div></div></div><div class="campus-progress-grid">${bloques.map(b=>`<div class="campus-progress-block"><h4>${escaparHTML(b.bloque||'Progreso')}</h4>${(b.items||[]).map(it=>`<div class="campus-progress-item"><span>${escaparHTML(it.nombre)}</span><span class="campus-mini-status ${it.completado?'ok':''}">${it.completado?'Completado':'Pendiente'}</span></div>`).join('')}</div>`).join('')}</div>`;
+    return `<div class="campus-progress-summary" style="margin:0 0 12px;padding:12px 14px;background:#f7fafc;border:1px solid #e7edf2;border-radius:12px"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:12px"><strong>${completados} de ${total} actividades completadas</strong><strong style="color:#075b91">${porcentaje}%</strong></div><div style="height:7px;background:#e6edf2;border-radius:99px;overflow:hidden;margin-top:9px"><div style="height:100%;width:${porcentaje}%;background:#0b6aa5;border-radius:99px"></div></div></div><div class="campus-progress-grid">${bloques.map(b=>`<div class="campus-progress-block"><h4>${escaparHTML(b.bloque||'Progreso')}</h4>${(b.items||[]).map(it=>`<div class="campus-progress-item"><span>${escaparHTML(it.nombre)}</span><span class="campus-mini-status ${it.completado?'ok':''}">${it.completado?'Completado':'Pendiente'}</span></div>`).join('')}</div>`).join('')}</div>`;
   }
 
   function renderizarHistorialCampus_(lista) {
@@ -2785,18 +2760,10 @@
 
   function renderizarAsistenciasSemanaCampus_(lista) {
     if (!Array.isArray(lista) || !lista.length) return '<p class="portal-muted">No hay sesiones registradas o transcurridas esta semana.</p>';
-    const programa = arguments.length > 1 ? arguments[1] : 'HOMBRIA';
-    const editable = ['ADMIN_CAMPUS','ADMIN_GLOBAL'].includes(String(usuarioSesion?.rol||'').toUpperCase());
-    return `<div class="campus-weekly-attendance">${lista.slice().sort((a,b)=>Number(String(a.sesion||'').match(/\d+/)?.[0]||0)-Number(String(b.sesion||'').match(/\d+/)?.[0]||0)).map(a=>{
-      const semana = Number(String(a.sesion||'').match(/\d+/)?.[0]||0);
-      const presente = ['PRESENTE','RETARDO','ASISTIO','ASISTIÓ'].includes(String(a.estado||'').toUpperCase());
-      const control = editable ? `<input type="checkbox" ${presente?'checked':''} aria-label="Marcar asistencia semana ${semana}" onchange="actualizarAsistenciaSemanaCampus('${escaparHTML(a.programa||programa)}','${semana}',this.checked)">` : `<span class="portal-mini-status ${presente?'ok':''}">${presente?'Presente':'Falta'}</span>`;
-      return `<div class="campus-week-check"><span><strong>Semana ${semana||'—'}</strong><br><small class="portal-muted">${escaparHTML(a.fecha||'Fecha pendiente')} · ${escaparHTML(a.leccion||'')}</small></span>${control}</div>`;
-    }).join('')}</div>`;
+    return renderizarHistorialCampus_(lista);
   }
 
   function renderizarDetallePersonaCampus(data) {
-    window.campusDetalleActual=data;
     const p=data.persona||{}; const a=data.asistencias||{}; const semana=data.semanaActual||{}; const prog=data.progreso||{}; const ins=data.inscripciones||{};
     const rol=String(usuarioSesion?.rol||'').toUpperCase();
     const puedeRegistrar=['ADMIN_CAMPUS','ADMIN_GLOBAL'].includes(rol);
@@ -2806,64 +2773,21 @@
     const resumenH=contarAsistenciasSemanaCampus_(semanaH);
     const resumenF=contarAsistenciasSemanaCampus_(semanaF);
     const rangoSemana=semana.desde&&semana.hasta?`Del ${escaparHTML(semana.desde)} al ${escaparHTML(semana.hasta)}`:'Semana actual';
-    cont.dataset.registroPersona=String(p.registro||'');
-    cont.innerHTML=`<button class="campus-ficha-back" type="button" onclick="regresarAMiCampusUI()">← Regresar a Mi Campus</button><div class="campus-person-head"><div><h3>${escaparHTML(p.nombre||'Persona')}</h3><p class="portal-muted" style="margin:6px 0 0">Registro ${escaparHTML(p.registro||'—')} · ${escaparHTML(p.campus||'—')}</p></div><span class="portal-badge">Ficha de participante</span></div>
-      <div class="portal-group-detail-meta" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:14px"><div><span>Correo</span><strong>${escaparHTML(p.correo||'No registrado')}</strong></div><div><span>Teléfono</span><strong>${escaparHTML(p.telefono||'No registrado')}</strong></div><div><span>Estado civil</span><strong>${escaparHTML(p.estadoCivil||'—')}</strong></div><div><span>Fecha de nacimiento</span><strong>${escaparHTML(p.nacimiento||'—')}</strong></div></div>
+    cont.innerHTML=`<div class="campus-person-head"><div><h3>${escaparHTML(p.nombre||'Persona')}</h3><p class="portal-muted" style="margin:6px 0 0">Registro ${escaparHTML(p.registro||'—')} · ${escaparHTML(p.campus||'—')}</p></div><span class="portal-badge">Ficha de participante</span></div>
       <div class="portal-detail-section-title">Inscripciones activas</div><div class="portal-group-detail-meta" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div><span>Hombría al Máximo</span><strong>${ins.HOMBRIA?escaparHTML(ins.cursoHombria||'Inscrito'):'No inscrito'}</strong></div><div><span>Fundamentos</span><strong>${ins.FUNDAMENTOS?escaparHTML(ins.cursoFundamentos||'Inscrito'):'No inscrito'}</strong></div></div>
       <div class="portal-detail-section-title">Asistencias de esta semana <small style="font-size:11px;font-weight:600;color:#71808e">${rangoSemana}</small></div>
       <div class="campus-weekly-person-grid">
         <div class="campus-weekly-person-card"><h4>Hombría al Máximo</h4><strong>${resumenH.presentes}</strong><small>Asistencias · ${resumenH.faltas} falta(s) · ${resumenH.total} sesión(es) evaluada(s)</small></div>
         <div class="campus-weekly-person-card"><h4>Fundamentos</h4><strong>${resumenF.presentes}</strong><small>Asistencias · ${resumenF.faltas} falta(s) · ${resumenF.total} sesión(es) evaluada(s)</small></div>
       </div>
-      <div class="portal-detail-section-title">Asistencias de la temporada · Hombría al Máximo</div>${renderizarAsistenciasSemanaCampus_(a.HOMBRIA||[],'HOMBRIA')}
-      <div class="portal-detail-section-title">Asistencias de la temporada · Fundamentos</div>${renderizarAsistenciasSemanaCampus_(a.FUNDAMENTOS||[],'FUNDAMENTOS')}
+      <div class="portal-detail-section-title">Detalle de la semana · Hombría al Máximo</div>${renderizarAsistenciasSemanaCampus_(semanaH)}
+      <div class="portal-detail-section-title">Detalle de la semana · Fundamentos</div>${renderizarAsistenciasSemanaCampus_(semanaF)}
       <details style="margin-top:18px"><summary style="cursor:pointer;font-weight:800;color:#075b91;padding:10px 0">Consultar historial completo de asistencias</summary>
         <div class="portal-detail-section-title">Historial · Hombría al Máximo</div>${renderizarHistorialCampus_(a.HOMBRIA||[])}
         <div class="portal-detail-section-title">Historial · Fundamentos</div>${renderizarHistorialCampus_(a.FUNDAMENTOS||[])}</details>
       <div class="portal-detail-section-title">Progreso académico · Hombría al Máximo</div>${renderizarProgresoCampus_('HOMBRIA',prog.HOMBRIA||[])}
       <div class="portal-detail-section-title">Progreso académico · Fundamentos</div>${renderizarProgresoCampus_('FUNDAMENTOS',prog.FUNDAMENTOS||[])}
-      <div class="portal-detail-section-title">Calificaciones</div>${renderizarCalificacionesCampus_(data.calificaciones||[],p.registro,ins)}
-      ${puedeRegistrar?`<div class="campus-grade-panel"><h4 style="margin:0 0 12px">Registrar calificación</h4><div class="campus-grade-row"><div class="portal-field"><label for="campusGradePrograma">Programa</label><select id="campusGradePrograma" onchange="actualizarCursoCalificacionUI()"><option value="HOMBRIA">Hombría al Máximo</option><option value="FUNDAMENTOS">Fundamentos</option></select></div><div class="portal-field"><label for="campusGradeCurso">Nivel / Curso</label><input id="campusGradeCurso" placeholder="Ej. Nivel 1: Hombría al Máximo"></div><div class="portal-field"><label for="campusGradeNota">Calificación</label><input id="campusGradeNota" type="number" min="0" max="10" step="0.1" placeholder="0–10"></div></div><button class="portal-primary" style="margin-top:12px" type="button" onclick="guardarCalificacionCampus('${escaparHTML(p.registro)}')">Guardar calificación</button><div id="campusGradeMensaje" class="portal-status"></div></div>`:''}
       ${puedeRegistrar?`<div class="campus-registration-tools"><div class="portal-field"><label for="campusProgramaAsistencia">Registrar asistencia de hoy</label><select id="campusProgramaAsistencia"><option value="HOMBRIA">Hombría al Máximo</option><option value="FUNDAMENTOS">Fundamentos</option></select></div><button class="portal-primary" type="button" onclick="registrarAsistenciaPersonaCampus('${escaparHTML(p.registro)}')">Registrar asistencia</button></div>`:''}`;
-    if(puedeRegistrar) actualizarCursoCalificacionUI();
-  }
-
-  function actualizarAsistenciaSemanaCampus(programa, semana, presente) {
-    const registro = String(document.querySelector('#campusFichaContenedor [data-registro-persona]')?.dataset.registroPersona || '');
-    if (!registro) { alert('No se pudo identificar el registro de la persona.'); return; }
-    apiPortal('actualizarAsistenciaSemanaCampus',{registro,programa,semana,presente:presente?'true':'false'}, {force:true}).then(r=>{
-      if(!r || !r.exito) throw new Error(r?.mensaje || 'No se pudo actualizar la asistencia.');
-      campusPanelCache=null; campusPanelCacheAt=0;
-      return cargarDetallePersonaCampus(registro);
-    }).catch(e=>{alert(e.message || 'Error al guardar asistencia.'); cargarDetallePersonaCampus(registro);});
-  }
-
-  function renderizarCalificacionesCampus_(lista, registro, inscripciones) {
-    const filas=Array.isArray(lista)?lista:[];
-    const tabla=filas.length?`<div class="campus-attendance-list">${filas.map(x=>`<div class="campus-attendance-item"><span><strong>${escaparHTML(x.curso||'Curso')}</strong><br><small class="portal-muted">${escaparHTML(x.programa||'')} · Asistencias: ${escaparHTML(x.asistencias||'—')}</small></span><span class="portal-mini-status ${String(x.estatus||'').toUpperCase()==='APROBADO'?'ok':''}">${escaparHTML(x.calificacion||'—')} · ${escaparHTML(x.estatus||'Pendiente')}</span></div>`).join('')}</div>`:'<p class="portal-muted">Aún no hay calificaciones registradas.</p>';
-    return tabla;
-  }
-
-  function actualizarCursoCalificacionUI() {
-    const programa=document.getElementById('campusGradePrograma')?.value||'HOMBRIA';
-    const input=document.getElementById('campusGradeCurso');
-    if(!input) return;
-    const detalle=window.campusDetalleActual||{};
-    const ins=detalle.inscripciones||{};
-    input.value=programa==='HOMBRIA'?(ins.cursoHombria||'Nivel 1: Hombría al Máximo'):(ins.cursoFundamentos||'Fundamentos');
-  }
-
-  function guardarCalificacionCampus(registro) {
-    const programa=document.getElementById('campusGradePrograma')?.value||'HOMBRIA';
-    const curso=document.getElementById('campusGradeCurso')?.value||'';
-    const calificacion=document.getElementById('campusGradeNota')?.value||'';
-    const msg=document.getElementById('campusGradeMensaje');
-    if(msg) msg.textContent='Guardando calificación…';
-    apiPortal('guardarCalificacionCampus',{registro,programa,curso,calificacion},{force:true}).then(r=>{
-      if(!r?.exito) throw new Error(r?.mensaje||'No se pudo guardar la calificación.');
-      if(msg) msg.textContent=`${r.mensaje} ${r.asistencias} asistencias · ${r.estatus}.`;
-      return cargarDetallePersonaCampus(registro);
-    }).catch(e=>{if(msg)msg.textContent=e.message||'Error al guardar.';});
   }
 
   function registrarAsistenciaPersonaCampus(registro) {
